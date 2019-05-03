@@ -21,17 +21,17 @@ targets:
       - target: Shared
       - target: Domain
       - target: App
-    # prebuildScripts:
+    prebuildScripts:
     #   - name: "[SwiftGen] Run Script"
     #     script: |
     #       ${PODS_ROOT}/SwiftGen/bin/swiftgen
-    #   - name: "[SwiftLint] Run Script"
-    #     script: |
-    #       if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then
-    #         ${PODS_ROOT}/SwiftLint/swiftlint
-    #       else
-    #         echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-    #       fi
+      - name: "[SwiftLint] Run Script"
+        script: |
+          if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then
+            ${PODS_ROOT}/SwiftLint/swiftlint
+          else
+            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+          fi
     scheme:
       testTargets:
         - CimonTests

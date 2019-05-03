@@ -1,0 +1,19 @@
+included:
+  - Cimon
+  - App
+  - Domain
+  - Shared
+excluded:
+  - CimonTests
+  - AppTests
+  - DomainTests
+  - SharedTests
+  - Pods
+  - Carthage
+disabled_rules:
+  - file_length
+  - line_length
+  - function_body_length
+  - type_name
+  - variable_name
+  - nesting
