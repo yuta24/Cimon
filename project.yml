@@ -1,0 +1,98 @@
+main_target: &main_target Cimon
+
+name: *main_target
+options:
+  minimumXcodeGenVersion: 2.5.0
+  bundleIdPrefix: com.bivre
+  deploymentTarget:
+    iOS: "11.0"
+settings:
+  DEVELOPMENT_TEAM: PS98BD6732
+  CODE_SIGN_STYLE: Automatic
+targets:
+  Cimon:
+    type: application
+    platform: iOS
+    sources:
+      - Cimon
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon
+    dependencies:
+      - target: Shared
+      - target: Domain
+      - target: App
+    # prebuildScripts:
+    #   - name: "[SwiftGen] Run Script"
+    #     script: |
+    #       ${PODS_ROOT}/SwiftGen/bin/swiftgen
+    #   - name: "[SwiftLint] Run Script"
+    #     script: |
+    #       if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then
+    #         ${PODS_ROOT}/SwiftLint/swiftlint
+    #       else
+    #         echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+    #       fi
+    scheme:
+      testTargets:
+        - CimonTests
+  CimonTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - CimonTests
+    dependencies:
+      - target: *main_target
+  Shared:
+    type: framework
+    platform: iOS
+    sources:
+      - Shared
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.shared
+    scheme:
+      testTargets:
+        - SharedTests
+  SharedTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - SharedTests
+    dependencies:
+      - target: *main_target
+      - target: Shared
+  Domain:
+    type: framework
+    platform: iOS
+    sources:
+      - Domain
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.domain
+    scheme:
+      testTargets:
+        - DomainTests
+  DomainTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - DomainTests
+    dependencies:
+      - target: *main_target
+      - target: Domain
+  App:
+    type: framework
+    platform: iOS
+    sources:
+      - App
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.app
+    scheme:
+      testTargets:
+        - AppTests
+  AppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - AppTests
+    dependencies:
+      - target: *main_target
+      - target: App
