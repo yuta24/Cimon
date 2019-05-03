@@ -21,6 +21,7 @@ targets:
       - target: Shared
       - target: Domain
       - target: App
+      - carthage: APIKit
     prebuildScripts:
     #   - name: "[SwiftGen] Run Script"
     #     script: |
@@ -35,6 +36,9 @@ targets:
     scheme:
       testTargets:
         - CimonTests
+        - SharedTests
+        - DomainTests
+        - AppTests
   CimonTests:
     type: bundle.unit-test
     platform: iOS
@@ -85,6 +89,8 @@ targets:
       - App
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.app
+    dependencies:
+      - carthage: APIKit
     scheme:
       testTargets:
         - AppTests
@@ -96,3 +102,30 @@ targets:
     dependencies:
       - target: *main_target
       - target: App
+  BitriseAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - BitriseAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.bitrise
+    dependencies:
+      - carthage: APIKit
+  CircleCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - CircleCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.circleci
+    dependencies:
+      - carthage: APIKit
+  TravisCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - TravisCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.travisci
+    dependencies:
+      - carthage: APIKit
