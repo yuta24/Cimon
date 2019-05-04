@@ -12,7 +12,10 @@ import Domain
 
 class BitriseViewController: UIViewController, Instantiatable {
     struct Dependency {
+        let presenter: BitriseViewPresenterProtocol
     }
+
+    private var presenter: BitriseViewPresenterProtocol!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,5 +24,6 @@ class BitriseViewController: UIViewController, Instantiatable {
     }
 
     func inject(dependency: BitriseViewController.Dependency) {
+        self.presenter = dependency.presenter
     }
 }

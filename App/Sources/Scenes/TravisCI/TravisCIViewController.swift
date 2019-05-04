@@ -12,14 +12,12 @@ import Domain
 
 class TravisCIViewController: UIViewController, Instantiatable {
     struct Dependency {
+        let presenter: TravisCIViewPresenterProtocol
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = .green
-    }
+    private var presenter: TravisCIViewPresenterProtocol!
 
     func inject(dependency: TravisCIViewController.Dependency) {
+        self.presenter = dependency.presenter
     }
 }

@@ -12,7 +12,10 @@ import Domain
 
 class CircleCIViewController: UIViewController, Instantiatable {
     struct Dependency {
+        let presenter: CircleCIViewPresenterProtocol
     }
+
+    private var presenter: CircleCIViewPresenterProtocol!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,5 +24,6 @@ class CircleCIViewController: UIViewController, Instantiatable {
     }
 
     func inject(dependency: CircleCIViewController.Dependency) {
+        self.presenter = dependency.presenter
     }
 }

@@ -42,9 +42,9 @@ class MainViewController: UIViewController, Instantiatable {
     private let page: UIPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
     private let pages: [CI: UIViewController] = [
-        .travisci: Scenes.travisCI.execute(.init()),
-        .circleci: Scenes.circleCI.execute(.init()),
-        .bitrise: Scenes.bitrise.execute(.init())]
+        .travisci: Scenes.travisCI.execute(.init(presenter: TravisCIViewPresenter())),
+        .circleci: Scenes.circleCI.execute(.init(presenter: CircleCIViewPresenter())),
+        .bitrise: Scenes.bitrise.execute(.init(presenter: BitriseViewPresenter()))]
 
     private var presenter: MainViewPresenterProtocol!
 
