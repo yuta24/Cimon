@@ -12,6 +12,14 @@ public func apply<T>(_ target: T, _ closure: (T) -> Void) -> T where T: AnyObjec
     return target
 }
 
+public struct Tagged<T, V>: RawRepresentable {
+    public var rawValue: V
+
+    public init?(rawValue: V) {
+        self.rawValue = rawValue
+    }
+}
+
 public struct Reader<E, A> {
     let closure: (E) -> A
 

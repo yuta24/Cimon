@@ -25,3 +25,8 @@ extension CI: CustomStringConvertible {
         }
     }
 }
+
+public protocol ServiceType {}
+public struct TravisCIType: ServiceType {}
+public struct CircleCIType: ServiceType {}
+public struct BitriseType: ServiceType {}

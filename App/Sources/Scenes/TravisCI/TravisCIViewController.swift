@@ -15,6 +15,11 @@ class TravisCIViewController: UIViewController, Instantiatable {
         let presenter: TravisCIViewPresenterProtocol
     }
 
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBOutlet weak var unregisteredView: UIView!
+
     private var presenter: TravisCIViewPresenterProtocol!
 
     func inject(dependency: TravisCIViewController.Dependency) {
