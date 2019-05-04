@@ -25,6 +25,7 @@ targets:
       - carthage: Promises
       - carthage: FBLPromises
       - carthage: Pipeline
+      - carthage: Nuke
     prebuildScripts:
       - name: "[SwiftLint] Run Script"
         script: |
@@ -100,6 +101,7 @@ targets:
       - carthage: Promises
       - carthage: FBLPromises
       - carthage: Pipeline
+      - carthage: Nuke
     prebuildScripts:
       - name: "[SwiftGen] Run Script"
         script: |

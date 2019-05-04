@@ -1,3 +1,4 @@
 github "ishkawa/APIKit" ~> 5.0
 github "google/promises"
 github "yuta24/Pipeline" "master"
+github "kean/Nuke" ~> 7.0

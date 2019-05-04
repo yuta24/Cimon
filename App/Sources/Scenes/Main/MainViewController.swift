@@ -67,6 +67,8 @@ class MainViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        navigationController?.navigationBar.setTransparent()
+
         presenter.subscribe { [weak self] (state) in
             self?.navigationItem.title = state.selected.description
         }
@@ -74,6 +76,8 @@ class MainViewController: UIViewController, Instantiatable {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+
+        navigationController?.navigationBar.clearTransparent()
 
         presenter.unsubscribe()
     }
