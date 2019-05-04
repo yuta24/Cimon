@@ -12,3 +12,16 @@ public enum CI {
     case circleci
     case bitrise
 }
+
+extension CI: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .travisci:
+            return "Travis CI"
+        case .circleci:
+            return "Circle CI"
+        case .bitrise:
+            return "Bitrise"
+        }
+    }
+}

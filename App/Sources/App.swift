@@ -15,7 +15,8 @@ public class App {
 
     public init (window: UIWindow) {
         self.window = apply(window, {
-            $0.rootViewController = Scenes.main().execute(.init(presenter: MainViewPresenter())) |> UINavigationController.init
+            $0.rootViewController = Scenes.main.execute(.init(presenter: MainViewPresenter(ci: .travisci)))
+                |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
     }
