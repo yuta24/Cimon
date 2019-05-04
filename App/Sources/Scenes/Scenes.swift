@@ -10,7 +10,9 @@ import UIKit
 import Shared
 
 enum Scenes {
-    static func main() -> Storyboard<MainViewController> {
-        return Storyboard<MainViewController>(bundle: .current, name: "Main")
+    static func main() -> Reader<MainViewController.Dependency, MainViewController> {
+        return .init({ dependency in
+            return Storyboard<MainViewController>(bundle: .current, name: "Main").instantiate(dependency: dependency)
+        })
     }
 }

@@ -7,15 +7,15 @@
 
 import Foundation
 import UIKit
+import Pipeline
 import Shared
 
 public class App {
-
     public let window: UIWindow
 
     public init (window: UIWindow) {
         self.window = apply(window, {
-            $0.rootViewController = Scenes.main().instantiate(dependency: .init())
+            $0.rootViewController = Scenes.main().execute(.init(presenter: MainViewPresenter())) |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
     }
@@ -38,5 +38,4 @@ public class App {
 
     public func willTerminate() {
     }
-
 }

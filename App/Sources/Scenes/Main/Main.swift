@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import Promises
+
+protocol MainViewPresenterProtocol {
+}
+
+class MainViewPresenter: MainViewPresenterProtocol {
+}

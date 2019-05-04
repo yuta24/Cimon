@@ -14,7 +14,7 @@ targets:
     type: application
     platform: iOS
     sources:
-      - Cimon
+      - path: Cimon
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon
     dependencies:
@@ -22,10 +22,10 @@ targets:
       - target: Domain
       - target: App
       - carthage: APIKit
+      - carthage: Promises
+      - carthage: FBLPromises
+      - carthage: Pipeline
     prebuildScripts:
-    #   - name: "[SwiftGen] Run Script"
-    #     script: |
-    #       ${PODS_ROOT}/SwiftGen/bin/swiftgen
       - name: "[SwiftLint] Run Script"
         script: |
           if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then
@@ -43,14 +43,14 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - CimonTests
+      - path: CimonTests
     dependencies:
       - target: *main_target
   Shared:
     type: framework
     platform: iOS
     sources:
-      - Shared
+      - path: Shared
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.shared
     scheme:
@@ -60,7 +60,7 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - SharedTests
+      - path: SharedTests
     dependencies:
       - target: *main_target
       - target: Shared
@@ -68,9 +68,11 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - Domain
+      - path: Domain
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.domain
+    dependencies:
+      - target: Shared
     scheme:
       testTargets:
         - DomainTests
@@ -78,7 +80,7 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - DomainTests
+      - path: DomainTests
     dependencies:
       - target: *main_target
       - target: Domain
@@ -86,11 +88,22 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - App
+      - path: App
+      - path: App/Sources/Generated/Assets.swift
+        optional: true
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.app
     dependencies:
+      - target: Shared
+      - target: Domain
       - carthage: APIKit
+      - carthage: Promises
+      - carthage: FBLPromises
+      - carthage: Pipeline
+    prebuildScripts:
+      - name: "[SwiftGen] Run Script"
+        script: |
+          ${PODS_ROOT}/SwiftGen/bin/swiftgen config run --config App/swiftgen.yml
     scheme:
       testTargets:
         - AppTests
@@ -98,7 +111,7 @@ targets:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - AppTests
+      - path: AppTests
     dependencies:
       - target: *main_target
       - target: App
@@ -106,7 +119,7 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - BitriseAPI
+      - path: BitriseAPI
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.bitrise
     dependencies:
@@ -115,7 +128,7 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - CircleCIAPI
+      - path: CircleCIAPI
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.circleci
     dependencies:
@@ -124,7 +137,7 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - TravisCIAPI
+      - path: TravisCIAPI
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon.travisci
     dependencies:

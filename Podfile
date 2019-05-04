@@ -20,6 +20,7 @@ target 'Cimon' do
 
   # Pods for Cimon
   pod 'SwiftLint'
+  pod 'SwiftGen', '~> 6.0'
 
   target 'CimonTests' do
     inherit! :search_paths

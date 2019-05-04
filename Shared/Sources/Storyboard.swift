@@ -8,7 +8,6 @@
 import Foundation
 
 public struct Storyboard<V> where V: UIViewController {
-
     let bundle: Bundle
     let name: String
     var identifier: String?
@@ -25,7 +24,6 @@ public struct Storyboard<V> where V: UIViewController {
         let controller = storyboard.instantiateViewController(withIdentifier: identifier) as! V // swiftlint:disable:this force_cast
         return controller
     }
-
 }
 
 public protocol Instantiatable {
@@ -35,11 +33,9 @@ public protocol Instantiatable {
 }
 
 extension Storyboard where V: Instantiatable {
-
     public func instantiate(dependency: V.Dependency) -> V {
         let controller = instantiate()
         controller.inject(dependency: dependency)
         return controller
     }
-
 }
