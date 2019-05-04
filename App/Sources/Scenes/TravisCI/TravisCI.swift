@@ -13,14 +13,23 @@ import Domain
 enum TravisCI {
     struct State {
         static var initial: State {
-            return .init()
+            return .init(loading: .idle, token: .none)
+        }
+
+        var loading: LoadingState<Void, Never>
+        var token: TravisCIToken?
+
+        var isUnregistered: Bool {
+            return token == nil
         }
     }
 
     enum Message {
     }
 
-    enum TransitionEvent {
+    enum Transition {
+        enum Event {
+        }
     }
 }
 
@@ -31,7 +40,7 @@ protocol TravisCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: TravisCI.Message)
 
-    func route(event: TravisCI.TransitionEvent) -> Reader<UIViewController, Void>
+    func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
@@ -41,6 +50,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (TravisCI.State) -> Void) {
         self.closure = closure
+        closure(state)
     }
 
     func unsubscribe() {
@@ -50,7 +60,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
     func dispatch(_ message: TravisCI.Message) {
     }
 
-    func route(event: TravisCI.TransitionEvent) -> Reader<UIViewController, Void> {
+    func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

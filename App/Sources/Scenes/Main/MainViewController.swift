@@ -39,7 +39,10 @@ class MainViewController: UIViewController, Instantiatable {
 
     @IBOutlet weak var contentView: UIView!
 
-    private let page: UIPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    private let page: UIPageViewController = UIPageViewController(
+        transitionStyle: .scroll,
+        navigationOrientation: .horizontal,
+        options: nil)
 
     private let pages: [CI: UIViewController] = [
         .travisci: Scenes.travisCI.execute(.init(presenter: TravisCIViewPresenter())),
@@ -69,9 +72,7 @@ class MainViewController: UIViewController, Instantiatable {
 
         navigationController?.navigationBar.setTransparent()
 
-        presenter.subscribe { [weak self] (state) in
-            self?.navigationItem.title = state.selected.description
-        }
+        presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,6 +85,10 @@ class MainViewController: UIViewController, Instantiatable {
 
     func inject(dependency: MainViewController.Dependency) {
         self.presenter = dependency.presenter
+    }
+
+    private func configure(_ state: Main.State) {
+        navigationItem.title = state.selected.description
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {

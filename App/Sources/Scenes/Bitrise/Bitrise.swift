@@ -20,7 +20,9 @@ enum Bitrise {
     enum Message {
     }
 
-    enum TransitionEvent {
+    enum Transition {
+        enum Event {
+        }
     }
 }
 
@@ -31,7 +33,7 @@ protocol BitriseViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: Bitrise.Message)
 
-    func route(event: Bitrise.TransitionEvent) -> Reader<UIViewController, Void>
+    func route(event: Bitrise.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class BitriseViewPresenter: BitriseViewPresenterProtocol {
@@ -41,6 +43,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (Bitrise.State) -> Void) {
         self.closure = closure
+        closure(state)
     }
 
     func unsubscribe() {
@@ -50,7 +53,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
     func dispatch(_ message: Bitrise.Message) {
     }
 
-    func route(event: Bitrise.TransitionEvent) -> Reader<UIViewController, Void> {
+    func route(event: Bitrise.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

@@ -20,7 +20,9 @@ enum CircleCI {
     enum Message {
     }
 
-    enum TransitionEvent {
+    enum Transition {
+        enum Event {
+        }
     }
 }
 
@@ -31,7 +33,7 @@ protocol CircleCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: CircleCI.Message)
 
-    func route(event: CircleCI.TransitionEvent) -> Reader<UIViewController, Void>
+    func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
@@ -41,6 +43,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (CircleCI.State) -> Void) {
         self.closure = closure
+        closure(state)
     }
 
     func unsubscribe() {
@@ -50,7 +53,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
     func dispatch(_ message: CircleCI.Message) {
     }
 
-    func route(event: CircleCI.TransitionEvent) -> Reader<UIViewController, Void> {
+    func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

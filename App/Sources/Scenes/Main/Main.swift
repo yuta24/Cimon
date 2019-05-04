@@ -41,8 +41,10 @@ enum Main {
         case update(CI)
     }
 
-    enum TransitionEvent {
-        case settings
+    enum Transition {
+        enum Event {
+            case settings
+        }
     }
 }
 
@@ -53,7 +55,7 @@ protocol MainViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: Main.Message)
 
-    func route(event: Main.TransitionEvent) -> Reader<UIViewController, Void>
+    func route(event: Main.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -85,7 +87,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
         }
     }
 
-    func route(event: Main.TransitionEvent) -> Reader<UIViewController, Void> {
+    func route(event: Main.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
             switch event {
             case .settings:
