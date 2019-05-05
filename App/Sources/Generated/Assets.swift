@@ -18,6 +18,10 @@
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
+  internal static let outlineCloseBlack18pt = ImageAsset(name: "outline_close_black_18pt")
+  internal static let outlineCloseBlack24pt = ImageAsset(name: "outline_close_black_24pt")
+  internal static let outlineCloseBlack36pt = ImageAsset(name: "outline_close_black_36pt")
+  internal static let outlineCloseBlack48pt = ImageAsset(name: "outline_close_black_48pt")
   internal static let outlineSettingsBlack18pt = ImageAsset(name: "outline_settings_black_18pt")
   internal static let outlineSettingsBlack24pt = ImageAsset(name: "outline_settings_black_24pt")
   internal static let outlineSettingsBlack36pt = ImageAsset(name: "outline_settings_black_36pt")

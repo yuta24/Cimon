@@ -37,4 +37,11 @@ enum Scenes {
                 .instantiate(dependency: dependency)
         })
     }
+
+    static var settings: Reader<SettingsViewController.Dependency, SettingsViewController> {
+        return .init({ dependency in
+            return Storyboard<SettingsViewController>(bundle: .current, name: "Settings")
+                .instantiate(dependency: dependency)
+        })
+    }
 }

@@ -99,7 +99,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        logger.debug(#function)
+        dependency.presenter.route(event: .settings).execute(self)
     }
 }
 

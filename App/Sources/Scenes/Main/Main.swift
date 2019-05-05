@@ -7,6 +7,7 @@
 
 import Foundation
 import Promises
+import Pipeline
 import Shared
 import Domain
 
@@ -91,7 +92,9 @@ class MainViewPresenter: MainViewPresenterProtocol {
         return .init({ (from) in
             switch event {
             case .settings:
-                break
+                let controller = Scenes.settings.execute(.init())
+                let navigation = UINavigationController(rootViewController: controller, hasClose: true)
+                from.present(navigation, animated: true, completion: nil)
             }
         })
     }
