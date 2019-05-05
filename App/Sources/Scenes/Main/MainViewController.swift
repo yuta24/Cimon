@@ -34,6 +34,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
+        let storage: Storage
         let presenter: MainViewPresenterProtocol
     }
 
@@ -44,12 +45,17 @@ class MainViewController: UIViewController, Instantiatable {
         navigationOrientation: .horizontal,
         options: nil)
 
-    private let pages: [CI: UIViewController] = [
-        .travisci: Scenes.travisCI.execute(.init(presenter: TravisCIViewPresenter())),
-        .circleci: Scenes.circleCI.execute(.init(presenter: CircleCIViewPresenter())),
-        .bitrise: Scenes.bitrise.execute(.init(presenter: BitriseViewPresenter()))]
+    private lazy var pages: [CI: UIViewController] = {
+        return [
+            .travisci: Scenes.travisCI
+                .execute(.init(storage: self.dependency.storage, presenter: TravisCIViewPresenter())),
+            .circleci: Scenes.circleCI
+                .execute(.init(presenter: CircleCIViewPresenter())),
+            .bitrise: Scenes.bitrise
+                .execute(.init(presenter: BitriseViewPresenter()))]
+    }()
 
-    private var presenter: MainViewPresenterProtocol!
+    private var dependency: Dependency!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +70,8 @@ class MainViewController: UIViewController, Instantiatable {
         page.view.anchor.fixedToSuperView()
         page.dataSource = self
         page.delegate = self
-        page.setViewControllers([pages[presenter.state.selected]!], direction: .forward, animated: true, completion: nil)
+        let initial = [pages[dependency.presenter.state.selected]!]
+        page.setViewControllers(initial, direction: .forward, animated: true, completion: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -72,7 +79,7 @@ class MainViewController: UIViewController, Instantiatable {
 
         navigationController?.navigationBar.setTransparent()
 
-        presenter.subscribe(configure(_:))
+        dependency.presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -80,11 +87,11 @@ class MainViewController: UIViewController, Instantiatable {
 
         navigationController?.navigationBar.clearTransparent()
 
-        presenter.unsubscribe()
+        dependency.presenter.unsubscribe()
     }
 
     func inject(dependency: MainViewController.Dependency) {
-        self.presenter = dependency.presenter
+        self.dependency = dependency
     }
 
     private func configure(_ state: Main.State) {
@@ -98,13 +105,13 @@ class MainViewController: UIViewController, Instantiatable {
 
 extension MainViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return presenter.state.before
+        return dependency.presenter.state.before
             .flatMap(Translator.convert)?
             .execute(self)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        return presenter.state.after
+        return dependency.presenter.state.after
             .flatMap(Translator.convert)?
             .execute(self)
     }
@@ -121,6 +128,6 @@ extension MainViewController: UIPageViewControllerDelegate {
         }
         pageViewController.viewControllers?.first
             .flatMap { Translator.convert(viewController: $0) }
-            .flatMap { presenter.dispatch(.update($0)) }
+            .flatMap { dependency.presenter.dispatch(.update($0)) }
     }
 }

@@ -36,6 +36,7 @@ enum TravisCI {
 protocol TravisCIViewPresenterProtocol {
     var state: TravisCI.State { get }
 
+    func load() -> Reader<Storage, Void>
     func subscribe(_ closure: @escaping (TravisCI.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: TravisCI.Message)
@@ -47,6 +48,14 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
     private(set) var state: TravisCI.State = .initial
 
     private var closure: ((TravisCI.State) -> Void)?
+
+    func load() -> Reader<Storage, Void> {
+        return .init({ (storage) in
+            storage.value(.travisCIToken, { (value) in
+                self.state.token = value
+            })
+        })
+    }
 
     func subscribe(_ closure: @escaping (TravisCI.State) -> Void) {
         self.closure = closure

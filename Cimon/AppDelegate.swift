@@ -9,7 +9,9 @@
 import UIKit
 import App
 
-let app = App(window: UIWindow(frame: UIScreen.main.bounds))
+let app = App(
+    window: UIWindow(frame: UIScreen.main.bounds),
+    storage: Storage.init(core: .userDefaults(.standard)))
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -12,6 +12,7 @@ import Domain
 
 class TravisCIViewController: UIViewController, Instantiatable {
     struct Dependency {
+        let storage: Storage
         let presenter: TravisCIViewPresenterProtocol
     }
 
@@ -32,28 +33,30 @@ class TravisCIViewController: UIViewController, Instantiatable {
             unregisteredLabel.text = "Set Travis CI's API access token."
         }
     }
-    @IBOutlet weak var unregisterdButton: RoundedButton! {
+    @IBOutlet weak var unregisterdButton: UIButton! {
         didSet {
+            unregisterdButton.setTitleColor(.black, for: .normal)
             unregisterdButton.setTitle("Set", for: .normal)
         }
     }
 
-    private var presenter: TravisCIViewPresenterProtocol!
+    private var dependency: Dependency!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        presenter.subscribe(configure(_:))
+        dependency.presenter.load().execute(dependency.storage)
+        dependency.presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        presenter.unsubscribe()
+        dependency.presenter.unsubscribe()
     }
 
     func inject(dependency: TravisCIViewController.Dependency) {
-        self.presenter = dependency.presenter
+        self.dependency = dependency
     }
 
     private func configure(_ state: TravisCI.State) {
