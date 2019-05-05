@@ -25,6 +25,7 @@ enum TravisCI {
     }
 
     enum Message {
+        case token(String?)
     }
 
     enum Transition {
@@ -39,20 +40,24 @@ protocol TravisCIViewPresenterProtocol {
     func load() -> Reader<Storage, Void>
     func subscribe(_ closure: @escaping (TravisCI.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: TravisCI.Message)
+    func dispatch(_ message: TravisCI.Message) -> Reader<Storage, Void>
 
     func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
-    private(set) var state: TravisCI.State = .initial
+    private(set) var state: TravisCI.State = .initial {
+        didSet {
+            closure?(state)
+        }
+    }
 
     private var closure: ((TravisCI.State) -> Void)?
 
     func load() -> Reader<Storage, Void> {
-        return .init({ (storage) in
+        return .init({ [weak self] (storage) in
             storage.value(.travisCIToken, { (value) in
-                self.state.token = value
+                self?.state.token = value
             })
         })
     }
@@ -66,7 +71,15 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCI.Message) {
+    func dispatch(_ message: TravisCI.Message) -> Reader<Storage, Void> {
+        return .init({ [weak self] (storage) in
+            switch message {
+            case .token(let raw):
+                let token = raw.flatMap(TravisCIToken.init)
+                storage.set(token, for: .travisCIToken)
+                self?.state.token = token
+            }
+        })
     }
 
     func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void> {

@@ -37,7 +37,11 @@ protocol CircleCIViewPresenterProtocol {
 }
 
 class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
-    private(set) var state: CircleCI.State = .initial
+    private(set) var state: CircleCI.State = .initial {
+        didSet {
+            closure?(state)
+        }
+    }
 
     private var closure: ((CircleCI.State) -> Void)?
 

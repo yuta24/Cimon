@@ -81,7 +81,7 @@
                     <connections>
                         <outlet property="contentView" destination="N0m-NH-HpW" id="yHB-cL-rFQ"/>
                         <outlet property="tableView" destination="FUB-ZP-GHM" id="YW1-QD-FYQ"/>
-                        <outlet property="unregisterdButton" destination="Bkw-dk-yA7" id="RMN-F3-dyE"/>
+                        <outlet property="unregisteredButton" destination="Bkw-dk-yA7" id="91c-iO-7J6"/>
                         <outlet property="unregisteredLabel" destination="vkR-UX-qhw" id="DGd-b2-ZdS"/>
                         <outlet property="unregisteredView" destination="NgE-Dj-cP7" id="T1Q-9c-Gud"/>
                     </connections>

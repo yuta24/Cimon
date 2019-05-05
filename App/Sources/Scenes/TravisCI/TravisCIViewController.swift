@@ -33,10 +33,13 @@ class TravisCIViewController: UIViewController, Instantiatable {
             unregisteredLabel.text = "Set Travis CI's API access token."
         }
     }
-    @IBOutlet weak var unregisterdButton: UIButton! {
+    @IBOutlet weak var unregisteredButton: UIButton! {
         didSet {
-            unregisterdButton.setTitleColor(.black, for: .normal)
-            unregisterdButton.setTitle("Set", for: .normal)
+            unregisteredButton.setTitleColor(.black, for: .normal)
+            unregisteredButton.setTitle("Set", for: .normal)
+            unregisteredButton.addEventHandler(for: .touchUpInside) { [weak self] in
+                self?.onUnregistered()
+            }
         }
     }
 
@@ -64,6 +67,21 @@ class TravisCIViewController: UIViewController, Instantiatable {
 
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
+    }
+
+    @objc private func onUnregistered() {
+        let alert = UIAlertController(title: "", message: "Set access token", preferredStyle: .alert)
+        alert.addTextField()
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak alert] _ in
+            guard let `self` = self else {
+                return
+            }
+            self.dependency.presenter
+                .dispatch(.token(alert?.textFields?.first?.text))
+                .execute(self.dependency.storage)
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(alert, animated: true)
     }
 }
 

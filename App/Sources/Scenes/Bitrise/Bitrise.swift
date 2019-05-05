@@ -37,7 +37,11 @@ protocol BitriseViewPresenterProtocol {
 }
 
 class BitriseViewPresenter: BitriseViewPresenterProtocol {
-    private(set) var state: Bitrise.State = .initial
+    private(set) var state: Bitrise.State = .initial {
+        didSet {
+            closure?(state)
+        }
+    }
 
     private var closure: ((Bitrise.State) -> Void)?
 

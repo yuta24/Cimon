@@ -40,17 +40,24 @@ public class Storage {
         self.core = core
     }
 
-    public func set<V>(_ value: V, for key: StorageKey<V>) {
+    public func set<V>(_ value: V?, for key: StorageKey<V>) where V: Encodable {
         switch core {
         case .userDefaults(let userDefaults):
-            userDefaults.set(value, forKey: key.rawValue)
+            let encoder = JSONEncoder()
+            let data = try? encoder.encode(value)
+            userDefaults.set(data, forKey: key.rawValue)
         }
     }
 
-    public func value<V>(_ key: StorageKey<V>, _ completion: @escaping (V?) -> Void) {
+    public func value<V>(_ key: StorageKey<V>, _ completion: @escaping (V?) -> Void) where V: Decodable {
         switch core {
         case .userDefaults(let userDefaults):
-            completion(userDefaults.value(forKey: key.rawValue) as? V)
+            let decoder = JSONDecoder()
+            let data = userDefaults.data(forKey: key.rawValue)
+            let value = data.flatMap({
+                try? decoder.decode(V.self, from: $0)
+            })
+            completion(value)
         }
     }
 }
