@@ -91,7 +91,7 @@ class MainViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        navigationController?.navigationBar.setTransparent()
+        navigationController?.navigationBar.setBackgroundColor(.white)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -99,7 +99,7 @@ class MainViewController: UIViewController, Instantiatable {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        navigationController?.navigationBar.clearTransparent()
+        navigationController?.navigationBar.clearBackgroundColor()
 
         dependency.presenter.unsubscribe()
     }
@@ -119,7 +119,6 @@ class MainViewController: UIViewController, Instantiatable {
 
 extension MainViewController: MainPageDelegate {
     func onScrollChanged(_ contentOffset: CGPoint) {
-        logger.debug(contentOffset)
     }
 }
 
