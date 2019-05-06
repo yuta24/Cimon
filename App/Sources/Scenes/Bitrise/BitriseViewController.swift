@@ -31,7 +31,7 @@ class BitriseViewController: UIViewController, Instantiatable {
         didSet {
             unregisteredLabel.numberOfLines = 0
             unregisteredLabel.textAlignment = .center
-            unregisteredLabel.text = "Set Travis CI's API access token."
+            unregisteredLabel.text = "Set Bitrise's API access token."
         }
     }
     @IBOutlet weak var unregisteredButton: UIButton! {
