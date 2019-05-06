@@ -27,7 +27,7 @@ public struct Build: Codable {
     public var state: String
     public var duration: Int
     public var eventType: String
-    public var previousState: String
+    public var previousState: String?
     public var pullRequestTitle: String?
     public var pullRequestNumber: Int?
     public var startedAt: String
@@ -40,7 +40,7 @@ public struct Build: Codable {
         state: String,
         duration: Int,
         eventType: String,
-        previousState: String,
+        previousState: String?,
         pullRequestTitle: String?,
         pullRequestNumber: Int?,
         startedAt: String,
