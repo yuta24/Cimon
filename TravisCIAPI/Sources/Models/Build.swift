@@ -20,8 +20,11 @@ public struct Build: Codable {
         case startedAt = "started_at"
         case finishedAt = "finished_at"
         case `private` = "private"
+        case repository = "repository"
+        case branch = "branch"
     }
 
+    // @minimal
     public let id: Int
     public var number: String
     public var state: String
@@ -34,6 +37,9 @@ public struct Build: Codable {
     public var finishedAt: String
     public var `private`: Bool
 
+    public var repository: Repository?
+    public var branch: Branch?
+
     public init(
         id: Int,
         number: String,
@@ -45,7 +51,10 @@ public struct Build: Codable {
         pullRequestNumber: Int?,
         startedAt: String,
         finishedAt: String,
-        `private`: Bool) {
+        `private`: Bool,
+
+        repository: Repository?,
+        branch: Branch?) {
         self.id = id
         self.number = number
         self.state = state
@@ -57,5 +66,7 @@ public struct Build: Codable {
         self.startedAt = startedAt
         self.finishedAt = finishedAt
         self.private = `private`
+        self.repository = repository
+        self.branch = branch
     }
 }

@@ -85,6 +85,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                 dependency.network.response(Endpoint.Builds(limit: 10, offset: 0))
                     .then({ (response) in
                         logger.debug(response)
+                        self?.state.builds = response.builds
                     })
                     .catch({ (error) in
                         logger.debug(error)

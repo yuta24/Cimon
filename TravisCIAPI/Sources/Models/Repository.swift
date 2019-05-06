@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Repository {
+public struct Repository: Codable {
     enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "name"

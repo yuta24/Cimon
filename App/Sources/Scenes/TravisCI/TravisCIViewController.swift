@@ -86,6 +86,8 @@ class TravisCIViewController: UIViewController, Instantiatable {
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
+
+        tableView.reloadData()
     }
 
     @objc private func onUnregistered() {
@@ -106,11 +108,13 @@ class TravisCIViewController: UIViewController, Instantiatable {
 
 extension TravisCIViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return dependency.presenter.state.builds.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = UITableViewCell()
+        cell.textLabel?.text = dependency.presenter.state.builds[indexPath.row].repository?.slug
+        return cell
     }
 }
 
