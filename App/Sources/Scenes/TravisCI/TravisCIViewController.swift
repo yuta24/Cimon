@@ -13,7 +13,7 @@ import Domain
 class TravisCIViewController: UIViewController, Instantiatable {
     struct Dependency {
         let network: NetworkServiceProtocol
-        let storage: Storage
+        let storage: StorageProtocol
         let presenter: TravisCIViewPresenterProtocol
     }
 

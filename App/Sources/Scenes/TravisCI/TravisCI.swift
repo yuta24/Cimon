@@ -32,7 +32,7 @@ enum TravisCI {
 
     struct Dependency {
         var network: NetworkServiceProtocol
-        var storage: Storage
+        var storage: StorageProtocol
     }
 
     enum Transition {

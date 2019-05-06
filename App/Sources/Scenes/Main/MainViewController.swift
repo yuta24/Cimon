@@ -34,7 +34,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        let storage: Storage
+        let storage: StorageProtocol
         let presenter: MainViewPresenterProtocol
     }
 

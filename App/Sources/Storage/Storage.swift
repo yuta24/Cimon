@@ -9,14 +9,6 @@ import Foundation
 import Shared
 import Domain
 
-public struct StorageKey<V>: RawRepresentable {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-}
-
 extension StorageKey {
     static var travisCIToken: StorageKey<TravisCIToken> {
         return StorageKey<TravisCIToken>(rawValue: "travis_ci:token")
@@ -29,7 +21,7 @@ extension StorageKey {
     }
 }
 
-public class Storage {
+public class Storage: StorageProtocol {
     public enum Core {
         case userDefaults(UserDefaults)
     }
