@@ -44,6 +44,8 @@ class TravisCIViewController: UIViewController, Instantiatable {
         }
     }
 
+    weak var delegate: MainPageDelegate?
+
     private let refreshControl = UIRefreshControl()
     private var dependency: Dependency!
 
@@ -119,6 +121,10 @@ extension TravisCIViewController: UITableViewDataSource {
 }
 
 extension TravisCIViewController: UITableViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        delegate?.onScrollChanged(scrollView.contentOffset)
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }

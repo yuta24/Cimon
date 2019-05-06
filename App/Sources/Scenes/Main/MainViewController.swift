@@ -11,6 +11,10 @@ import Pipeline
 import Shared
 import Domain
 
+protocol MainPageDelegate: class {
+    func onScrollChanged(_ contentOffset: CGPoint)
+}
+
 class MainViewController: UIViewController, Instantiatable {
     enum Translator {
         static func convert(viewController: UIViewController) -> CI? {
@@ -46,16 +50,23 @@ class MainViewController: UIViewController, Instantiatable {
         options: nil)
 
     private lazy var pages: [CI: UIViewController] = {
+        let travisCIController = Scenes.travisCI
+            .execute(.init(
+                network: travisCIService,
+                storage: self.dependency.storage,
+                presenter: TravisCIViewPresenter()))
+        travisCIController.delegate = self
+
+        let circleCIController = Scenes.circleCI
+            .execute(.init(presenter: CircleCIViewPresenter()))
+
+        let bitriseController = Scenes.bitrise
+            .execute(.init(presenter: BitriseViewPresenter()))
+
         return [
-            .travisci: Scenes.travisCI
-                .execute(.init(
-                    network: travisCIService,
-                    storage: self.dependency.storage,
-                    presenter: TravisCIViewPresenter())),
-            .circleci: Scenes.circleCI
-                .execute(.init(presenter: CircleCIViewPresenter())),
-            .bitrise: Scenes.bitrise
-                .execute(.init(presenter: BitriseViewPresenter()))]
+            .travisci: travisCIController,
+            .circleci: circleCIController,
+            .bitrise: bitriseController]
     }()
 
     private var dependency: Dependency!
@@ -103,6 +114,12 @@ class MainViewController: UIViewController, Instantiatable {
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
         dependency.presenter.route(event: .settings).execute(self)
+    }
+}
+
+extension MainViewController: MainPageDelegate {
+    func onScrollChanged(_ contentOffset: CGPoint) {
+        logger.debug(contentOffset)
     }
 }
 
