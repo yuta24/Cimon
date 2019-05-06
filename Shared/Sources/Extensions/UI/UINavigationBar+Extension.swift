@@ -8,13 +8,13 @@
 import Foundation
 import UIKit
 
-extension UINavigationBar {
-    public func setTransparent() {
+public extension UINavigationBar {
+    func setTransparent() {
         setBackgroundImage(UIImage(), for: .default)
         shadowImage = UIImage()
     }
 
-    public func clearTransparent() {
+    func clearTransparent() {
         setBackgroundImage(nil, for: .default)
         shadowImage = nil
     }
