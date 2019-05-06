@@ -48,6 +48,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
 
     private let refreshControl = UIRefreshControl()
     private var dependency: Dependency!
+    private var observations = [NSKeyValueObservation]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +63,18 @@ class TravisCIViewController: UIViewController, Instantiatable {
             }
         }
         tableView.refreshControl = refreshControl
+
+        observations.append(tableView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (tableView, _) in
+            guard let `self` = self else {
+                return
+            }
+            logger.debug(tableView.nearBottom)
+
+            if tableView.nearBottom {
+                self.dependency.presenter.dispatch(.fetchNext)
+                    .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
+            }
+        })
     }
 
     override func viewWillAppear(_ animated: Bool) {

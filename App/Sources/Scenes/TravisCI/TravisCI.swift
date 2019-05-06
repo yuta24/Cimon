@@ -14,12 +14,13 @@ import Domain
 enum TravisCI {
     struct State {
         static var initial: State {
-            return .init(token: .none, builds: [], offset: 0)
+            return .init(isLoading: false, token: .none, builds: [], offset: 0)
         }
 
+        var isLoading: Bool
         var token: TravisCIToken?
         var builds: [Build]
-        var offset: Int
+        var offset: Int?
 
         var isUnregistered: Bool {
             return token == nil
@@ -28,6 +29,7 @@ enum TravisCI {
 
     enum Message {
         case fetch
+        case fetchNext
         case token(String?)
     }
 
@@ -83,11 +85,38 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         return .init({ [weak self] (dependency) in
             switch message {
             case .fetch:
-                dependency.network.response(Endpoint.Builds(limit: 25, offset: self?.state.offset ?? 0))
+                guard self.condition(where: { !$0.state.isLoading }) else {
+                    return
+                }
+                self?.state.isLoading = true
+                dependency.network.response(Endpoint.Builds(limit: 25, offset: 0))
+                    .always {
+                        self?.state.isLoading = false
+                    }
                     .then({ (response) in
                         logger.debug(response)
                         self?.state.builds = response.builds
-                        self?.state.offset = response.pagination.next?.offset ?? 0
+                        self?.state.offset = response.pagination.next?.offset
+                    })
+                    .catch({ (error) in
+                        logger.debug(error)
+                    })
+            case .fetchNext:
+                guard self.condition(where: { !$0.state.isLoading }) else {
+                    return
+                }
+                guard let offset = self?.state.offset else {
+                    return
+                }
+                self?.state.isLoading = true
+                dependency.network.response(Endpoint.Builds(limit: 25, offset: offset))
+                    .always {
+                        self?.state.isLoading = false
+                    }
+                    .then({ (response) in
+                        logger.debug(response)
+                        self?.state.builds.append(contentsOf: response.builds)
+                        self?.state.offset = response.pagination.next?.offset
                     })
                     .catch({ (error) in
                         logger.debug(error)
