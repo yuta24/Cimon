@@ -19,7 +19,6 @@ target 'Cimon' do
   use_frameworks!
 
   # Pods for Cimon
-  pod 'SwiftLint'
   pod 'SwiftGen', '~> 6.0'
 
   target 'CimonTests' do

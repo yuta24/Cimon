@@ -3,6 +3,7 @@ main_target: &main_target Cimon
 name: *main_target
 options:
   minimumXcodeGenVersion: 2.5.0
+  carthageExecutablePath: mint run Carthage/Carthage carthage
   bundleIdPrefix: com.bivre
   deploymentTarget:
     iOS: "11.0"
@@ -32,11 +33,7 @@ targets:
     prebuildScripts:
       - name: "[SwiftLint] Run Script"
         script: |
-          if which ${PODS_ROOT}/SwiftLint/swiftlint >/dev/null; then
-            ${PODS_ROOT}/SwiftLint/swiftlint
-          else
-            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-          fi
+          mint run realm/SwiftLint swiftlint
     scheme:
       testTargets:
         - CimonTests
