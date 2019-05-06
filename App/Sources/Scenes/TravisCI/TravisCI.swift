@@ -14,11 +14,12 @@ import Domain
 enum TravisCI {
     struct State {
         static var initial: State {
-            return .init(token: .none, builds: [])
+            return .init(token: .none, builds: [], offset: 0)
         }
 
         var token: TravisCIToken?
         var builds: [Build]
+        var offset: Int
 
         var isUnregistered: Bool {
             return token == nil
@@ -82,10 +83,11 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         return .init({ [weak self] (dependency) in
             switch message {
             case .fetch:
-                dependency.network.response(Endpoint.Builds(limit: 10, offset: 0))
+                dependency.network.response(Endpoint.Builds(limit: 25, offset: self?.state.offset ?? 0))
                     .then({ (response) in
                         logger.debug(response)
                         self?.state.builds = response.builds
+                        self?.state.offset = response.pagination.next?.offset ?? 0
                     })
                     .catch({ (error) in
                         logger.debug(error)
