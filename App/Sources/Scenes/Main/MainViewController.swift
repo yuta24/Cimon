@@ -61,7 +61,11 @@ class MainViewController: UIViewController, Instantiatable {
             .execute(.init(presenter: CircleCIViewPresenter()))
 
         let bitriseController = Scenes.bitrise
-            .execute(.init(presenter: BitriseViewPresenter()))
+            .execute(.init(
+                network: bitriseService,
+                storage: self.dependency.storage,
+                presenter: BitriseViewPresenter()))
+        bitriseController.delegate = self
 
         return [
             .travisci: travisCIController,

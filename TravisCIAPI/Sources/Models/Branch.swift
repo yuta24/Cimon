@@ -9,7 +9,7 @@ import Foundation
 
 public struct Branch: Codable {
     enum CodingKeys: String, CodingKey {
-        case name = "name"
+        case name
     }
 
     public var name: String

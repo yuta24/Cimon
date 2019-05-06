@@ -9,9 +9,9 @@ import Foundation
 
 public struct Repository: Codable {
     enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case name = "name"
-        case slug = "slug"
+        case id
+        case name
+        case slug
     }
 
     public let id: Int

@@ -28,11 +28,10 @@ public extension Endpoint {
             return .get
         }
 
-        public var queryParameters: [String : Any]? {
+        public var queryParameters: [String: Any]? {
             return [
                 "limit": limit,
-                "offset": offset,
-            ]
+                "offset": offset]
         }
 
         public var limit: Int

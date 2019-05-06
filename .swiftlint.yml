@@ -3,6 +3,9 @@ included:
   - App
   - Domain
   - Shared
+  - BitriseAPI
+  - TravisCIAPI
+  - CircleCIAPI
 excluded:
   - CimonTests
   - AppTests

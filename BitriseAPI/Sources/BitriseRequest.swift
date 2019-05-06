@@ -1,14 +1,14 @@
 //
-//  TravisCIRequest.swift
-//  TravisCIAPI
+//  BitriseRequest.swift
+//  BitriseAPI
 //
-//  Created by Yu Tawata on 2019/05/05.
+//  Created by Yu Tawata on 2019/05/06.
 //
 
 import Foundation
 import APIKit
 
-public protocol TravisCIRequest: APIKit.Request {
+public protocol BitriseRequest: APIKit.Request {
 }
 
 public struct DecodableDataParser: DataParser {
@@ -22,9 +22,9 @@ public struct DecodableDataParser: DataParser {
 
 }
 
-public extension TravisCIRequest where Response: Decodable {
+public extension BitriseRequest where Response: Decodable {
     var baseURL: URL {
-        return URL(string: "https://api.travis-ci.org")!
+        return URL(string: "https://api.bitrise.io/v0.1")!
     }
 
     var headerFields: [String: String] {

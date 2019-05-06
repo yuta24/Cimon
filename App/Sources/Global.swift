@@ -69,5 +69,5 @@ let bitriseService = NetworkService(
     session: Session.shared,
     plugins: [
         LoggerPlugin(outputProvider: { logger.debug($0) }),
-        AuthorizationPlugin(kind: .customize("token"), tokenProvider: bitriseTokenProvider)
+        AuthorizationPlugin(kind: .none, tokenProvider: bitriseTokenProvider)
     ])
