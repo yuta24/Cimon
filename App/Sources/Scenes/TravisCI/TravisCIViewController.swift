@@ -12,6 +12,7 @@ import Domain
 
 class TravisCIViewController: UIViewController, Instantiatable {
     struct Dependency {
+        let network: NetworkServiceProtocol
         let storage: Storage
         let presenter: TravisCIViewPresenterProtocol
     }
@@ -43,12 +44,31 @@ class TravisCIViewController: UIViewController, Instantiatable {
         }
     }
 
+    private let refreshControl = UIRefreshControl()
     private var dependency: Dependency!
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        apply(refreshControl) { (control) in
+            control.addEventHandler(for: .valueChanged) { [weak self] in
+                guard let `self` = self else {
+                    return
+                }
+                self.dependency.presenter.dispatch(.fetch)
+                    .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
+            }
+        }
+        tableView.refreshControl = refreshControl
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        dependency.presenter.load().execute(dependency.storage)
+        dependency.presenter.load()
+            .execute(.init(network: dependency.network, storage: dependency.storage))
+        dependency.presenter.dispatch(.fetch)
+            .execute(.init(network: dependency.network, storage: dependency.storage))
         dependency.presenter.subscribe(configure(_:))
     }
 
@@ -63,8 +83,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: TravisCI.State) {
-        logger.debug(#function)
-
+        refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
     }
@@ -78,7 +97,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
             }
             self.dependency.presenter
                 .dispatch(.token(alert?.textFields?.first?.text))
-                .execute(self.dependency.storage)
+                .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true)

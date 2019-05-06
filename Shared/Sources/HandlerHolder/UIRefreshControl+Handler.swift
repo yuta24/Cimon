@@ -1,29 +1,14 @@
 //
-//  UIButton+Extension.swift
+//  UIRefreshControl+Handler.swift
 //  Shared
 //
-//  Created by Yu Tawata on 2019/05/04.
+//  Created by Yu Tawata on 2019/05/05.
 //
 
 import Foundation
 import UIKit
 
-class HandlerHolder {
-    let closure: () -> Void
-
-    init(closure: @escaping () -> Void) {
-        self.closure = {
-            closure()
-        }
-    }
-
-    @objc
-    func handler() {
-        closure()
-    }
-}
-
-extension UIButton: HasAssociatedObjects {
+extension UIRefreshControl: HasAssociatedObjects {
     var holders: [HandlerHolder] {
         get {
             return (associatedObjects["closures"] as? [HandlerHolder]) ?? []
@@ -34,7 +19,7 @@ extension UIButton: HasAssociatedObjects {
     }
 }
 
-public extension UIButton {
+public extension UIRefreshControl {
     func addEventHandler(for event: UIControl.Event, handler: @escaping () -> Void) {
         let holder = HandlerHolder(closure: handler)
         addTarget(holder, action: #selector(HandlerHolder.handler), for: event)

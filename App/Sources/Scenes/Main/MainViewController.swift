@@ -48,7 +48,10 @@ class MainViewController: UIViewController, Instantiatable {
     private lazy var pages: [CI: UIViewController] = {
         return [
             .travisci: Scenes.travisCI
-                .execute(.init(storage: self.dependency.storage, presenter: TravisCIViewPresenter())),
+                .execute(.init(
+                    network: travisCIService,
+                    storage: self.dependency.storage,
+                    presenter: TravisCIViewPresenter())),
             .circleci: Scenes.circleCI
                 .execute(.init(presenter: CircleCIViewPresenter())),
             .bitrise: Scenes.bitrise

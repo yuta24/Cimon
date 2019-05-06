@@ -19,6 +19,9 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon
     dependencies:
       - target: Shared
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
       - target: Domain
       - target: App
       - carthage: APIKit
@@ -97,6 +100,9 @@ targets:
     dependencies:
       - target: Shared
       - target: Domain
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
       - carthage: APIKit
       - carthage: Promises
       - carthage: FBLPromises

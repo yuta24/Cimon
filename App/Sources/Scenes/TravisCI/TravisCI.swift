@@ -7,17 +7,18 @@
 
 import Foundation
 import Promises
+import TravisCIAPI
 import Shared
 import Domain
 
 enum TravisCI {
     struct State {
         static var initial: State {
-            return .init(loading: .idle, token: .none)
+            return .init(token: .none, builds: [])
         }
 
-        var loading: LoadingState<Void, Never>
         var token: TravisCIToken?
+        var builds: [Build]
 
         var isUnregistered: Bool {
             return token == nil
@@ -25,7 +26,13 @@ enum TravisCI {
     }
 
     enum Message {
+        case fetch
         case token(String?)
+    }
+
+    struct Dependency {
+        var network: NetworkServiceProtocol
+        var storage: Storage
     }
 
     enum Transition {
@@ -37,10 +44,10 @@ enum TravisCI {
 protocol TravisCIViewPresenterProtocol {
     var state: TravisCI.State { get }
 
-    func load() -> Reader<Storage, Void>
+    func load() -> Reader<TravisCI.Dependency, Void>
     func subscribe(_ closure: @escaping (TravisCI.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: TravisCI.Message) -> Reader<Storage, Void>
+    func dispatch(_ message: TravisCI.Message) -> Reader<TravisCI.Dependency, Void>
 
     func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -54,9 +61,9 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     private var closure: ((TravisCI.State) -> Void)?
 
-    func load() -> Reader<Storage, Void> {
-        return .init({ [weak self] (storage) in
-            storage.value(.travisCIToken, { (value) in
+    func load() -> Reader<TravisCI.Dependency, Void> {
+        return .init({ [weak self] (dependency) in
+            dependency.storage.value(.travisCIToken, { (value) in
                 self?.state.token = value
             })
         })
@@ -71,12 +78,20 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCI.Message) -> Reader<Storage, Void> {
-        return .init({ [weak self] (storage) in
+    func dispatch(_ message: TravisCI.Message) -> Reader<TravisCI.Dependency, Void> {
+        return .init({ [weak self] (dependency) in
             switch message {
+            case .fetch:
+                dependency.network.response(Endpoint.Builds(limit: 10, offset: 0))
+                    .then({ (response) in
+                        logger.debug(response)
+                    })
+                    .catch({ (error) in
+                        logger.debug(error)
+                    })
             case .token(let raw):
                 let token = raw.flatMap(TravisCIToken.init)
-                storage.set(token, for: .travisCIToken)
+                dependency.storage.set(token, for: .travisCIToken)
                 self?.state.token = token
             }
         })
