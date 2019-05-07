@@ -12,7 +12,7 @@ import Shared
 
 let logger = LightLogger.self
 
-private let travisCITokenProvider: () -> String? = {
+private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
@@ -22,10 +22,10 @@ private let travisCITokenProvider: () -> String? = {
     }
     semaphore.wait()
 
-    return token
+    return token.flatMap({ .customize(prefix: "token", token: $0) })
 }
 
-private let circleCITokenProvider: () -> String? = {
+private let circleCIKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
@@ -35,10 +35,10 @@ private let circleCITokenProvider: () -> String? = {
     }
     semaphore.wait()
 
-    return token
+    return token.flatMap({ .basic(userName: $0, password: "") })
 }
 
-private let bitriseTokenProvider: () -> String? = {
+private let bitriseKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
@@ -48,26 +48,26 @@ private let bitriseTokenProvider: () -> String? = {
     }
     semaphore.wait()
 
-    return token
+    return token.flatMap({ .customize(prefix: .none, token: $0) })
 }
 
 let travisCIService = NetworkService(
     session: Session.shared,
     plugins: [
         LoggerPlugin(outputProvider: { logger.debug($0) }),
-        AuthorizationPlugin(kind: .customize("token"), tokenProvider: travisCITokenProvider)
+        AuthorizationPlugin(kindProvider: travisCIKindProvider)
     ])
 
 let circleCIService = NetworkService(
     session: Session.shared,
     plugins: [
         LoggerPlugin(outputProvider: { logger.debug($0) }),
-        AuthorizationPlugin(kind: .customize("token"), tokenProvider: circleCITokenProvider)
+        AuthorizationPlugin(kindProvider: circleCIKindProvider)
     ])
 
 let bitriseService = NetworkService(
     session: Session.shared,
     plugins: [
         LoggerPlugin(outputProvider: { logger.debug($0) }),
-        AuthorizationPlugin(kind: .none, tokenProvider: bitriseTokenProvider)
+        AuthorizationPlugin(kindProvider: bitriseKindProvider)
     ])

@@ -1,14 +1,14 @@
 //
-//  BitriseRequest.swift
-//  BitriseAPI
+//  CircleCIRequest.swift
+//  CircleCIAPI
 //
-//  Created by Yu Tawata on 2019/05/06.
+//  Created by Yu Tawata on 2019/05/07.
 //
 
 import Foundation
 import APIKit
 
-public protocol BitriseRequest: APIKit.Request {
+public protocol CircleCIRequest: APIKit.Request {
 }
 
 public struct DecodableDataParser: DataParser {
@@ -22,9 +22,9 @@ public struct DecodableDataParser: DataParser {
 
 }
 
-public extension BitriseRequest where Response: Decodable {
+public extension CircleCIRequest where Response: Decodable {
     var baseURL: URL {
-        return URL(string: "https://api.bitrise.io/v0.1")!
+        return URL(string: "https://circleci.com/api/v1.1")!
     }
 
     var headerFields: [String: String] {

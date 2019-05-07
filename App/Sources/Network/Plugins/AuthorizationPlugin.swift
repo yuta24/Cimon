@@ -9,29 +9,31 @@ import Foundation
 
 struct AuthorizationPlugin: NetworkServicePlugin {
     enum Kind {
-        case bearer
-        case customize(String)
-        case none
+        case basic(userName: String, password: String)
+        case bearer(token: String)
+        case customize(prefix: String?, token: String)
     }
 
-    let kind: Kind
-    let tokenProvider: () -> String?
+    let kindProvider: () -> Kind?
 
     func prepare(urlRequest: URLRequest) -> URLRequest {
         var urlRequest = urlRequest
 
-        if let token = tokenProvider() {
-            let authorization: String = {
-                switch kind {
-                case .bearer:
-                    return "bearer \(token)"
-                case .customize(let prefix):
-                    return "\(prefix) \(token)"
-                case .none:
-                    return "\(token)"
+        if let kind = kindProvider() {
+            switch kind {
+            case .basic(let userName, let password):
+                if let token = "\(userName):\(password)".data(using: .utf8)?.base64EncodedString() {
+                    urlRequest.addValue("Basic \(token)", forHTTPHeaderField: "Authorization")
                 }
-            }()
-            urlRequest.addValue("\(authorization)", forHTTPHeaderField: "Authorization")
+            case .bearer(let token):
+                urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            case .customize(let prefix, let token):
+                if let prefix = prefix {
+                    urlRequest.addValue("\(prefix) \(token)", forHTTPHeaderField: "Authorization")
+                } else {
+                    urlRequest.addValue("\(token)", forHTTPHeaderField: "Authorization")
+                }
+            }
         }
 
         return urlRequest

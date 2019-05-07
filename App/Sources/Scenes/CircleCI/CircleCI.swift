@@ -7,17 +7,35 @@
 
 import Foundation
 import Promises
+import CircleCIAPI
 import Shared
 import Domain
 
 enum CircleCI {
     struct State {
         static var initial: State {
-            return .init()
+            return .init(isLoading: false, token: .none, builds: [], offset: 0)
+        }
+
+        var isLoading: Bool
+        var token: CircleCIToken?
+        var builds: [Build]
+        var offset: Int?
+
+        var isUnregistered: Bool {
+            return token == nil
         }
     }
 
     enum Message {
+        case fetch
+        case fetchNext
+        case token(String?)
+    }
+
+    struct Dependency {
+        var network: NetworkServiceProtocol
+        var storage: StorageProtocol
     }
 
     enum Transition {
@@ -29,9 +47,10 @@ enum CircleCI {
 protocol CircleCIViewPresenterProtocol {
     var state: CircleCI.State { get }
 
+    func load() -> Reader<CircleCI.Dependency, Void>
     func subscribe(_ closure: @escaping (CircleCI.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: CircleCI.Message)
+    func dispatch(_ message: CircleCI.Message) -> Reader<CircleCI.Dependency, Void>
 
     func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -45,6 +64,14 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     private var closure: ((CircleCI.State) -> Void)?
 
+    func load() -> Reader<CircleCI.Dependency, Void> {
+        return .init({ [weak self] (dependency) in
+            dependency.storage.value(.circleCIToken, { (value) in
+                self?.state.token = value
+            })
+        })
+    }
+
     func subscribe(_ closure: @escaping (CircleCI.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -54,7 +81,52 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: CircleCI.Message) {
+    func dispatch(_ message: CircleCI.Message) -> Reader<CircleCI.Dependency, Void> {
+        return .init({ [weak self] (dependency) in
+            switch message {
+            case .fetch:
+                guard self.condition(where: { !$0.state.isLoading }) else {
+                    return
+                }
+                self?.state.isLoading = true
+                dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: 0, shallow: false))
+                    .always {
+                        self?.state.isLoading = false
+                    }
+                    .then({ (response) in
+                        logger.debug(response)
+                        self?.state.builds = response
+                        self?.state.offset = self?.state.builds.count
+                    })
+                    .catch({ (error) in
+                        logger.debug(error)
+                    })
+            case .fetchNext:
+                guard self.condition(where: { !$0.state.isLoading }) else {
+                    return
+                }
+                guard let offset = self?.state.offset else {
+                    return
+                }
+                self?.state.isLoading = true
+                dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: offset, shallow: false))
+                    .always {
+                        self?.state.isLoading = false
+                    }
+                    .then({ (response) in
+                        logger.debug(response)
+                        self?.state.builds.append(contentsOf: response)
+                        self?.state.offset = response.isEmpty ? nil : self?.state.builds.count
+                    })
+                    .catch({ (error) in
+                        logger.debug(error)
+                    })
+            case .token(let raw):
+                let token = raw.flatMap(CircleCIToken.init)
+                dependency.storage.set(token, for: .circleCIToken)
+                self?.state.token = token
+            }
+        })
     }
 
     func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void> {

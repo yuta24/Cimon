@@ -58,7 +58,11 @@ class MainViewController: UIViewController, Instantiatable {
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI
-            .execute(.init(presenter: CircleCIViewPresenter()))
+            .execute(.init(
+                network: circleCIService,
+                storage: self.dependency.storage,
+                presenter: CircleCIViewPresenter()))
+        circleCIController.delegate = self
 
         let bitriseController = Scenes.bitrise
             .execute(.init(
