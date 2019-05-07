@@ -89,7 +89,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                     return
                 }
                 self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds.init(ownerSlug: nil, isOnHold: nil, status: nil, next: nil))
+                dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: nil, limit: 25))
                     .always {
                         self?.state.isLoading = false
                     }
@@ -111,7 +111,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                     return
                 }
                 self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds.init(ownerSlug: nil, isOnHold: nil, status: nil, next: next))
+                dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: next, limit: 25))
                     .always {
                         self?.state.isLoading = false
                     }
