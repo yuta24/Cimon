@@ -18,11 +18,16 @@ class BitriseViewController: UIViewController, Instantiatable {
     }
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var tableView: UITableView! {
+    @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            tableView.tableFooterView = UIView()
-            tableView.dataSource = self
-            tableView.delegate = self
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+                layout.minimumInteritemSpacing = 0
+                layout.minimumLineSpacing = 0
+            }
+            collectionView.backgroundColor = .clear
+            collectionView.dataSource = self
+            collectionView.delegate = self
         }
     }
 
@@ -62,15 +67,14 @@ class BitriseViewController: UIViewController, Instantiatable {
                     .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
             }
         }
-        tableView.refreshControl = refreshControl
+        collectionView.refreshControl = refreshControl
 
-        observations.append(tableView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (tableView, _) in
+        observations.append(collectionView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (collectionView, _) in
             guard let `self` = self else {
                 return
             }
-            logger.debug(tableView.nearBottom)
 
-            if tableView.nearBottom {
+            if collectionView.nearBottom {
                 self.dependency.presenter.dispatch(.fetchNext)
                     .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
             }
@@ -102,7 +106,7 @@ class BitriseViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        tableView.reloadData()
+        collectionView.reloadData()
     }
 
     @objc private func onUnregistered() {
@@ -121,28 +125,36 @@ class BitriseViewController: UIViewController, Instantiatable {
     }
 }
 
-extension BitriseViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension BitriseViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dependency.presenter.state.builds.count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let build = dependency.presenter.state.builds[indexPath.row]
-        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: tableView)
-        zip(build.statusText, build.repository?.owner?.name, build.repository?.title, build.branch, build.commitMessage, build.triggeredWorkflow, build.triggeredAt) {
-            (statusText: String, ownerName: String, repositoryTitle: String, branch: String, commitMessage: String, triggeredWorkflow: String, triggeredAt: String) in // swiftlint:disable:this closure_parameter_position
-            cell.configure(.init(context: .init(status: statusText, owner: ownerName, repositoryName: repositoryTitle, branchName: branch, targetBranchName: build.pullRequestTargetBranch, commitMessage: commitMessage, triggeredWorkflow: triggeredWorkflow, triggeredAt: triggeredAt)))
+        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: collectionView)
+        zip(build.statusText, build.repository?.owner?.name, build.repository?.slug, build.branch, build.triggeredWorkflow, build.triggeredAt) {
+            (statusText: String, ownerName: String, repositoryTitle: String, branch: String, triggeredWorkflow: String, triggeredAt: String) in // swiftlint:disable:this closure_parameter_position
+            cell.configure(.init(context: .init(
+                status: statusText,
+                owner: ownerName,
+                repositoryName: repositoryTitle,
+                branchName: branch,
+                targetBranchName: build.pullRequestTargetBranch,
+                commitMessage: build.commitMessage,
+                triggeredWorkflow: triggeredWorkflow,
+                triggeredAt: triggeredAt)))
         }
         return cell
     }
 }
 
-extension BitriseViewController: UITableViewDelegate {
+extension BitriseViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.onScrollChanged(scrollView.contentOffset)
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }

@@ -18,6 +18,13 @@
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
+  internal static let base00 = ColorAsset(name: "base00")
+  internal static let base01 = ColorAsset(name: "base01")
+  internal static let base02 = ColorAsset(name: "base02")
+  internal static let base03 = ColorAsset(name: "base03")
+  internal static let buildStatusAborted = ColorAsset(name: "build_status_aborted")
+  internal static let buildStatusFailed = ColorAsset(name: "build_status_failed")
+  internal static let buildStatusSuccess = ColorAsset(name: "build_status_success")
   internal static let outlineCloseBlack18pt = ImageAsset(name: "outline_close_black_18pt")
   internal static let outlineCloseBlack24pt = ImageAsset(name: "outline_close_black_24pt")
   internal static let outlineCloseBlack36pt = ImageAsset(name: "outline_close_black_36pt")

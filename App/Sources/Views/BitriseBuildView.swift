@@ -11,8 +11,13 @@ import BitriseAPI
 import Shared
 
 @IBDesignable
-class BitriseBuildView: UIView {
-    @IBOutlet weak var statusLabel: UILabel!
+class BitriseBuildView: RoundedView {
+    @IBOutlet weak var statusWrapperView: UIView!
+    @IBOutlet weak var statusLabel: UILabel! {
+        didSet {
+            statusLabel.textColor = Asset.base02.color
+        }
+    }
     @IBOutlet weak var ownerLabel: UILabel!
     @IBOutlet weak var repositoryNameLabel: UILabel!
     @IBOutlet weak var branchNameLabel: UILabel!
@@ -37,19 +42,51 @@ class BitriseBuildView: UIView {
 }
 
 extension BitriseBuildView: Configurable {
+    enum Status: String {
+        case success
+        case aborted
+        case error
+
+        init?(rawValue: String) {
+            switch rawValue {
+            case "success":
+                self = .success
+            case "aborted":
+                self = .aborted
+            case "error":
+                self = .error
+            default:
+                return nil
+            }
+        }
+
+        var color: UIColor {
+            switch self {
+            case .success:
+                return Asset.buildStatusSuccess.color
+            case .aborted:
+                return Asset.buildStatusAborted.color
+            case .error:
+                return Asset.buildStatusFailed.color
+            }
+        }
+    }
+
     struct Context {
         var status: String
         var owner: String
         var repositoryName: String
         var branchName: String
         var targetBranchName: String?
-        var commitMessage: String
+        var commitMessage: String?
         var triggeredWorkflow: String
         var triggeredAt: String
     }
 
     func configure(_ context: BitriseBuildView.Context) {
-        statusLabel.text = context.status
+        let status = Status(rawValue: context.status)
+        statusWrapperView.backgroundColor = status?.color
+        statusLabel.text = status?.rawValue.uppercased()
         ownerLabel.text = context.owner
         repositoryNameLabel.text = context.repositoryName
         branchNameLabel.text = context.branchName

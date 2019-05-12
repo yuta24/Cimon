@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -11,29 +11,58 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BitriseBuildStatusCell" rowHeight="96" id="hGj-Dw-AbT" customClass="BitriseBuildStatusCell" customModule="App" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="96"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hGj-Dw-AbT" id="QaO-lu-ISN">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="95.5"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="BitriseBuildStatusCell" id="mbY-cq-ak0" customClass="BitriseBuildStatusCell" customModule="App" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="369" height="154"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="369" height="154"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f0q-Nd-36F" customClass="BitriseBuildView" customModule="App" customModuleProvider="target">
-                        <rect key="frame" x="16" y="8" width="382" height="79.5"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rwp-e3-REr" customClass="RoundedView" customModule="App" customModuleProvider="target">
+                        <rect key="frame" x="16" y="8" width="337" height="138"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                <real key="value" value="0.20000000000000001"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                <real key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                <size key="value" width="0.0" height="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwX-uF-qcX" customClass="BitriseBuildView" customModule="App" customModuleProvider="target">
+                        <rect key="frame" x="16" y="8" width="337" height="138"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="8"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="bottom" secondItem="f0q-Nd-36F" secondAttribute="bottom" constant="8" id="8qE-wI-5y9"/>
-                    <constraint firstItem="f0q-Nd-36F" firstAttribute="top" secondItem="QaO-lu-ISN" secondAttribute="top" constant="8" id="CNJ-qj-vHC"/>
-                    <constraint firstAttribute="trailing" secondItem="f0q-Nd-36F" secondAttribute="trailing" constant="16" id="FCU-Th-V31"/>
-                    <constraint firstItem="f0q-Nd-36F" firstAttribute="leading" secondItem="QaO-lu-ISN" secondAttribute="leading" constant="16" id="lp7-2o-TlK"/>
-                </constraints>
-            </tableViewCellContentView>
+            </view>
+            <constraints>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="leading" secondItem="rwp-e3-REr" secondAttribute="leading" id="029-vU-3kl"/>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="bottom" secondItem="rwp-e3-REr" secondAttribute="bottom" id="5rR-Un-mrl"/>
+                <constraint firstAttribute="trailing" secondItem="jwX-uF-qcX" secondAttribute="trailing" constant="16" id="TA6-nO-URc"/>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="leading" secondItem="mbY-cq-ak0" secondAttribute="leading" constant="16" id="Xsv-8j-Qsp"/>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="top" secondItem="mbY-cq-ak0" secondAttribute="top" constant="16" id="asj-li-6kD"/>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="trailing" secondItem="rwp-e3-REr" secondAttribute="trailing" id="nw1-5Z-cZq"/>
+                <constraint firstItem="jwX-uF-qcX" firstAttribute="top" secondItem="rwp-e3-REr" secondAttribute="top" id="yjf-gS-jdg"/>
+                <constraint firstAttribute="bottom" secondItem="jwX-uF-qcX" secondAttribute="bottom" constant="16" id="ytY-dm-9ck"/>
+            </constraints>
+            <size key="customSize" width="369" height="154"/>
             <connections>
-                <outlet property="buildView" destination="f0q-Nd-36F" id="pie-68-knC"/>
+                <outlet property="buildView" destination="jwX-uF-qcX" id="A8U-FA-PcN"/>
+                <outlet property="shadowView" destination="rwp-e3-REr" id="ogC-oN-Dmq"/>
             </connections>
-            <point key="canvasLocation" x="134.78260869565219" y="166.07142857142856"/>
-        </tableViewCell>
+            <point key="canvasLocation" x="394.92753623188406" y="212.27678571428569"/>
+        </collectionViewCell>
     </objects>
 </document>
