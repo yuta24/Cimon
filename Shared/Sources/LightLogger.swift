@@ -59,7 +59,7 @@ func fileName(of filePath: String) -> String? {
     return fileNameOrNil
 }
 
-func build(level: LogLevel, message: String, threadName: String, functionName: String, filePath: String, lineNumber: Int) -> String {
+func build(level: LogLevel, message: String, threadName: String, functionName: String, filePath: String, lineNumber: Int) -> String { // swiftlint:disable:this function_parameter_count
     if let fileName = fileName(of: filePath) {
         return "\(level.description) [\(threadName)] [\(fileName):\(lineNumber)] \(functionName) > \(message)"
     } else {

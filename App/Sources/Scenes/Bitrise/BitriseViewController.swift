@@ -127,8 +127,12 @@ extension BitriseViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = dependency.presenter.state.builds[indexPath.row].repository?.title
+        let build = dependency.presenter.state.builds[indexPath.row]
+        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: tableView)
+        zip(build.statusText, build.repository?.owner?.name, build.repository?.title, build.branch, build.commitMessage, build.triggeredWorkflow, build.triggeredAt) {
+            (statusText: String, ownerName: String, repositoryTitle: String, branch: String, commitMessage: String, triggeredWorkflow: String, triggeredAt: String) in // swiftlint:disable:this closure_parameter_position
+            cell.configure(.init(context: .init(status: statusText, owner: ownerName, repositoryName: repositoryTitle, branchName: branch, targetBranchName: build.pullRequestTargetBranch, commitMessage: commitMessage, triggeredWorkflow: triggeredWorkflow, triggeredAt: triggeredAt)))
+        }
         return cell
     }
 }

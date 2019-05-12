@@ -30,9 +30,16 @@ public protocol CellRegisterable {
     static func register() -> CellRegister
 }
 
-public extension CellRegisterable {
+public extension CellRegisterable where Self: UITableViewCell {
     static func register() -> CellRegister {
         let identifier = String(describing: self)
-        return CellRegister(identifier: identifier, method: .nib(UINib(nibName: identifier, bundle: nil)))
+        return CellRegister(identifier: identifier, method: .nib(UINib(nibName: identifier, bundle: Bundle(for: self))))
+    }
+}
+
+public extension CellRegisterable where Self: UICollectionViewCell {
+    static func register() -> CellRegister {
+        let identifier = String(describing: self)
+        return CellRegister(identifier: identifier, method: .nib(UINib(nibName: identifier, bundle: Bundle(for: self))))
     }
 }
