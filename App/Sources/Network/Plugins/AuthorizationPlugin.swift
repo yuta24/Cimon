@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct AuthorizationPlugin: NetworkServicePlugin {
-    enum Kind {
+public struct AuthorizationPlugin: NetworkServicePlugin {
+    public enum Kind {
         case basic(userName: String, password: String)
         case bearer(token: String)
         case customize(prefix: String?, token: String)
@@ -16,7 +16,11 @@ struct AuthorizationPlugin: NetworkServicePlugin {
 
     let kindProvider: () -> Kind?
 
-    func prepare(urlRequest: URLRequest) -> URLRequest {
+    public init(kindProvider: @escaping () -> Kind?) {
+        self.kindProvider = kindProvider
+    }
+
+    public func prepare(urlRequest: URLRequest) -> URLRequest {
         var urlRequest = urlRequest
 
         if let kind = kindProvider() {
@@ -39,11 +43,11 @@ struct AuthorizationPlugin: NetworkServicePlugin {
         return urlRequest
     }
 
-    func willSend(urlRequest: URLRequest) {
+    public func willSend(urlRequest: URLRequest) {
         // no operation.
     }
 
-    func didReceive(object: Any, urlResponse: HTTPURLResponse) {
+    public func didReceive(object: Any, urlResponse: HTTPURLResponse) {
         // no operation.
     }
 }

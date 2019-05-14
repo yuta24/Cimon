@@ -19,7 +19,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rwp-e3-REr" customClass="RoundedView" customModule="App" customModuleProvider="target">
-                        <rect key="frame" x="16" y="8" width="337" height="138"/>
+                        <rect key="frame" x="16" y="16" width="337" height="122"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
@@ -34,7 +34,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jwX-uF-qcX" customClass="BitriseBuildView" customModule="App" customModuleProvider="target">
-                        <rect key="frame" x="16" y="8" width="337" height="138"/>
+                        <rect key="frame" x="16" y="16" width="337" height="122"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

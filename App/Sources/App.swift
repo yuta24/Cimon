@@ -12,16 +12,12 @@ import Shared
 import Domain
 
 public class App {
-    public static let shared = App(
-        window: UIWindow(frame: UIScreen.main.bounds),
-        storage: Storage.init(core: .userDefaults(.standard)))
-
     public let window: UIWindow
     public let environment: Environment
 
-    init (window: UIWindow, storage: Storage) {
+    public init (window: UIWindow, storage: StorageProtocol, services: [CI: NetworkService]) {
         self.window = apply(window, {
-            $0.rootViewController = (storage, MainViewPresenter(ci: .travisci))
+            $0.rootViewController = (storage, MainViewPresenter(ci: .travisci), services)
                 |> MainViewController.Dependency.init
                 |> Scenes.main.execute
                 |> UINavigationController.init

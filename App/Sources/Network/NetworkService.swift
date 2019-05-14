@@ -9,20 +9,20 @@ import Foundation
 import APIKit
 import Promises
 
-protocol NetworkServiceProtocol {
+public protocol NetworkServiceProtocol {
     func response<R>(_ request: R) -> Promise<R.Response> where R: Request, R.Response: Decodable
 }
 
-class NetworkService: NetworkServiceProtocol {
+public class NetworkService: NetworkServiceProtocol {
     let session: Session
     var plugins: [NetworkServicePlugin]
 
-    init(session: Session, plugins: [NetworkServicePlugin] = []) {
+    public init(session: Session, plugins: [NetworkServicePlugin] = []) {
         self.session = session
         self.plugins = plugins
     }
 
-    func response<R>(_ request: R) -> Promise<R.Response> where R: Request, R.Response: Decodable {
+    public func response<R>(_ request: R) -> Promise<R.Response> where R: Request, R.Response: Decodable {
         let wrap = NetworkServiceRequest(request, plugins: plugins)
         return Promise({ (fulfill, reject) in
             self.session.send(

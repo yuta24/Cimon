@@ -81,18 +81,22 @@ extension URLRequest {
     }
 }
 
-struct LoggerPlugin: NetworkServicePlugin {
+public struct LoggerPlugin: NetworkServicePlugin {
     let outputProvider: (String) -> Void
 
-    func prepare(urlRequest: URLRequest) -> URLRequest {
+    public init(outputProvider: @escaping (String) -> Void) {
+        self.outputProvider = outputProvider
+    }
+
+    public func prepare(urlRequest: URLRequest) -> URLRequest {
         return urlRequest
     }
 
-    func willSend(urlRequest: URLRequest) {
+    public func willSend(urlRequest: URLRequest) {
         outputProvider(urlRequest.cURLRepresentation())
     }
 
-    func didReceive(object: Any, urlResponse: HTTPURLResponse) {
+    public func didReceive(object: Any, urlResponse: HTTPURLResponse) {
         // no operation.
     }
 }

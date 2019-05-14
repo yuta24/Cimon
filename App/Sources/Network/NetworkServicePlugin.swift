@@ -8,7 +8,7 @@
 import Foundation
 import APIKit
 
-protocol NetworkServicePlugin {
+public protocol NetworkServicePlugin {
     func prepare(urlRequest: URLRequest) -> URLRequest
     func willSend(urlRequest: URLRequest)
     func didReceive(object: Any, urlResponse: HTTPURLResponse)

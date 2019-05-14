@@ -16,6 +16,7 @@ targets:
     platform: iOS
     sources:
       - path: Cimon
+      - path: GoogleService-Info.plist
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.bivre.cimon
     dependencies:

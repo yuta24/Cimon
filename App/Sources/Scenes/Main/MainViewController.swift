@@ -40,6 +40,7 @@ class MainViewController: UIViewController, Instantiatable {
     struct Dependency {
         let storage: StorageProtocol
         let presenter: MainViewPresenterProtocol
+        let services: [CI: NetworkService]
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -52,21 +53,21 @@ class MainViewController: UIViewController, Instantiatable {
     private lazy var pages: [CI: UIViewController] = {
         let travisCIController = Scenes.travisCI
             .execute(.init(
-                network: travisCIService,
+                network: self.dependency.services[.travisci]!,
                 storage: self.dependency.storage,
                 presenter: TravisCIViewPresenter()))
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI
             .execute(.init(
-                network: circleCIService,
+                network: self.dependency.services[.circleci]!,
                 storage: self.dependency.storage,
                 presenter: CircleCIViewPresenter()))
         circleCIController.delegate = self
 
         let bitriseController = Scenes.bitrise
             .execute(.init(
-                network: bitriseService,
+                network: self.dependency.services[.bitrise]!,
                 storage: self.dependency.storage,
                 presenter: BitriseViewPresenter()))
         bitriseController.delegate = self
