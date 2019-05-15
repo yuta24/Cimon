@@ -49,12 +49,10 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - Rome (0.20.0.56)
   - SwiftGen (6.1.0)
 
 DEPENDENCIES:
   - Firebase/Core
-  - Rome
   - SwiftGen (~> 6.0)
 
 SPEC REPOS:
@@ -66,7 +64,6 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
-    - Rome
     - SwiftGen
 
 SPEC CHECKSUMS:
@@ -77,9 +74,8 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 7f028ea162b72c8f326daec74afc95d94f7a47d6
   GoogleUtilities: f1faafc033ea203adf1783ce00af455bb99d0e5b
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  Rome: 47cf2099bc8de241881241a7cd61a9a7cd564999
   SwiftGen: f872ca75cbd17bf7103c17f13dcfa0d9a15667b0
 
-PODFILE CHECKSUM: 335d1697644cacece45fb166542ed94b4c22b9dc
+PODFILE CHECKSUM: f573460c0cadae2b2cdbb7f6f5e2cdcea9b47198
 
 COCOAPODS: 1.6.1
