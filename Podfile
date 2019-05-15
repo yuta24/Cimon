@@ -20,6 +20,7 @@ target 'Cimon' do
 
   # Pods for Cimon
   pod 'SwiftGen', '~> 6.0'
+  pod 'Rome'
   pod 'Firebase/Core'
 
   target 'CimonTests' do
