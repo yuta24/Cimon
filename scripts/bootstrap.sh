@@ -13,6 +13,7 @@ cd `dirname $0`/..
 echo "  + Generate xcodeproje by XcodeGen."
 mint run yonaskolb/XcodeGen xcodegen
 mint run Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
+bundle exec pod repo update
 bundle exec pod install
 
 echo ""
