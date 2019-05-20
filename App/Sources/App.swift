@@ -15,7 +15,7 @@ public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init (window: UIWindow, store: StoreProtocol, services: [CI: NetworkService]) {
+    public init (window: UIWindow, store: StoreProtocol, services: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
             $0.rootViewController = (store, MainViewPresenter(ci: .travisci), services)
                 |> MainViewController.Dependency.init

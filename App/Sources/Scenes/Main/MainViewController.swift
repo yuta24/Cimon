@@ -40,7 +40,7 @@ class MainViewController: UIViewController, Instantiatable {
     struct Dependency {
         let store: StoreProtocol
         let presenter: MainViewPresenterProtocol
-        let services: [CI: NetworkService]
+        let services: [CI: NetworkServiceProtocol]
     }
 
     @IBOutlet weak var contentView: UIView!
