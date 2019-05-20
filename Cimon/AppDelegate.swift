@@ -9,13 +9,13 @@
 import UIKit
 import Shared
 import App
-import Firebase
+import FirebaseCore
 
 let logger = LightLogger.self
 
 let app = App(
     window: UIWindow(frame: UIScreen.main.bounds),
-    store: Store(core: .userDefaults(.standard)),
+    store: LocalStore(userDefaults: .standard),
     services: [
         .travisci: travisCIService,
         .circleci: circleCIService,
