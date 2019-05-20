@@ -14,7 +14,7 @@ import Domain
 enum Bitrise {
     struct State {
         static var initial: State {
-            return .init(isLoading: false, token: .none, builds: [], next: nil)
+            return .init(isLoading: false, token: .none, builds: [], next: .none)
         }
 
         var isLoading: Bool
