@@ -23,21 +23,21 @@ public struct AuthorizationPlugin: NetworkServicePlugin {
     public func prepare(urlRequest: URLRequest) -> URLRequest {
         var urlRequest = urlRequest
 
-        if let kind = kindProvider() {
-            switch kind {
-            case .basic(let userName, let password):
-                if let token = "\(userName):\(password)".data(using: .utf8)?.base64EncodedString() {
-                    urlRequest.addValue("Basic \(token)", forHTTPHeaderField: "Authorization")
-                }
-            case .bearer(let token):
-                urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            case .customize(let prefix, let token):
-                if let prefix = prefix {
-                    urlRequest.addValue("\(prefix) \(token)", forHTTPHeaderField: "Authorization")
-                } else {
-                    urlRequest.addValue("\(token)", forHTTPHeaderField: "Authorization")
-                }
+        switch kindProvider() {
+        case .some(.basic(let userName, let password)):
+            if let token = "\(userName):\(password)".data(using: .utf8)?.base64EncodedString() {
+                urlRequest.addValue("Basic \(token)", forHTTPHeaderField: "Authorization")
             }
+        case .some(.bearer(let token)):
+            urlRequest.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        case .some(.customize(let prefix, let token)):
+            if let prefix = prefix {
+                urlRequest.addValue("\(prefix) \(token)", forHTTPHeaderField: "Authorization")
+            } else {
+                urlRequest.addValue("\(token)", forHTTPHeaderField: "Authorization")
+            }
+        case .none:
+            break
         }
 
         return urlRequest
