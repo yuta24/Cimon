@@ -75,6 +75,10 @@ class TravisCIViewController: UIViewController, Instantiatable {
                     .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         })
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
         dependency.presenter.load()
             .execute(.init(network: dependency.network, store: dependency.store))
