@@ -15,7 +15,7 @@ let logger = LightLogger.self
 
 let app = App(
     window: UIWindow(frame: UIScreen.main.bounds),
-    storage: Storage(core: .userDefaults(.standard)),
+    store: Store(core: .userDefaults(.standard)),
     services: [
         .travisci: travisCIService,
         .circleci: circleCIService,

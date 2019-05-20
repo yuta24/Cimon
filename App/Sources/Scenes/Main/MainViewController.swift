@@ -38,7 +38,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        let storage: StorageProtocol
+        let store: StoreProtocol
         let presenter: MainViewPresenterProtocol
         let services: [CI: NetworkService]
     }
@@ -54,21 +54,21 @@ class MainViewController: UIViewController, Instantiatable {
         let travisCIController = Scenes.travisCI
             .execute(.init(
                 network: self.dependency.services[.travisci]!,
-                storage: self.dependency.storage,
+                store: self.dependency.store,
                 presenter: TravisCIViewPresenter()))
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI
             .execute(.init(
                 network: self.dependency.services[.circleci]!,
-                storage: self.dependency.storage,
+                store: self.dependency.store,
                 presenter: CircleCIViewPresenter()))
         circleCIController.delegate = self
 
         let bitriseController = Scenes.bitrise
             .execute(.init(
                 network: self.dependency.services[.bitrise]!,
-                storage: self.dependency.storage,
+                store: self.dependency.store,
                 presenter: BitriseViewPresenter()))
         bitriseController.delegate = self
 

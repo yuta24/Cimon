@@ -13,7 +13,7 @@ private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
-    app.environment.storage.value(.travisCIToken) { (_token) in
+    app.environment.store.value(.travisCIToken) { (_token) in
         token = _token?.value
         semaphore.signal()
     }
@@ -26,7 +26,7 @@ private let circleCIKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
-    app.environment.storage.value(.circleCIToken) { (_token) in
+    app.environment.store.value(.circleCIToken) { (_token) in
         token = _token?.value
         semaphore.signal()
     }
@@ -39,7 +39,7 @@ private let bitriseKindProvider: () -> AuthorizationPlugin.Kind? = {
     var token: String?
 
     let semaphore = DispatchSemaphore(value: 0)
-    app.environment.storage.value(.bitriseToken) { (_token) in
+    app.environment.store.value(.bitriseToken) { (_token) in
         token = _token?.value
         semaphore.signal()
     }

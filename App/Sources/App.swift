@@ -15,15 +15,15 @@ public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init (window: UIWindow, storage: StorageProtocol, services: [CI: NetworkService]) {
+    public init (window: UIWindow, store: StoreProtocol, services: [CI: NetworkService]) {
         self.window = apply(window, {
-            $0.rootViewController = (storage, MainViewPresenter(ci: .travisci), services)
+            $0.rootViewController = (store, MainViewPresenter(ci: .travisci), services)
                 |> MainViewController.Dependency.init
                 |> Scenes.main.execute
                 |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
-        self.environment = Environment(storage: storage)
+        self.environment = Environment(store: store)
     }
 
     public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

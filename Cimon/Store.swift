@@ -1,5 +1,5 @@
 //
-//  Storage.swift
+//  Store.swift
 //  Cimon
 //
 //  Created by Yu Tawata on 2019/05/14.
@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public class Storage: StorageProtocol {
+public class Store: StoreProtocol {
     public enum Core {
         case userDefaults(UserDefaults)
     }
@@ -19,7 +19,7 @@ public class Storage: StorageProtocol {
         self.core = core
     }
 
-    public func set<V>(_ value: V?, for key: StorageKey<V>) where V: Encodable {
+    public func set<V>(_ value: V?, for key: StoreKey<V>) where V: Encodable {
         switch core {
         case .userDefaults(let userDefaults):
             let encoder = JSONEncoder()
@@ -28,7 +28,7 @@ public class Storage: StorageProtocol {
         }
     }
 
-    public func value<V>(_ key: StorageKey<V>, _ completion: @escaping (V?) -> Void) where V: Decodable {
+    public func value<V>(_ key: StoreKey<V>, _ completion: @escaping (V?) -> Void) where V: Decodable {
         switch core {
         case .userDefaults(let userDefaults):
             let decoder = JSONDecoder()

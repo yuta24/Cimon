@@ -10,9 +10,9 @@ import Shared
 import Domain
 
 public class Environment {
-    public let storage: StorageProtocol
+    public let store: StoreProtocol
 
-    public init(storage: StorageProtocol) {
-        self.storage = storage
+    public init(store: StoreProtocol) {
+        self.store = store
     }
 }
