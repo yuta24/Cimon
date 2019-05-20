@@ -12,10 +12,11 @@ import App
 import FirebaseCore
 
 let logger = LightLogger.self
+let store = LocalStore(userDefaults: .standard)
 
 let app = App(
     window: UIWindow(frame: UIScreen.main.bounds),
-    store: LocalStore(userDefaults: .standard),
+    store: store,
     services: [
         .travisci: travisCIService,
         .circleci: circleCIService,
