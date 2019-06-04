@@ -35,7 +35,7 @@ enum TravisCI {
 
     struct Dependency {
         var network: NetworkServiceProtocol
-        var storage: StorageProtocol
+        var store: StoreProtocol
     }
 
     enum Transition {
@@ -66,7 +66,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     func load() -> Reader<TravisCI.Dependency, Void> {
         return .init({ [weak self] (dependency) in
-            dependency.storage.value(.travisCIToken, { (value) in
+            dependency.store.value(.travisCIToken, { (value) in
                 self?.state.token = value
             })
         })
@@ -123,7 +123,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                     })
             case .token(let raw):
                 let token = raw.flatMap(TravisCIToken.init)
-                dependency.storage.set(token, for: .travisCIToken)
+                dependency.store.set(token, for: .travisCIToken)
                 self?.state.token = token
             }
         })

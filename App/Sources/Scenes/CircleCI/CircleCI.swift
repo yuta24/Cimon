@@ -35,7 +35,7 @@ enum CircleCI {
 
     struct Dependency {
         var network: NetworkServiceProtocol
-        var storage: StorageProtocol
+        var store: StoreProtocol
     }
 
     enum Transition {
@@ -66,7 +66,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     func load() -> Reader<CircleCI.Dependency, Void> {
         return .init({ [weak self] (dependency) in
-            dependency.storage.value(.circleCIToken, { (value) in
+            dependency.store.value(.circleCIToken, { (value) in
                 self?.state.token = value
             })
         })
@@ -123,7 +123,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
                     })
             case .token(let raw):
                 let token = raw.flatMap(CircleCIToken.init)
-                dependency.storage.set(token, for: .circleCIToken)
+                dependency.store.set(token, for: .circleCIToken)
                 self?.state.token = token
             }
         })

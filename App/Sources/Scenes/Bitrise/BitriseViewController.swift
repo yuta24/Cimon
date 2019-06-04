@@ -13,7 +13,7 @@ import Domain
 class BitriseViewController: UIViewController, Instantiatable {
     struct Dependency {
         let network: NetworkServiceProtocol
-        let storage: StorageProtocol
+        let store: StoreProtocol
         let presenter: BitriseViewPresenterProtocol
     }
 
@@ -64,7 +64,7 @@ class BitriseViewController: UIViewController, Instantiatable {
                     return
                 }
                 self.dependency.presenter.dispatch(.fetch)
-                    .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
+                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         }
         collectionView.refreshControl = refreshControl
@@ -76,7 +76,7 @@ class BitriseViewController: UIViewController, Instantiatable {
 
             if collectionView.nearBottom {
                 self.dependency.presenter.dispatch(.fetchNext)
-                    .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
+                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         })
     }
@@ -85,9 +85,9 @@ class BitriseViewController: UIViewController, Instantiatable {
         super.viewWillAppear(animated)
 
         dependency.presenter.load()
-            .execute(.init(network: dependency.network, storage: dependency.storage))
+            .execute(.init(network: dependency.network, store: dependency.store))
         dependency.presenter.dispatch(.fetch)
-            .execute(.init(network: dependency.network, storage: dependency.storage))
+            .execute(.init(network: dependency.network, store: dependency.store))
         dependency.presenter.subscribe(configure(_:))
     }
 
@@ -118,7 +118,7 @@ class BitriseViewController: UIViewController, Instantiatable {
             }
             self.dependency.presenter
                 .dispatch(.token(alert?.textFields?.first?.text))
-                .execute(.init(network: self.dependency.network, storage: self.dependency.storage))
+                .execute(.init(network: self.dependency.network, store: self.dependency.store))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         present(alert, animated: true)

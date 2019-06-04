@@ -14,7 +14,7 @@ import Domain
 enum Bitrise {
     struct State {
         static var initial: State {
-            return .init(isLoading: false, token: .none, builds: [], next: nil)
+            return .init(isLoading: false, token: .none, builds: [], next: .none)
         }
 
         var isLoading: Bool
@@ -35,7 +35,7 @@ enum Bitrise {
 
     struct Dependency {
         var network: NetworkServiceProtocol
-        var storage: StorageProtocol
+        var store: StoreProtocol
     }
 
     enum Transition {
@@ -66,7 +66,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     func load() -> Reader<Bitrise.Dependency, Void> {
         return .init({ [weak self] (dependency) in
-            dependency.storage.value(.bitriseToken, { (value) in
+            dependency.store.value(.bitriseToken, { (value) in
                 self?.state.token = value
             })
         })
@@ -127,7 +127,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                     })
             case .token(let raw):
                 let token = raw.flatMap(BitriseToken.init)
-                dependency.storage.set(token, for: .bitriseToken)
+                dependency.store.set(token, for: .bitriseToken)
                 self?.state.token = token
             }
         })
