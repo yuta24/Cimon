@@ -252,6 +252,7 @@ DEPENDENCIES
   danger
   danger-swiftlint
   fastlane
+  google-api-client
 
 BUNDLED WITH
    2.0.1
