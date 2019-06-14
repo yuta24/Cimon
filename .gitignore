@@ -5,6 +5,8 @@
 *.xcodeproj
 *.xcworkspace
 
+/GoogleService-Info.plist
+
 ## Build generated
 build/
 DerivedData/
