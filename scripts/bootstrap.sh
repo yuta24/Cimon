@@ -8,8 +8,10 @@ PROJECT_NAME=Cimon
 
 echo "  + Generate xcodeproje by XcodeGen."
 mint run --silent yonaskolb/XcodeGen xcodegen
-mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
-bundle exec pod install
+if [ "${CI-A}" = "A" ]; then
+  mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
+  bundle exec pod install
+fi
 
 echo ""
 echo "********************************************************"
