@@ -6,5 +6,5 @@
 ## Setup
 
 ```hcl
-$ ./scripts/bootstrap.sh
+$ ./scripts/setup.sh
 ```
