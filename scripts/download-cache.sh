@@ -10,3 +10,5 @@ BRANCH_=$(parse_git_branch)
 BRANCH=${BRANCH_/\//-}
 FILE="${PROJECT_NAME}-${BRANCH/\ /}.zip"
 bundle exec ruby scripts/_cache/download_from_google_drive.rb ${FILE}
+unzip -o ${FILE} -d ./
+rm ${FILE}
