@@ -4,16 +4,13 @@ set -eu
 
 PROJECT_NAME=Cimon
 
-cd `dirname $0`/..
-
-`dirname $0`/setup.sh
-
 # bootstrap
 
 echo "  + Generate xcodeproje by XcodeGen."
 mint run --silent yonaskolb/XcodeGen xcodegen
-mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
-bundle exec pod repo update
+if [ "${CI-A}" = "A" ]; then
+  mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
+fi
 bundle exec pod install
 
 echo ""

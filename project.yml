@@ -109,7 +109,7 @@ targets:
     prebuildScripts:
       - name: "[SwiftGen] Run Script"
         script: |
-          ${PODS_ROOT}/SwiftGen/bin/swiftgen config run --config App/swiftgen.yml
+          mint run SwiftGen/SwiftGen swiftgen config run --config App/swiftgen.yml
     scheme:
       testTargets:
         - AppTests

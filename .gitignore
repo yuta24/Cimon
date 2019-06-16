@@ -6,6 +6,8 @@
 *.xcworkspace
 
 /GoogleService-Info.plist
+/credentials.json
+/token.yaml
 
 ## Build generated
 build/

@@ -2,7 +2,7 @@
 
 set -eu
 
-cd `dirname $0`/..
+cp -R scripts/_hooks/* .git/hooks/
 
 # Mint
 if test ! $(which mint)
