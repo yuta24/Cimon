@@ -22,7 +22,6 @@ target 'Cimon' do
   use_frameworks!
 
   # Pods for Cimon
-  pod 'SwiftGen', '~> 6.0'
   pod 'Firebase/Core', :binary => true
   pod 'Firebase/Firestore', :binary => true
 
