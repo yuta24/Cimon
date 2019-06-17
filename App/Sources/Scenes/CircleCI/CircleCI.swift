@@ -10,7 +10,7 @@ import CircleCIAPI
 import Shared
 import Domain
 
-enum CircleCI {
+enum CircleCIScene {
     struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], offset: 0)
@@ -44,18 +44,18 @@ enum CircleCI {
 }
 
 protocol CircleCIViewPresenterProtocol {
-    var state: CircleCI.State { get }
+    var state: CircleCIScene.State { get }
 
-    func load() -> Reader<CircleCI.Dependency, Void>
-    func subscribe(_ closure: @escaping (CircleCI.State) -> Void)
+    func load() -> Reader<CircleCIScene.Dependency, Void>
+    func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: CircleCI.Message) -> Reader<CircleCI.Dependency, Void>
+    func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void>
 
-    func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
-    private(set) var state: CircleCI.State = .initial {
+    private(set) var state: CircleCIScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -63,9 +63,9 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         }
     }
 
-    private var closure: ((CircleCI.State) -> Void)?
+    private var closure: ((CircleCIScene.State) -> Void)?
 
-    func load() -> Reader<CircleCI.Dependency, Void> {
+    func load() -> Reader<CircleCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             dependency.store.value(.circleCIToken, { (value) in
                 self?.state.token = value
@@ -73,7 +73,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         })
     }
 
-    func subscribe(_ closure: @escaping (CircleCI.State) -> Void) {
+    func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
@@ -82,7 +82,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: CircleCI.Message) -> Reader<CircleCI.Dependency, Void> {
+    func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
             case .fetch:
@@ -128,7 +128,7 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         })
     }
 
-    func route(event: CircleCI.Transition.Event) -> Reader<UIViewController, Void> {
+    func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

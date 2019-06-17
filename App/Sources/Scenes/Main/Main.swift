@@ -9,7 +9,7 @@ import Foundation
 import Shared
 import Domain
 
-enum Main {
+enum MainScene {
     struct State {
         var selected: CI
 
@@ -48,29 +48,29 @@ enum Main {
 }
 
 protocol MainViewPresenterProtocol {
-    var state: Main.State { get }
+    var state: MainScene.State { get }
 
-    func subscribe(_ closure: @escaping (Main.State) -> Void)
+    func subscribe(_ closure: @escaping (MainScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: Main.Message)
+    func dispatch(_ message: MainScene.Message)
 
-    func route(event: Main.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
-    private(set) var state: Main.State {
+    private(set) var state: MainScene.State {
         didSet {
             closure?(state)
         }
     }
 
-    private var closure: ((Main.State) -> Void)?
+    private var closure: ((MainScene.State) -> Void)?
 
     init(ci: CI) {
         self.state = .init(selected: ci)
     }
 
-    func subscribe(_ closure: @escaping (Main.State) -> Void) {
+    func subscribe(_ closure: @escaping (MainScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
@@ -79,14 +79,14 @@ class MainViewPresenter: MainViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: Main.Message) {
+    func dispatch(_ message: MainScene.Message) {
         switch message {
         case .update(let ci):
             state.selected = ci
         }
     }
 
-    func route(event: Main.Transition.Event) -> Reader<UIViewController, Void> {
+    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
             switch event {
             case .settings:

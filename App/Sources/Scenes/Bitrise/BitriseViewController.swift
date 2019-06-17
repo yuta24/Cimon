@@ -101,7 +101,7 @@ class BitriseViewController: UIViewController, Instantiatable {
         self.dependency = dependency
     }
 
-    private func configure(_ state: Bitrise.State) {
+    private func configure(_ state: BitriseScene.State) {
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered

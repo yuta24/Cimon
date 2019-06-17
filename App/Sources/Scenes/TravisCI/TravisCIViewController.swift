@@ -97,7 +97,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
         self.dependency = dependency
     }
 
-    private func configure(_ state: TravisCI.State) {
+    private func configure(_ state: TravisCIScene.State) {
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered

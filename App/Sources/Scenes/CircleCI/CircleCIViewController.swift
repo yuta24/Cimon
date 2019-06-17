@@ -97,7 +97,7 @@ class CircleCIViewController: UIViewController, Instantiatable {
         self.dependency = dependency
     }
 
-    private func configure(_ state: CircleCI.State) {
+    private func configure(_ state: CircleCIScene.State) {
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered

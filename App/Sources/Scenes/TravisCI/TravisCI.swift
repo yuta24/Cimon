@@ -11,7 +11,7 @@ import TravisCIAPI
 import Shared
 import Domain
 
-enum TravisCI {
+enum TravisCIScene {
     struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], offset: 0)
@@ -45,18 +45,18 @@ enum TravisCI {
 }
 
 protocol TravisCIViewPresenterProtocol {
-    var state: TravisCI.State { get }
+    var state: TravisCIScene.State { get }
 
-    func load() -> Reader<TravisCI.Dependency, Void>
-    func subscribe(_ closure: @escaping (TravisCI.State) -> Void)
+    func load() -> Reader<TravisCIScene.Dependency, Void>
+    func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: TravisCI.Message) -> Reader<TravisCI.Dependency, Void>
+    func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void>
 
-    func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
-    private(set) var state: TravisCI.State = .initial {
+    private(set) var state: TravisCIScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -64,9 +64,9 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         }
     }
 
-    private var closure: ((TravisCI.State) -> Void)?
+    private var closure: ((TravisCIScene.State) -> Void)?
 
-    func load() -> Reader<TravisCI.Dependency, Void> {
+    func load() -> Reader<TravisCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             dependency.store.value(.travisCIToken, { (value) in
                 self?.state.token = value
@@ -74,7 +74,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         })
     }
 
-    func subscribe(_ closure: @escaping (TravisCI.State) -> Void) {
+    func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
@@ -83,7 +83,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCI.Message) -> Reader<TravisCI.Dependency, Void> {
+    func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
             case .fetch:
@@ -129,7 +129,7 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         })
     }
 
-    func route(event: TravisCI.Transition.Event) -> Reader<UIViewController, Void> {
+    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

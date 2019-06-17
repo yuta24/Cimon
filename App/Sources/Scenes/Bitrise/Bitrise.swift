@@ -10,7 +10,7 @@ import BitriseAPI
 import Shared
 import Domain
 
-enum Bitrise {
+enum BitriseScene {
     struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], next: .none)
@@ -44,18 +44,18 @@ enum Bitrise {
 }
 
 protocol BitriseViewPresenterProtocol {
-    var state: Bitrise.State { get }
+    var state: BitriseScene.State { get }
 
-    func load() -> Reader<Bitrise.Dependency, Void>
-    func subscribe(_ closure: @escaping (Bitrise.State) -> Void)
+    func load() -> Reader<BitriseScene.Dependency, Void>
+    func subscribe(_ closure: @escaping (BitriseScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: Bitrise.Message) -> Reader<Bitrise.Dependency, Void>
+    func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void>
 
-    func route(event: Bitrise.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class BitriseViewPresenter: BitriseViewPresenterProtocol {
-    private(set) var state: Bitrise.State = .initial {
+    private(set) var state: BitriseScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -63,9 +63,9 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         }
     }
 
-    private var closure: ((Bitrise.State) -> Void)?
+    private var closure: ((BitriseScene.State) -> Void)?
 
-    func load() -> Reader<Bitrise.Dependency, Void> {
+    func load() -> Reader<BitriseScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             dependency.store.value(.bitriseToken, { (value) in
                 self?.state.token = value
@@ -73,7 +73,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         })
     }
 
-    func subscribe(_ closure: @escaping (Bitrise.State) -> Void) {
+    func subscribe(_ closure: @escaping (BitriseScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
@@ -82,7 +82,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: Bitrise.Message) -> Reader<Bitrise.Dependency, Void> {
+    func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
             case .fetch:
@@ -132,7 +132,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         })
     }
 
-    func route(event: Bitrise.Transition.Event) -> Reader<UIViewController, Void> {
+    func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
         })
     }

@@ -116,7 +116,7 @@ class MainViewController: UIViewController, Instantiatable {
         self.dependency = dependency
     }
 
-    private func configure(_ state: Main.State) {
+    private func configure(_ state: MainScene.State) {
         navigationItem.title = state.selected.description
     }
 
