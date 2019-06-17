@@ -27,10 +27,9 @@ targets:
       - target: Domain
       - target: App
       - carthage: APIKit
-      - carthage: Promises
-      - carthage: FBLPromises
-      - carthage: Pipeline
       - carthage: Nuke
+      - carthage: Pipeline
+      - carthage: ReactiveSwift
     prebuildScripts:
       - name: "[SwiftLint] Run Script"
         script: |
@@ -102,10 +101,9 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - carthage: APIKit
-      - carthage: Promises
-      - carthage: FBLPromises
-      - carthage: Pipeline
       - carthage: Nuke
+      - carthage: Pipeline
+      - carthage: ReactiveSwift
     prebuildScripts:
       - name: "[SwiftGen] Run Script"
         script: |

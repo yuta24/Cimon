@@ -7,7 +7,6 @@
 
 import Foundation
 import APIKit
-import Promises
 import Shared
 
 let logger = LightLogger.self

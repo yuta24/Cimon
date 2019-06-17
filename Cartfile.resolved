@@ -1,3 +1,4 @@
 github "ReactiveCocoa/ReactiveSwift" "6.0.0"
 github "ishkawa/APIKit" "5.0.0"
 github "kean/Nuke" "7.6.3"
+github "yuta24/Pipeline" "b9a2ab741e4b69a2a8cab9977ea5f75f75f0261e"

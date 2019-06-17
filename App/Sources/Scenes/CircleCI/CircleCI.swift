@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Promises
 import CircleCIAPI
 import Shared
 import Domain
@@ -58,7 +57,9 @@ protocol CircleCIViewPresenterProtocol {
 class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
     private(set) var state: CircleCI.State = .initial {
         didSet {
-            closure?(state)
+            DispatchQueue.main.async {
+                self.closure?(self.state)
+            }
         }
     }
 
@@ -90,17 +91,16 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: 0, shallow: false))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds = response
                         self?.state.offset = self?.state.builds.count
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .fetchNext:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return
@@ -110,17 +110,16 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: offset, shallow: false))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds.append(contentsOf: response)
                         self?.state.offset = response.isEmpty ? nil : self?.state.builds.count
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .token(let raw):
                 let token = raw.flatMap(CircleCIToken.init)
                 dependency.store.set(token, for: .circleCIToken)

@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import Promises
-import Pipeline
 import Shared
 import Domain
 

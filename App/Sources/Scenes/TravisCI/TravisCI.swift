@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Promises
+import ReactiveSwift
 import TravisCIAPI
 import Shared
 import Domain
@@ -58,7 +58,9 @@ protocol TravisCIViewPresenterProtocol {
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
     private(set) var state: TravisCI.State = .initial {
         didSet {
-            closure?(state)
+            DispatchQueue.main.async {
+                self.closure?(self.state)
+            }
         }
     }
 
@@ -90,17 +92,16 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.Builds(limit: 25, offset: 0))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds = response.builds
                         self?.state.offset = response.pagination.next?.offset
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .fetchNext:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return
@@ -110,17 +111,16 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.Builds(limit: 25, offset: offset))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds.append(contentsOf: response.builds)
                         self?.state.offset = response.pagination.next?.offset
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .token(let raw):
                 let token = raw.flatMap(TravisCIToken.init)
                 dependency.store.set(token, for: .travisCIToken)

@@ -1,3 +1,4 @@
 github "ishkawa/APIKit" ~> 5.0
 github "kean/Nuke" ~> 7.0
+github "yuta24/Pipeline" "master"
 github "ReactiveCocoa/ReactiveSwift" ~> 6.0

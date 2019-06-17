@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Promises
 import BitriseAPI
 import Shared
 import Domain
@@ -58,7 +57,9 @@ protocol BitriseViewPresenterProtocol {
 class BitriseViewPresenter: BitriseViewPresenterProtocol {
     private(set) var state: Bitrise.State = .initial {
         didSet {
-            closure?(state)
+            DispatchQueue.main.async {
+                self.closure?(self.state)
+            }
         }
     }
 
@@ -90,19 +91,18 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: nil, limit: 25))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         if let data = response.data {
                             self?.state.builds = data
                         }
                         self?.state.next = response.paging?.next
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .fetchNext:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return
@@ -112,19 +112,18 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                 }
                 self?.state.isLoading = true
                 dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: next, limit: 25))
-                    .always {
+                    .on(failed: { (error) in
+                        logger.debug(error)
+                    }, disposed: {
                         self?.state.isLoading = false
-                    }
-                    .then({ (response) in
+                    }, value: { (response) in
                         logger.debug(response)
                         if let data = response.data {
                             self?.state.builds.append(contentsOf: data)
                         }
                         self?.state.next = response.paging?.next
                     })
-                    .catch({ (error) in
-                        logger.debug(error)
-                    })
+                    .start()
             case .token(let raw):
                 let token = raw.flatMap(BitriseToken.init)
                 dependency.store.set(token, for: .bitriseToken)
