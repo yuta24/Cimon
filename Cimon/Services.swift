@@ -7,45 +7,37 @@
 
 import Foundation
 import APIKit
+import Domain
 import App
 
-private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
-    var token: String?
+private extension LocalStore {
+    func value<V>(_ key: StoreKey<V>) -> V? where V: Decodable {
+        var value: V?
 
-    let semaphore = DispatchSemaphore(value: 0)
-    store.value(.travisCIToken) { (_token) in
-        token = _token?.value
-        semaphore.signal()
+        let semaphore = DispatchSemaphore(value: 0)
+        store.value(key) { (_value) in
+            value = _value
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return value
     }
-    semaphore.wait()
+}
 
-    return token.flatMap({ .customize(prefix: "token", token: $0) })
+private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
+    return store.value(.travisCIToken)
+        .flatMap({ .customize(prefix: "token", token: $0.value) })
 }
 
 private let circleCIKindProvider: () -> AuthorizationPlugin.Kind? = {
-    var token: String?
-
-    let semaphore = DispatchSemaphore(value: 0)
-    store.value(.circleCIToken) { (_token) in
-        token = _token?.value
-        semaphore.signal()
-    }
-    semaphore.wait()
-
-    return token.flatMap({ .basic(userName: $0, password: "") })
+    return store.value(.circleCIToken)
+        .flatMap({ .basic(userName: $0.value, password: "")  })
 }
 
 private let bitriseKindProvider: () -> AuthorizationPlugin.Kind? = {
-    var token: String?
-
-    let semaphore = DispatchSemaphore(value: 0)
-    store.value(.bitriseToken) { (_token) in
-        token = _token?.value
-        semaphore.signal()
-    }
-    semaphore.wait()
-
-    return token.flatMap({ .customize(prefix: .none, token: $0) })
+    return store.value(.bitriseToken)
+        .flatMap({ .customize(prefix: .none, token: $0.value) })
 }
 
 let travisCIService = NetworkService(
