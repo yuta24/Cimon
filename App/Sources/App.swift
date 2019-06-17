@@ -17,8 +17,10 @@ public class App {
 
     public init (window: UIWindow, store: StoreProtocol, services: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
-            $0.rootViewController = (store, MainViewPresenter(ci: .travisci), services)
-                |> MainViewController.Dependency.init
+            $0.rootViewController = MainViewController.Dependency(
+                store: store,
+                presenter: MainViewPresenter(ci: .travisci),
+                services: services)
                 |> Scenes.main.execute
                 |> UINavigationController.init
             $0.makeKeyAndVisible()
