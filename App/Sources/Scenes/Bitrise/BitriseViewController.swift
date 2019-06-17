@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Pipeline
 import Shared
 import Domain
 
@@ -84,10 +85,11 @@ class BitriseViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        dependency.presenter.load()
-            .execute(.init(network: dependency.network, store: dependency.store))
-        dependency.presenter.dispatch(.fetch)
-            .execute(.init(network: dependency.network, store: dependency.store))
+        BitriseScene.Dependency(network: dependency.network, store: dependency.store) |> {
+            self.dependency.presenter.dispatch(.load).execute($0)
+            self.dependency.presenter.dispatch(.fetch).execute($0)
+        }
+
         dependency.presenter.subscribe(configure(_:))
     }
 

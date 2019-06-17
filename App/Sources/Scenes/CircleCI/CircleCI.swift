@@ -27,6 +27,7 @@ enum CircleCIScene {
     }
 
     enum Message {
+        case load
         case fetch
         case fetchNext
         case token(String?)
@@ -46,7 +47,6 @@ enum CircleCIScene {
 protocol CircleCIViewPresenterProtocol {
     var state: CircleCIScene.State { get }
 
-    func load() -> Reader<CircleCIScene.Dependency, Void>
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void>
@@ -65,14 +65,6 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     private var closure: ((CircleCIScene.State) -> Void)?
 
-    func load() -> Reader<CircleCIScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            dependency.store.value(.circleCIToken, { (value) in
-                self?.state.token = value
-            })
-        })
-    }
-
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -85,6 +77,10 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
     func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
+            case .load:
+                dependency.store.value(.circleCIToken, { (value) in
+                    self?.state.token = value
+                })
             case .fetch:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return

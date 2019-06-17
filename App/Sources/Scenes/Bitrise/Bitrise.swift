@@ -27,6 +27,7 @@ enum BitriseScene {
     }
 
     enum Message {
+        case load
         case fetch
         case fetchNext
         case token(String?)
@@ -46,7 +47,6 @@ enum BitriseScene {
 protocol BitriseViewPresenterProtocol {
     var state: BitriseScene.State { get }
 
-    func load() -> Reader<BitriseScene.Dependency, Void>
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void>
@@ -65,14 +65,6 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     private var closure: ((BitriseScene.State) -> Void)?
 
-    func load() -> Reader<BitriseScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            dependency.store.value(.bitriseToken, { (value) in
-                self?.state.token = value
-            })
-        })
-    }
-
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -85,6 +77,10 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
     func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
+            case .load:
+                dependency.store.value(.bitriseToken, { (value) in
+                    self?.state.token = value
+                })
             case .fetch:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return

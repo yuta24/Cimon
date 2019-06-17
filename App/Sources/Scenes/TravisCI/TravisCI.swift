@@ -28,6 +28,7 @@ enum TravisCIScene {
     }
 
     enum Message {
+        case load
         case fetch
         case fetchNext
         case token(String?)
@@ -47,7 +48,6 @@ enum TravisCIScene {
 protocol TravisCIViewPresenterProtocol {
     var state: TravisCIScene.State { get }
 
-    func load() -> Reader<TravisCIScene.Dependency, Void>
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void>
@@ -66,14 +66,6 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     private var closure: ((TravisCIScene.State) -> Void)?
 
-    func load() -> Reader<TravisCIScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            dependency.store.value(.travisCIToken, { (value) in
-                self?.state.token = value
-            })
-        })
-    }
-
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -86,6 +78,10 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
     func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void> {
         return .init({ [weak self] (dependency) in
             switch message {
+            case .load:
+                dependency.store.value(.travisCIToken, { (value) in
+                    self?.state.token = value
+                })
             case .fetch:
                 guard self.condition(where: { !$0.state.isLoading }) else {
                     return
