@@ -4,9 +4,10 @@ set -eu
 
 cp -R scripts/_hooks/* .git/hooks/
 
+brew install libxml2 # For SwiftGen via Mint
+
 # Mint
-if test ! $(which mint)
-then
+if [ ! $(which mint) ];then
   echo "  + Installing mint..."
   brew install mint
 else
