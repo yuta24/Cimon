@@ -25,8 +25,10 @@ public class StringAttributer {
 
         return mutable
     }
+}
 
-    public func font(_ font: UIFont, range: NSRange? = nil) -> StringAttributer {
+public extension StringAttributer {
+    func font(_ font: UIFont, range: NSRange? = nil) -> StringAttributer {
         let range = range ?? NSRange(location: 0, length: string.utf16.count)
 
         if attributes[range] != nil {
@@ -37,7 +39,7 @@ public class StringAttributer {
         return self
     }
 
-    public func lineSpacing(_ lineSpacing: CGFloat, range: NSRange? = nil) -> StringAttributer {
+    func lineSpacing(_ lineSpacing: CGFloat, range: NSRange? = nil) -> StringAttributer {
         let range = range ?? NSRange(location: 0, length: string.utf16.count)
 
         if attributes[range] != nil {
@@ -50,7 +52,7 @@ public class StringAttributer {
         return self
     }
 
-    public func foregroundColor(_ color: UIColor, range: NSRange? = nil) -> StringAttributer {
+    func foregroundColor(_ color: UIColor, range: NSRange? = nil) -> StringAttributer {
         let range = range ?? NSRange(location: 0, length: string.utf16.count)
 
         if attributes[range] != nil {
@@ -61,7 +63,7 @@ public class StringAttributer {
         return self
     }
 
-    public func backgroundColor(_ color: UIColor, range: NSRange? = nil) -> StringAttributer {
+    func backgroundColor(_ color: UIColor, range: NSRange? = nil) -> StringAttributer {
         let range = range ?? NSRange(location: 0, length: string.utf16.count)
 
         if attributes[range] != nil {

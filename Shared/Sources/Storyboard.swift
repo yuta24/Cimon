@@ -12,8 +12,8 @@ public struct Storyboard<V> where V: UIViewController {
     let name: String
     var identifier: String?
 
-    public init(bundle: Bundle, name: String, identifier: String? = nil) {
-        self.bundle = bundle
+    public init(name: String, identifier: String? = nil, bundle: Bundle? = nil) {
+        self.bundle = bundle ?? Bundle(for: V.self)
         self.name = name
         self.identifier = identifier
     }

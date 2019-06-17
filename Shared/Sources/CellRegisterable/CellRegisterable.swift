@@ -17,10 +17,7 @@ public struct CellRegister {
     public let identifier: String
     public let method: MethodKind
 
-    public init(
-        identifier: String,
-        method: MethodKind
-        ) {
+    public init(identifier: String, method: MethodKind) {
         self.identifier = identifier
         self.method = method
     }

@@ -13,8 +13,8 @@ public struct Xib<V> where V: UIView {
     let name: String?
     let owner: Any?
 
-    public init(bundle: Bundle, name: String? = nil, owner: Any? = nil) {
-        self.bundle = bundle
+    public init(bundle: Bundle? = nil, name: String? = nil, owner: Any? = nil) {
+        self.bundle = bundle ?? Bundle(for: V.self)
         self.name = name
         self.owner = owner
     }
