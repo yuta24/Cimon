@@ -11,8 +11,10 @@ import Domain
 
 public class Environment {
     let store: StoreProtocol
+    let reporter: ReporterProtocol
 
-    init(store: StoreProtocol) {
+    init(store: StoreProtocol, reporter: ReporterProtocol) {
         self.store = store
+        self.reporter = reporter
     }
 }
