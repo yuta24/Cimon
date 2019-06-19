@@ -34,6 +34,12 @@ targets:
       - name: "[SwiftLint] Run Script"
         script: |
           mint run realm/SwiftLint swiftlint
+    postbuildScripts:
+      - name: "[Crashlytics] Run Script"
+        script: |
+          "${PODS_ROOT}/Fabric/run"
+        inputFiles:
+          - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
     scheme:
       testTargets:
         - CimonTests

@@ -23,7 +23,8 @@ target 'Cimon' do
 
   # Pods for Cimon
   pod 'Firebase/Core', :binary => true
-  pod 'Firebase/Firestore', :binary => true
+  pod 'Fabric', '~> 1.10.1'
+  pod 'Crashlytics', '~> 3.13.1'
 
   target 'CimonTests' do
     inherit! :search_paths
