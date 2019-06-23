@@ -11,19 +11,6 @@ import Shared
 import App
 import FirebaseCore
 
-let logger = LightLogger.self
-let store = LocalStore(userDefaults: .standard)
-let reporter = CrashlyticsReporter()
-
-let app = App(
-    window: UIWindow(frame: UIScreen.main.bounds),
-    store: store,
-    reporter: reporter,
-    services: [
-        .travisci: travisCIService,
-        .circleci: circleCIService,
-        .bitrise: bitriseService])
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?

@@ -8,28 +8,12 @@
 import Foundation
 import os
 
-public enum LogLevel {
+public enum LogLevel: Int {
     case verbose
     case info
     case debug
     case warning
     case error
-}
-
-extension LogLevel: Comparable {
-    public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
-        return lhs.raw < rhs.raw
-    }
-
-    var raw: Int {
-        switch self {
-        case .verbose: return 0
-        case .info: return 1
-        case .debug: return 2
-        case .warning: return 3
-        case .error: return 4
-        }
-    }
 }
 
 extension LogLevel: CustomStringConvertible {
