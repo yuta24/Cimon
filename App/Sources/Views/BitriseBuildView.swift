@@ -37,7 +37,7 @@ class BitriseBuildView: RoundedView {
     }
 
     private func commonInit() {
-        Xib<BitriseBuildView>(bundle: .current).load(to: self)
+        Xib<BitriseBuildView>().load(to: self)
     }
 }
 
