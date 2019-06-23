@@ -149,6 +149,9 @@ let project = Project(
             sources: [
                 TargetSource(path: "Domain"),
             ],
+            dependencies: [
+                Dependency(type: .target, reference: "Shared"),
+            ],
             scheme: TargetScheme(
                 testTargets: [
                     Scheme.Test.TestTarget(name: "DomainTests"),
