@@ -2,7 +2,7 @@
 
 set -eu
 
-ln -sf ../../scripts/_hooks/pre-push .git/hooks/pre-push
+ln -sf ../../scripts/hooks/pre-push .git/hooks/pre-push
 
 brew install libxml2 # For SwiftGen via Mint
 
