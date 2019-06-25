@@ -1,8 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
 
-# plugin 'cocoapods-binary'
-# enable_bitcode_for_prebuilt_frameworks!
+plugin 'cocoapods-binary'
+enable_bitcode_for_prebuilt_frameworks!
 
 target 'App' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
@@ -22,9 +22,9 @@ target 'Cimon' do
   use_frameworks!
 
   # Pods for Cimon
-  pod 'Firebase/Core'
-  pod 'Fabric', '~> 1.10.1'
-  pod 'Crashlytics', '~> 3.13.1'
+  pod 'Firebase/Core', :binary => true
+  pod 'Fabric', '~> 1.10.1', :binary => true
+  pod 'Crashlytics', '~> 3.13.1', :binary => true
 
   target 'CimonTests' do
     inherit! :search_paths
