@@ -8,7 +8,7 @@ PROJECT_NAME=Cimon
 
 echo "  + Generate xcodeproje by XcodeGen."
 mint run --silent mxcl/swift-sh swift-sh `dirname $0`/../project.swift
-mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --cache-builds
+mint run --silent Carthage/Carthage carthage bootstrap --platform iOS --no-use-binaries --cache-builds
 bundle exec pod install
 
 echo ""
