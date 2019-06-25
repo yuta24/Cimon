@@ -19,8 +19,20 @@ let project = Project(
             name: "Cimon",
             type: .application,
             platform: .iOS,
-            settings: Settings(dictionary: [
-                "PRODUCT_BUNDLE_IDENTIFIER": "com.bivre.cimon"
+            settings: Settings(
+                buildSettings: [
+                    "CODE_SIGN_STYLE": "Manual",
+                    "PRODUCT_BUNDLE_IDENTIFIER": "com.bivre.cimon",
+                ],
+                configSettings: [
+                    "Debug" : [
+                        "CODE_SIGN_IDENTITY": "iPhone Developer",
+                        "PROVISIONING_PROFILE_SPECIFIER": "match Development com.bivre.cimon"
+                    ],
+                    "Release" : [
+                        "CODE_SIGN_IDENTITY": "iPhone Distribution",
+                        "PROVISIONING_PROFILE_SPECIFIER": "match AppStore com.bivre.cimon"
+                    ],
             ]),
             sources: [
                 TargetSource(path: "Cimon"),
@@ -217,8 +229,9 @@ let project = Project(
         ),
     ],
     settings: Settings(dictionary: [
+        "SWIFT_VERSION": "5.0",
         "DEVELOPMENT_TEAM": "PS98BD6732",
-        "CODE_SIGN_STYLE": "Automatic"
+        "CODE_SIGN_STYLE": "Automatic",
     ]),
     options: SpecOptions(
         minimumXcodeGenVersion: .init("2.5.0"),
