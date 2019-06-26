@@ -36,6 +36,7 @@ let project = Project(
             ]),
             sources: [
                 TargetSource(path: "Cimon"),
+                TargetSource(path: "Cimon/Sources/Generated/Assets.swift", optional: true),
                 TargetSource(path: "GoogleService-Info.plist"),
             ],
             dependencies: [
@@ -51,6 +52,9 @@ let project = Project(
                 Dependency(type: .carthage(findFrameworks: nil), reference: "ReactiveSwift"),
             ],
             preBuildScripts: [
+                BuildScript(
+                    script: .script("mint run SwiftGen/SwiftGen swiftgen config run --config Cimon/swiftgen.yml"),
+                    name: "[SwiftGen] Run Script"),
                 BuildScript(
                     script: .script("mint run realm/SwiftLint swiftlint"), 
                     name: "[SwiftLint] Run Script"),

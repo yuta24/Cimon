@@ -99,15 +99,11 @@ class MainViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        navigationController?.navigationBar.setBackgroundColor(.white)
-
         dependency.presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
-        navigationController?.navigationBar.clearBackgroundColor()
 
         dependency.presenter.unsubscribe()
     }

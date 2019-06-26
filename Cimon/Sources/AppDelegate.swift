@@ -18,8 +18,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         window = app.window
-        FirebaseApp.configure()
-        return app.didFinishLaunching(withOptions: launchOptions)
+        return process(app.didFinishLaunching(withOptions: launchOptions), post: {
+            FirebaseApp.configure()
+        })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -48,5 +49,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         app.willTerminate()
     }
-
 }
