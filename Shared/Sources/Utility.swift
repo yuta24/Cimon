@@ -14,10 +14,3 @@ public func process<T>(_ original: @autoclosure () -> T, pre: () -> Void = {}, p
     post()
     return result
 }
-
-@discardableResult
-public func completion<T>(_ original: @autoclosure () -> T, completion: () -> Void) -> T {
-    let result = original()
-    completion()
-    return result
-}
