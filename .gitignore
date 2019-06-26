@@ -5,6 +5,8 @@
 *.xcodeproj
 *.xcworkspace
 
+Assets.swift
+
 /GoogleService-Info.plist
 /credentials.json
 /token.yaml
