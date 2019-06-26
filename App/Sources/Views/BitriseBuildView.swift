@@ -63,11 +63,11 @@ extension BitriseBuildView: Configurable {
         var color: UIColor {
             switch self {
             case .success:
-                return Asset.buildStatusSuccess.color
+                return Asset.bitriseStatusSuccess.color
             case .aborted:
-                return Asset.buildStatusAborted.color
+                return Asset.bitriseStatusAborted.color
             case .error:
-                return Asset.buildStatusFailed.color
+                return Asset.bitriseStatusFailed.color
             }
         }
     }
