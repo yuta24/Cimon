@@ -17,10 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        window = app.window
-        return process(app.didFinishLaunching(withOptions: launchOptions), post: {
-            FirebaseApp.configure()
-        })
+        return process(
+            app.didFinishLaunching(withOptions: launchOptions),
+            pre: {
+                window = app.window
+            },
+            post: {
+                FirebaseApp.configure()
+            })
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
