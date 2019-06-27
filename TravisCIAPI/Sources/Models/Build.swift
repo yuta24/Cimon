@@ -33,7 +33,7 @@ public struct Build: Codable {
     public var previousState: String?
     public var pullRequestTitle: String?
     public var pullRequestNumber: Int?
-    public var startedAt: String
+    public var startedAt: String?
     public var finishedAt: String
     public var `private`: Bool
 
@@ -49,7 +49,7 @@ public struct Build: Codable {
         previousState: String?,
         pullRequestTitle: String?,
         pullRequestNumber: Int?,
-        startedAt: String,
+        startedAt: String?,
         finishedAt: String,
         `private`: Bool,
 
