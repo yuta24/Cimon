@@ -21,6 +21,12 @@ class SettingsViewController: UIViewController, Instantiatable {
         }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        navigationItem.title = "Settings"
+    }
+
     func inject(dependency: SettingsViewController.Dependency) {
     }
 }
