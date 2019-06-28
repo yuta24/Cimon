@@ -50,6 +50,7 @@ let project = Project(
                 Dependency(type: .carthage(findFrameworks: nil), reference: "Nuke"),
                 Dependency(type: .carthage(findFrameworks: nil), reference: "Pipeline"),
                 Dependency(type: .carthage(findFrameworks: nil), reference: "ReactiveSwift"),
+                Dependency(type: .carthage(findFrameworks: nil), reference: "Reachability"),
             ],
             preBuildScripts: [
                 BuildScript(
@@ -207,6 +208,7 @@ let project = Project(
                 Dependency(type: .carthage(findFrameworks: nil), reference: "Nuke"),
                 Dependency(type: .carthage(findFrameworks: nil), reference: "Pipeline"),
                 Dependency(type: .carthage(findFrameworks: nil), reference: "ReactiveSwift"),
+                Dependency(type: .carthage(findFrameworks: nil), reference: "Reachability"),
             ],
             preBuildScripts: [
                 BuildScript(
