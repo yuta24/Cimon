@@ -64,11 +64,16 @@
                                     <constraint firstItem="RMp-lU-dbu" firstAttribute="centerY" secondItem="NgE-Dj-cP7" secondAttribute="centerY" id="fdg-AF-Yfj"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="XcQ-Gr-CBY">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="N0m-NH-HpW" firstAttribute="top" secondItem="zNz-Dh-R0r" secondAttribute="top" id="8Tu-0X-CGq"/>
                             <constraint firstItem="N0m-NH-HpW" firstAttribute="leading" secondItem="zNz-Dh-R0r" secondAttribute="leading" id="AkX-fD-Srp"/>
+                            <constraint firstItem="XcQ-Gr-CBY" firstAttribute="centerX" secondItem="zNz-Dh-R0r" secondAttribute="centerX" id="DQq-7U-5nP"/>
+                            <constraint firstItem="XcQ-Gr-CBY" firstAttribute="centerY" secondItem="zNz-Dh-R0r" secondAttribute="centerY" id="FB4-xh-GAk"/>
                             <constraint firstAttribute="bottom" secondItem="NgE-Dj-cP7" secondAttribute="bottom" id="FCR-F5-Z1g"/>
                             <constraint firstAttribute="trailing" secondItem="NgE-Dj-cP7" secondAttribute="trailing" id="XlS-Wa-JH6"/>
                             <constraint firstAttribute="trailing" secondItem="N0m-NH-HpW" secondAttribute="trailing" id="Zll-X1-2lx"/>
@@ -79,6 +84,7 @@
                         <viewLayoutGuide key="safeArea" id="scc-LR-dGL"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="XcQ-Gr-CBY" id="fwB-c3-YfN"/>
                         <outlet property="contentView" destination="N0m-NH-HpW" id="yHB-cL-rFQ"/>
                         <outlet property="tableView" destination="FUB-ZP-GHM" id="YW1-QD-FYQ"/>
                         <outlet property="unregisteredButton" destination="Bkw-dk-yA7" id="91c-iO-7J6"/>

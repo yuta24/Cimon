@@ -44,6 +44,11 @@ class TravisCIViewController: UIViewController, Instantiatable {
             }
         }
     }
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView! {
+        didSet {
+            activityIndicatorView.hidesWhenStopped = true
+        }
+    }
 
     weak var delegate: MainPageDelegate?
 
@@ -100,6 +105,12 @@ class TravisCIViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: TravisCIScene.State) {
+        if state.isLoading {
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
+
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered

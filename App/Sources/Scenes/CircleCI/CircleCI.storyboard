@@ -34,7 +34,7 @@
                                     <constraint firstAttribute="bottom" secondItem="cmf-yC-CGP" secondAttribute="bottom" id="i6s-ap-PI8"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-O8-Tse">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dFR-O8-Tse">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="QHq-BL-9fR">
@@ -64,6 +64,9 @@
                                     <constraint firstItem="QHq-BL-9fR" firstAttribute="centerX" secondItem="dFR-O8-Tse" secondAttribute="centerX" id="Sn2-xk-ykc"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="gxd-NH-zlH">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -71,6 +74,8 @@
                             <constraint firstItem="YXS-Vc-5MZ" firstAttribute="top" secondItem="ObP-7s-ewt" secondAttribute="top" id="A3P-Hv-rjm"/>
                             <constraint firstItem="dFR-O8-Tse" firstAttribute="leading" secondItem="ObP-7s-ewt" secondAttribute="leading" id="Bzw-1x-Oun"/>
                             <constraint firstItem="YXS-Vc-5MZ" firstAttribute="leading" secondItem="ObP-7s-ewt" secondAttribute="leading" id="Ui3-Pc-EFu"/>
+                            <constraint firstItem="gxd-NH-zlH" firstAttribute="centerY" secondItem="ObP-7s-ewt" secondAttribute="centerY" id="WjE-KP-BEF"/>
+                            <constraint firstItem="gxd-NH-zlH" firstAttribute="centerX" secondItem="ObP-7s-ewt" secondAttribute="centerX" id="Xjz-oG-PMl"/>
                             <constraint firstAttribute="trailing" secondItem="dFR-O8-Tse" secondAttribute="trailing" id="XsO-bc-RQH"/>
                             <constraint firstAttribute="bottom" secondItem="YXS-Vc-5MZ" secondAttribute="bottom" id="gSS-2V-MrW"/>
                             <constraint firstAttribute="trailing" secondItem="YXS-Vc-5MZ" secondAttribute="trailing" id="kzC-Uv-9Yw"/>
@@ -79,6 +84,7 @@
                         <viewLayoutGuide key="safeArea" id="AMb-lc-qS9"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="gxd-NH-zlH" id="LfI-P8-1Ze"/>
                         <outlet property="contentView" destination="YXS-Vc-5MZ" id="umn-fu-6KZ"/>
                         <outlet property="tableView" destination="cmf-yC-CGP" id="8nf-zW-ulS"/>
                         <outlet property="unregisteredButton" destination="f68-Ze-jol" id="LRh-i7-fut"/>

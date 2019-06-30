@@ -49,7 +49,11 @@ class BitriseViewController: UIViewController, Instantiatable {
             }
         }
     }
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView! {
+        didSet {
+            activityIndicatorView.hidesWhenStopped = true
+        }
+    }
 
     weak var delegate: MainPageDelegate?
 
@@ -105,12 +109,15 @@ class BitriseViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: BitriseScene.State) {
+        if state.isLoading {
+            activityIndicatorView.startAnimating()
+        } else {
+            activityIndicatorView.stopAnimating()
+        }
+
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
-
-        activityIndicatorView.startAnimating()
-//        activityIndicatorView.isAnimating = state.isLoading
 
         collectionView.reloadData()
     }

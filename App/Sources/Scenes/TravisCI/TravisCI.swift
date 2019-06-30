@@ -90,12 +90,12 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                 dependency.network.response(Endpoint.Builds(limit: 25, offset: 0))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds = response.builds
                         self?.state.offset = response.pagination.next?.offset
+                        self?.state.isLoading = false
                     })
                     .start()
             case .fetchNext:
@@ -109,12 +109,12 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
                 dependency.network.response(Endpoint.Builds(limit: 25, offset: offset))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds.append(contentsOf: response.builds)
                         self?.state.offset = response.pagination.next?.offset
+                        self?.state.isLoading = false
                     })
                     .start()
             case .token(let raw):

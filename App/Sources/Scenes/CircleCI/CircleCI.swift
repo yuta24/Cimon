@@ -89,12 +89,12 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
                 dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: 0, shallow: false))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds = response
                         self?.state.offset = self?.state.builds.count
+                        self?.state.isLoading = false
                     })
                     .start()
             case .fetchNext:
@@ -108,12 +108,12 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
                 dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: offset, shallow: false))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
                         self?.state.builds.append(contentsOf: response)
                         self?.state.offset = response.isEmpty ? nil : self?.state.builds.count
+                        self?.state.isLoading = false
                     })
                     .start()
             case .token(let raw):

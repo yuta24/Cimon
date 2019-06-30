@@ -89,7 +89,6 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                 dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: nil, limit: 25))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
@@ -97,6 +96,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                             self?.state.builds = data
                         }
                         self?.state.next = response.paging?.next
+                        self?.state.isLoading = false
                     })
                     .start()
             case .fetchNext:
@@ -110,7 +110,6 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                 dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: next, limit: 25))
                     .on(failed: { (error) in
                         logger.debug(error)
-                    }, disposed: {
                         self?.state.isLoading = false
                     }, value: { (response) in
                         logger.debug(response)
@@ -118,6 +117,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                             self?.state.builds.append(contentsOf: data)
                         }
                         self?.state.next = response.paging?.next
+                        self?.state.isLoading = false
                     })
                     .start()
             case .token(let raw):

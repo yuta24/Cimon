@@ -41,7 +41,7 @@
                                     <constraint firstItem="dX0-5o-xbg" firstAttribute="leading" secondItem="T5p-M4-KWI" secondAttribute="leading" id="jFd-dL-ZtZ"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W94-zI-NTP">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W94-zI-NTP">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="COg-FC-snf">
@@ -91,7 +91,7 @@
                         <viewLayoutGuide key="safeArea" id="tHH-mO-xRL"/>
                     </view>
                     <connections>
-                        <outlet property="activityIndicatorView" destination="Hlr-aN-pia" id="95Y-sz-FPY"/>
+                        <outlet property="activityIndicatorView" destination="Hlr-aN-pia" id="EnY-Wb-xfU"/>
                         <outlet property="collectionView" destination="dX0-5o-xbg" id="H1q-PK-pGN"/>
                         <outlet property="contentView" destination="T5p-M4-KWI" id="Idn-5a-roq"/>
                         <outlet property="unregisteredButton" destination="aqN-hs-5ZF" id="2Hi-pt-dOV"/>
