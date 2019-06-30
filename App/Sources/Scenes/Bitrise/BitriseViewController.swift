@@ -49,6 +49,7 @@ class BitriseViewController: UIViewController, Instantiatable {
             }
         }
     }
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
     weak var delegate: MainPageDelegate?
 
@@ -107,6 +108,9 @@ class BitriseViewController: UIViewController, Instantiatable {
         refreshControl.endRefreshing()
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
+
+        activityIndicatorView.startAnimating()
+//        activityIndicatorView.isAnimating = state.isLoading
 
         collectionView.reloadData()
     }

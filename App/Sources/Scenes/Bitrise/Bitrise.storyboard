@@ -71,21 +71,27 @@
                                     <constraint firstItem="COg-FC-snf" firstAttribute="centerY" secondItem="W94-zI-NTP" secondAttribute="centerY" id="pxn-aR-OHx"/>
                                 </constraints>
                             </view>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Hlr-aN-pia">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="T5p-M4-KWI" secondAttribute="trailing" id="6N7-d0-KFO"/>
+                            <constraint firstItem="Hlr-aN-pia" firstAttribute="centerX" secondItem="WqX-ec-UKO" secondAttribute="centerX" id="8cS-4H-P1r"/>
                             <constraint firstItem="W94-zI-NTP" firstAttribute="leading" secondItem="WqX-ec-UKO" secondAttribute="leading" id="AX4-CS-sMF"/>
                             <constraint firstAttribute="trailing" secondItem="W94-zI-NTP" secondAttribute="trailing" id="boM-Zt-bCo"/>
                             <constraint firstAttribute="bottom" secondItem="T5p-M4-KWI" secondAttribute="bottom" id="eQX-n5-B5M"/>
                             <constraint firstAttribute="bottom" secondItem="W94-zI-NTP" secondAttribute="bottom" id="g0g-eS-OBT"/>
                             <constraint firstItem="W94-zI-NTP" firstAttribute="top" secondItem="WqX-ec-UKO" secondAttribute="top" id="iHz-Tr-sAo"/>
                             <constraint firstItem="T5p-M4-KWI" firstAttribute="leading" secondItem="WqX-ec-UKO" secondAttribute="leading" id="nj2-bX-IdE"/>
+                            <constraint firstItem="Hlr-aN-pia" firstAttribute="centerY" secondItem="WqX-ec-UKO" secondAttribute="centerY" id="uDP-lY-nxd"/>
                             <constraint firstItem="T5p-M4-KWI" firstAttribute="top" secondItem="WqX-ec-UKO" secondAttribute="top" id="vaM-Vn-req"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tHH-mO-xRL"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="Hlr-aN-pia" id="95Y-sz-FPY"/>
                         <outlet property="collectionView" destination="dX0-5o-xbg" id="H1q-PK-pGN"/>
                         <outlet property="contentView" destination="T5p-M4-KWI" id="Idn-5a-roq"/>
                         <outlet property="unregisteredButton" destination="aqN-hs-5ZF" id="2Hi-pt-dOV"/>
