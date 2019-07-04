@@ -9,7 +9,9 @@
 $ ./scripts/setup.sh
 ```
 
-## Generate xcodeproj using XcodeGen
+## Generate xcworkspace
+
+This project using [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
 ```hcl
 $ ./scripts/bootstrap.sh
