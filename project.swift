@@ -243,7 +243,7 @@ let project = Project(
         minimumXcodeGenVersion: .init("2.5.0"),
         carthageExecutablePath: "mint run Carthage/Carthage carthage",
         bundleIdPrefix: "com.bivre",
-        deploymentTarget: .init(iOS: "12.0")
+        deploymentTarget: .init(iOS: "13.0")
     )
 )
 
