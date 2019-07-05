@@ -1,4 +1,4 @@
-github "ReactiveCocoa/ReactiveSwift" "6.0.0"
+github "ReactiveCocoa/ReactiveSwift" "6.1.0"
 github "ashleymills/Reachability.swift" "v4.3.1"
 github "ishkawa/APIKit" "5.0.0"
 github "kean/Nuke" "7.6.3"
