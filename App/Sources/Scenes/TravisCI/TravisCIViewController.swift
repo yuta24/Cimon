@@ -21,6 +21,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var tableView: UITableView! {
         didSet {
+            apply(tableView, mainSceneStyle)
             tableView.tableFooterView = UIView()
             tableView.dataSource = self
             tableView.delegate = self

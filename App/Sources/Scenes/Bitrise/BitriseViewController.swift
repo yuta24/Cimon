@@ -26,6 +26,7 @@ class BitriseViewController: UIViewController, Instantiatable {
                 layout.minimumInteritemSpacing = 0
                 layout.minimumLineSpacing = 0
             }
+            apply(collectionView, mainSceneStyle)
             collectionView.backgroundColor = .clear
             collectionView.dataSource = self
             collectionView.delegate = self
