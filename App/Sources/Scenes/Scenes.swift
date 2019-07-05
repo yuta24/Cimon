@@ -38,6 +38,13 @@ enum Scenes {
         })
     }
 
+    static var bitriseDetail: Reader<BitriseDetailViewController.Dependency, BitriseDetailViewController> {
+        return .init({ dependency in
+            return Storyboard<BitriseDetailViewController>(name: "BitriseDetail")
+                .instantiate(dependency: dependency)
+        })
+    }
+
     static var settings: Reader<SettingsViewController.Dependency, SettingsViewController> {
         return .init({ dependency in
             return Storyboard<SettingsViewController>(name: "Settings")

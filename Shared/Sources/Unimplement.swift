@@ -12,8 +12,8 @@ public func unimplement<T>(_ target: T) {
     switch target {
     case let controller as UIViewController:
         let alert = UIAlertController(title: "ERROR", message: "unimplemented", preferredStyle: .alert)
-        alert.addAction(.init(title: "OK", style: .default, handler: nil))
-        controller.present(alert, animated: true, completion: nil)
+        alert.addAction(.init(title: "OK", style: .default, handler: .none))
+        controller.present(alert, animated: true, completion: .none)
     default:
         fatalError()
     }

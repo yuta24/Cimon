@@ -86,7 +86,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                     return
                 }
                 self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: nil, limit: 25))
+                dependency.network.response(Endpoint.Builds(ownerSlug: .none, isOnHold: .none, status: .none, next: .none, limit: 25))
                     .on(failed: { (error) in
                         logger.debug(error)
                         self?.state.isLoading = false
@@ -107,7 +107,7 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
                     return
                 }
                 self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(ownerSlug: nil, isOnHold: nil, status: nil, next: next, limit: 25))
+                dependency.network.response(Endpoint.Builds(ownerSlug: .none, isOnHold: .none, status: .none, next: next, limit: 25))
                     .on(failed: { (error) in
                         logger.debug(error)
                         self?.state.isLoading = false

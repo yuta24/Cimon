@@ -92,7 +92,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
             case .settings:
                 let controller = Scenes.settings.execute(.init())
                 let navigation = UINavigationController(rootViewController: controller, hasClose: true)
-                from.present(navigation, animated: true, completion: nil)
+                from.present(navigation, animated: true, completion: .none)
             }
         })
     }

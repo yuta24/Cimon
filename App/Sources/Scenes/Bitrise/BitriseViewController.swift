@@ -133,7 +133,7 @@ class BitriseViewController: UIViewController, Instantiatable {
                 .dispatch(.token(alert?.textFields?.first?.text))
                 .execute(.init(network: self.dependency.network, store: self.dependency.store))
         })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)
     }
 }

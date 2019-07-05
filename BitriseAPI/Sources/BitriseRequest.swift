@@ -42,6 +42,3 @@ public extension BitriseRequest where Response: Decodable {
         return try JSONDecoder().decode(Response.self, from: data)
     }
 }
-
-public enum Endpoint {
-}

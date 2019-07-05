@@ -20,7 +20,7 @@ public struct Xib<V> where V: UIView {
     }
 
     public func load(to view: UIView) {
-        let contentView = bundle.loadNibNamed(name ?? String(describing: V.self), owner: owner ?? view, options: nil)?.first as! UIView // swiftlint:disable:this force_cast
+        let contentView = bundle.loadNibNamed(name ?? String(describing: V.self), owner: owner ?? view, options: .none)?.first as! UIView // swiftlint:disable:this force_cast
 
         view.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false

@@ -19,6 +19,6 @@ extension UINavigationController {
     }
 
     @objc private func onClose() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: .none)
     }
 }

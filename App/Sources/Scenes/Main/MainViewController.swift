@@ -47,7 +47,7 @@ class MainViewController: UIViewController, Instantiatable {
     private let page: UIPageViewController = UIPageViewController(
         transitionStyle: .scroll,
         navigationOrientation: .horizontal,
-        options: nil)
+        options: .none)
 
     private lazy var pages: [CI: UIViewController] = {
         let travisCIController = Scenes.travisCI
@@ -93,7 +93,7 @@ class MainViewController: UIViewController, Instantiatable {
         page.dataSource = self
         page.delegate = self
         let initial = [pages[dependency.presenter.state.selected]!]
-        page.setViewControllers(initial, direction: .forward, animated: true, completion: nil)
+        page.setViewControllers(initial, direction: .forward, animated: true, completion: .none)
     }
 
     override func viewWillAppear(_ animated: Bool) {
