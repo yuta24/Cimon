@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TravisCIBuildView" customModule="App" customModuleProvider="target">
+            <connections>
+                <outlet property="branchLabel" destination="8Jn-tY-X10" id="siq-qc-ONk"/>
+                <outlet property="buildNumberLabel" destination="b6P-fa-Kf1" id="h16-mu-bOT"/>
+                <outlet property="descriptionLabel" destination="sk2-zH-99V" id="GF9-F3-RIC"/>
+                <outlet property="durationLabel" destination="xU8-F4-rA0" id="yVI-3E-of4"/>
+                <outlet property="slugLabel" destination="Gh7-aA-Lp9" id="KfY-Kh-5Wu"/>
+                <outlet property="statusColorView" destination="YuR-Z6-Alm" id="9FT-mN-jrc"/>
+                <outlet property="statusLabel" destination="3yP-5W-fn8" id="QEp-x3-O0n"/>
+                <outlet property="timestampLabel" destination="LaE-Zr-2hA" id="AYD-bi-jPX"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="4u5-r1-D7e">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YuR-Z6-Alm">
+                    <rect key="frame" x="0.0" y="0.0" width="8" height="240"/>
+                    <color key="backgroundColor" name="travisci_status_progress"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="8" id="Xkm-If-Qmt"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tpq-Ji-0L6">
+                    <rect key="frame" x="16" y="8" width="390" height="224"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="9Kg-zg-NTp">
+                            <rect key="frame" x="0.0" y="0.0" width="390" height="224"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="A5p-XS-lmf">
+                                    <rect key="frame" x="0.0" y="0.0" width="390" height="20.5"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3yP-5W-fn8">
+                                            <rect key="frame" x="0.0" y="0.0" width="345.5" height="20.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="# 24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b6P-fa-Kf1">
+                                            <rect key="frame" x="353.5" y="0.0" width="36.5" height="20.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yuta24/Pipeline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gh7-aA-Lp9">
+                                    <rect key="frame" x="0.0" y="28.5" width="390" height="19.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="feature/test &gt; master" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Jn-tY-X10">
+                                    <rect key="frame" x="0.0" y="56" width="390" height="19.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Update README" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sk2-zH-99V">
+                                    <rect key="frame" x="0.0" y="83.5" width="390" height="118"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="KeN-81-ZUh">
+                                    <rect key="frame" x="0.0" y="209.5" width="390" height="14.5"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="201907/06 00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LaE-Zr-2hA">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="14.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="24 min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xU8-F4-rA0">
+                                            <rect key="frame" x="351" y="0.0" width="39" height="14.5"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="9Kg-zg-NTp" secondAttribute="bottom" id="6vX-Fv-ILy"/>
+                        <constraint firstItem="9Kg-zg-NTp" firstAttribute="leading" secondItem="Tpq-Ji-0L6" secondAttribute="leading" id="HZu-Bj-g0M"/>
+                        <constraint firstAttribute="trailing" secondItem="9Kg-zg-NTp" secondAttribute="trailing" id="VZW-6B-Ilx"/>
+                        <constraint firstItem="9Kg-zg-NTp" firstAttribute="top" secondItem="Tpq-Ji-0L6" secondAttribute="top" id="rmC-Ud-PuN"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="YuR-Z6-Alm" secondAttribute="bottom" id="7cJ-S5-HxZ"/>
+                <constraint firstAttribute="trailing" secondItem="Tpq-Ji-0L6" secondAttribute="trailing" constant="8" id="LOj-39-3F8"/>
+                <constraint firstItem="Tpq-Ji-0L6" firstAttribute="top" secondItem="4u5-r1-D7e" secondAttribute="top" constant="8" id="VGb-st-427"/>
+                <constraint firstItem="Tpq-Ji-0L6" firstAttribute="leading" secondItem="YuR-Z6-Alm" secondAttribute="trailing" constant="8" id="dax-0T-Pzb"/>
+                <constraint firstAttribute="bottom" secondItem="Tpq-Ji-0L6" secondAttribute="bottom" constant="8" id="lND-PR-uII"/>
+                <constraint firstItem="YuR-Z6-Alm" firstAttribute="leading" secondItem="4u5-r1-D7e" secondAttribute="leading" id="xpX-Q0-nrP"/>
+                <constraint firstItem="YuR-Z6-Alm" firstAttribute="top" secondItem="4u5-r1-D7e" secondAttribute="top" id="yQT-D5-ugw"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="118.84057971014494" y="66.964285714285708"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="travisci_status_progress">
+            <color red="0.92941176470588238" green="0.87058823529411766" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

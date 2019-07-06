@@ -22,6 +22,7 @@ public struct Build: Codable {
         case `private` = "private"
         case repository = "repository"
         case branch = "branch"
+        case commit = "commit"
     }
 
     // @minimal
@@ -39,6 +40,8 @@ public struct Build: Codable {
 
     public var repository: Repository?
     public var branch: Branch?
+    public var tag: Tag?
+    public var commit: Commit
 
     public init(
         id: Int,
@@ -54,7 +57,9 @@ public struct Build: Codable {
         `private`: Bool,
 
         repository: Repository?,
-        branch: Branch?) {
+        branch: Branch?,
+        tag: Tag?,
+        commit: Commit) {
         self.id = id
         self.number = number
         self.state = state
@@ -68,5 +73,7 @@ public struct Build: Codable {
         self.private = `private`
         self.repository = repository
         self.branch = branch
+        self.tag = tag
+        self.commit = commit
     }
 }

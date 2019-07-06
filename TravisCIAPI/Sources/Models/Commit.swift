@@ -22,7 +22,7 @@ public struct Commit: Codable {
     public var ref: String
     public var message: String
     public var compareUrlString: String
-    public var committedAt: String
+    public var committedAt: String?
 
     public init(
         id: Int,
@@ -30,7 +30,7 @@ public struct Commit: Codable {
         ref: String,
         message: String,
         compareUrlString: String,
-        committedAt: String) {
+        committedAt: String?) {
         self.id = id
         self.sha = sha
         self.ref = ref

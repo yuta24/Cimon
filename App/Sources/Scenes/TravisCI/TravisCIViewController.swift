@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Pipeline
+import TravisCIAPI
 import Shared
 import Domain
 
@@ -18,13 +19,28 @@ class TravisCIViewController: UIViewController, Instantiatable {
         let presenter: TravisCIViewPresenterProtocol
     }
 
+    enum SectionKind: Int {
+        case builds
+    }
+
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var tableView: UITableView! {
+    @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            apply(tableView, mainSceneStyle)
-            tableView.tableFooterView = UIView()
-            tableView.dataSource = self
-            tableView.delegate = self
+            apply(collectionView, mainSceneStyle)
+            collectionView.refreshControl = refreshControl
+            collectionView.delegate = self
+            collectionView.collectionViewLayout = { () -> UICollectionViewLayout in
+                return UICollectionViewCompositionalLayout(sectionProvider: { (_, _) -> NSCollectionLayoutSection? in
+                    return NSCollectionLayoutSection(
+                        group: NSCollectionLayoutGroup.horizontal(
+                            layoutSize: NSCollectionLayoutSize(
+                                widthDimension: .fractionalWidth(1.0),
+                                heightDimension: .estimated(44)),
+                            subitems: [
+                                NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44)))
+                        ]))
+                })
+            }()
         }
     }
 
@@ -53,6 +69,11 @@ class TravisCIViewController: UIViewController, Instantiatable {
 
     weak var delegate: MainPageDelegate?
 
+    private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, Build>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
+        let cell = TravisCIBuildStatusCell.dequeue(for: indexPath, from: collectionView)
+        cell.configure(.init(child: build))
+        return cell
+    }
     private let refreshControl = UIRefreshControl()
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
@@ -69,9 +90,8 @@ class TravisCIViewController: UIViewController, Instantiatable {
                     .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         }
-        tableView.refreshControl = refreshControl
 
-        observations.append(tableView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (tableView, _) in
+        observations.append(collectionView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (tableView, _) in
             guard let `self` = self else {
                 return
             }
@@ -116,7 +136,11 @@ class TravisCIViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        tableView.reloadData()
+        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, Build>(), { (snapshot) in
+            snapshot.appendSections([.builds])
+            snapshot.appendItems(state.builds)
+        })
+        dataSource.apply(snapshot)
     }
 
     @objc private func onUnregistered() {
@@ -135,24 +159,12 @@ class TravisCIViewController: UIViewController, Instantiatable {
     }
 }
 
-extension TravisCIViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dependency.presenter.state.builds.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = dependency.presenter.state.builds[indexPath.row].repository?.slug
-        return cell
-    }
-}
-
-extension TravisCIViewController: UITableViewDelegate {
+extension TravisCIViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.onScrollChanged(scrollView.contentOffset)
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
