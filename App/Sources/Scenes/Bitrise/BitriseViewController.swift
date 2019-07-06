@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Pipeline
+import BitriseAPI
 import Shared
 import Domain
 
@@ -18,18 +19,28 @@ class BitriseViewController: UIViewController, Instantiatable {
         let presenter: BitriseViewPresenterProtocol
     }
 
+    enum SectionKind: Int {
+        case builds
+    }
+
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-                layout.minimumInteritemSpacing = 0
-                layout.minimumLineSpacing = 0
-            }
             apply(collectionView, mainSceneStyle)
-            collectionView.backgroundColor = .clear
-            collectionView.dataSource = self
+            collectionView.refreshControl = refreshControl
             collectionView.delegate = self
+            collectionView.collectionViewLayout = { () -> UICollectionViewLayout in
+                return UICollectionViewCompositionalLayout(sectionProvider: { (_, _) -> NSCollectionLayoutSection? in
+                    return NSCollectionLayoutSection(
+                        group: NSCollectionLayoutGroup.horizontal(
+                            layoutSize: NSCollectionLayoutSize(
+                                widthDimension: .fractionalWidth(1.0),
+                                heightDimension: .estimated(44)),
+                            subitems: [
+                                NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44)))
+                        ]))
+                })
+            }()
         }
     }
 
@@ -58,6 +69,11 @@ class BitriseViewController: UIViewController, Instantiatable {
 
     weak var delegate: MainPageDelegate?
 
+    private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, BuildListAllResponseItemModel>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
+        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: collectionView)
+        cell.configure(.init(child: build))
+        return cell
+    }
     private let refreshControl = UIRefreshControl()
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
@@ -74,7 +90,6 @@ class BitriseViewController: UIViewController, Instantiatable {
                     .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         }
-        collectionView.refreshControl = refreshControl
 
         observations.append(collectionView.observe(\.contentOffset, options: [.old, .new]) { [weak self] (collectionView, _) in
             guard let `self` = self else {
@@ -120,7 +135,11 @@ class BitriseViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        collectionView.reloadData()
+        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, BuildListAllResponseItemModel>(), { (snapshot) in
+            snapshot.appendSections([.builds])
+            snapshot.appendItems(state.builds)
+        })
+        dataSource.apply(snapshot)
     }
 
     @objc private func onUnregistered() {
@@ -136,30 +155,6 @@ class BitriseViewController: UIViewController, Instantiatable {
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)
-    }
-}
-
-extension BitriseViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dependency.presenter.state.builds.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let build = dependency.presenter.state.builds[indexPath.row]
-        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: collectionView)
-        zip(build.statusText, build.repository?.owner?.name, build.repository?.slug, build.branch, build.triggeredWorkflow, build.triggeredAt) {
-            (statusText: String, ownerName: String, repositoryTitle: String, branch: String, triggeredWorkflow: String, triggeredAt: String) in // swiftlint:disable:this closure_parameter_position
-            cell.configure(.init(context: .init(
-                status: statusText,
-                owner: ownerName,
-                repositoryName: repositoryTitle,
-                branchName: branch,
-                targetBranchName: build.pullRequestTargetBranch,
-                commitMessage: build.commitMessage,
-                triggeredWorkflow: triggeredWorkflow,
-                triggeredAt: triggeredAt)))
-        }
-        return cell
     }
 }
 

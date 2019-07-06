@@ -10,10 +10,6 @@ import UIKit
 import Shared
 
 class BitriseBuildStatusCell: UICollectionViewCell, CellRegisterable {
-    @IBOutlet weak var shadowView: RoundedView! {
-        didSet {
-        }
-    }
     @IBOutlet weak var buildView: BitriseBuildView!
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
@@ -35,10 +31,10 @@ class BitriseBuildStatusCell: UICollectionViewCell, CellRegisterable {
 
 extension BitriseBuildStatusCell: Configurable {
     struct Context {
-        var context: BitriseBuildView.Context
+        var child: BitriseBuildView.Context
     }
 
     func configure(_ context: BitriseBuildStatusCell.Context) {
-        buildView.configure(context.context)
+        buildView.configure(context.child)
     }
 }

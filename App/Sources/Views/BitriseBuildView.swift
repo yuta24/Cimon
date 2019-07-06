@@ -12,19 +12,14 @@ import Shared
 
 @IBDesignable
 class BitriseBuildView: RoundedView {
-    @IBOutlet weak var statusWrapperView: UIView!
-    @IBOutlet weak var statusLabel: UILabel! {
-        didSet {
-            statusLabel.textColor = Asset.base02.color
-        }
-    }
-    @IBOutlet weak var ownerLabel: UILabel!
-    @IBOutlet weak var repositoryNameLabel: UILabel!
-    @IBOutlet weak var branchNameLabel: UILabel!
-    @IBOutlet weak var targetBranchNameLabel: UILabel!
-    @IBOutlet weak var commitMessageLabel: UILabel!
-    @IBOutlet weak var triggeredWorkflowLabel: UILabel!
-    @IBOutlet weak var triggeredAtLabel: UILabel!
+    @IBOutlet weak var statusColorView: UIView!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var buildNumberLabel: UILabel!
+    @IBOutlet weak var slugLabel: UILabel!
+    @IBOutlet weak var branchLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var timestampLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -42,57 +37,17 @@ class BitriseBuildView: RoundedView {
 }
 
 extension BitriseBuildView: Configurable {
-    enum Status: String {
-        case success
-        case aborted
-        case error
-
-        init?(rawValue: String) {
-            switch rawValue {
-            case "success":
-                self = .success
-            case "aborted":
-                self = .aborted
-            case "error":
-                self = .error
-            default:
-                return nil
-            }
-        }
-
-        var color: UIColor {
-            switch self {
-            case .success:
-                return Asset.bitriseStatusSuccess.color
-            case .aborted:
-                return Asset.bitriseStatusAborted.color
-            case .error:
-                return Asset.bitriseStatusFailed.color
-            }
-        }
-    }
-
-    struct Context {
-        var status: String
-        var owner: String
-        var repositoryName: String
-        var branchName: String
-        var targetBranchName: String?
-        var commitMessage: String?
-        var triggeredWorkflow: String
-        var triggeredAt: String
-    }
+    typealias Context = BuildListAllResponseItemModel
 
     func configure(_ context: BitriseBuildView.Context) {
-        let status = Status(rawValue: context.status)
-        statusWrapperView.backgroundColor = status?.color
-        statusLabel.text = status?.rawValue.uppercased()
-        ownerLabel.text = context.owner
-        repositoryNameLabel.text = context.repositoryName
-        branchNameLabel.text = context.branchName
-        targetBranchNameLabel.text = context.targetBranchName
-        commitMessageLabel.text = context.commitMessage
-        triggeredWorkflowLabel.text = context.triggeredWorkflow
-        triggeredAtLabel.text = context.triggeredAt
+        statusColorView.backgroundColor = context.ext.status?.color
+        statusLabel.text = context.statusText
+        buildNumberLabel.text = context.buildNumber.flatMap(String.init)
+        slugLabel.text = context.slug
+        branchLabel.text = context.branch
+        descriptionLabel.text = context.commitMessage
+        timestampLabel.text = context.triggeredAt
+
+        durationLabel.isHidden = false
     }
 }
