@@ -21,9 +21,10 @@ public struct Build: Codable {
         case status
         case committerName = "committer_name"
         case subject
-        case vcsType = "vcs_type"
+        case buildTimeMillis = "build_time_millis"
         case vcsUrl = "vcs_url"
         case authorName = "author_name"
+        case queuedAt = "queued_at"
         case authorEmail = "author_email"
     }
 
@@ -72,9 +73,10 @@ public struct Build: Codable {
     public var status: String
     public var committerName: String?
     public var subject: String?
-    public var vcsType: String?
+    public var buildTimeMillis: Int
     public var vcsUrl: String
     public var authorName: String?
+    public var queuedAt: String
     public var authorEmail: String?
 
     public init(
@@ -90,9 +92,10 @@ public struct Build: Codable {
         status: String,
         committerName: String?,
         subject: String?,
-        vcsType: String?,
+        buildTimeMillis: Int,
         vcsUrl: String,
         authorName: String?,
+        queuedAt: String,
         authorEmail: String?) {
         self.body = body
         self.reponame = reponame
@@ -106,9 +109,10 @@ public struct Build: Codable {
         self.status = status
         self.committerName = committerName
         self.subject = subject
-        self.vcsType = vcsType
+        self.buildTimeMillis = buildTimeMillis
         self.vcsUrl = vcsUrl
         self.authorName = authorName
+        self.queuedAt = queuedAt
         self.authorEmail = authorEmail
     }
 }

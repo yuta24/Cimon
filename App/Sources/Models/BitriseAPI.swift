@@ -27,37 +27,39 @@ extension BitriseAPI.BuildListAllResponseItemModel: ExtendProvider {
 }
 
 extension Extend where Base == BitriseAPI.BuildListAllResponseItemModel {
-    enum Status: String {
-        case success
-        case aborted
-        case error
+    enum Bitrise {
+        enum Status: String {
+            case success
+            case aborted
+            case error
 
-        init?(rawValue: String) {
-            switch rawValue {
-            case "success":
-                self = .success
-            case "aborted":
-                self = .aborted
-            case "error":
-                self = .error
-            default:
-                return nil
+            init?(rawValue: String) {
+                switch rawValue {
+                case "success":
+                    self = .success
+                case "aborted":
+                    self = .aborted
+                case "error":
+                    self = .error
+                default:
+                    return nil
+                }
             }
-        }
 
-        var color: UIColor {
-            switch self {
-            case .success:
-                return Asset.bitriseStatusSuccess.color
-            case .aborted:
-                return Asset.bitriseStatusAborted.color
-            case .error:
-                return Asset.bitriseStatusFailed.color
+            var color: UIColor {
+                switch self {
+                case .success:
+                    return Asset.bitriseStatusSuccess.color
+                case .aborted:
+                    return Asset.bitriseStatusAborted.color
+                case .error:
+                    return Asset.bitriseStatusFailed.color
+                }
             }
         }
     }
 
-    var status: Status? {
-        return base.statusText.flatMap(Status.init)
+    var status: Bitrise.Status? {
+        return base.statusText.flatMap(Bitrise.Status.init)
     }
 }
