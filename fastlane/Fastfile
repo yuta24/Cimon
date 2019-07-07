@@ -8,8 +8,13 @@ platform :ios do
     sync_code_signing(type: "appstore")
   end
 
-  desc "Description of what the lane does"
-  lane :run_app_tests do
+  desc "ベータ配布向けアプリのビルド"
+  lane :build_beta do
+    build_ios_app(skip_package_ipa: true, export_method: "ad-hoc")
+  end
+
+  desc "自動テストの実行"
+  lane :run_auto_tests do
     run_tests(workspace: "Cimon.xcworkspace", scheme: "Cimon", devices: ["iPhone Xs"])
   end
 end

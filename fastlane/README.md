@@ -21,6 +21,11 @@ or alternatively using `brew cask install fastlane`
 fastlane ios fetch_certificates
 ```
 証明書＆プロビジョニングプロファイルの取得
+### ios build_beta
+```
+fastlane ios build_beta
+```
+Description of what the lane does
 ### ios run_app_tests
 ```
 fastlane ios run_app_tests
