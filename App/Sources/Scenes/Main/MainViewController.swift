@@ -83,7 +83,7 @@ class MainViewController: UIViewController, Instantiatable {
         super.viewDidLoad()
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: Asset.outlineSettingsBlack36pt.image,
+            image: Asset.settings.image,
             style: .plain,
             target: self,
             action: #selector(onLeftTapped(_:)))

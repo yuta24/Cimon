@@ -12,7 +12,7 @@ extension UINavigationController {
     convenience init(rootViewController: UIViewController, hasClose: Bool) {
         self.init(rootViewController: rootViewController)
         rootViewController.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: Asset.outlineCloseBlack36pt.image,
+            image: Asset.deleteFilled.image,
             style: .plain,
             target: self,
             action: #selector(onClose))
