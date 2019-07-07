@@ -40,7 +40,6 @@ extension CircleCIBuildView: Configurable {
     typealias Context = CircleCIAPI.Build
 
     func configure(_ context: CircleCIBuildView.Context) {
-        logger.debug(context)
         statusColorView.backgroundColor = context.ext.status?.color
         statusLabel.text = context.status
         buildNumberLabel.text = "# \(context.buildNum)"

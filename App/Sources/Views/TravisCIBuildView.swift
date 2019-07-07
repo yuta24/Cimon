@@ -40,7 +40,7 @@ extension TravisCIBuildView: Configurable {
     typealias Context = TravisCIAPI.Build
 
     func configure(_ context: TravisCIBuildView.Context) {
-        logger.debug(context)
+        statusColorView.backgroundColor = context.ext.status?.color
         statusLabel.text = context.state
         buildNumberLabel.text = "# \(context.number)"
         slugLabel.text = context.repository?.slug
