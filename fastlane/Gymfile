@@ -1,0 +1,3 @@
+scheme("Cimon")
+clean(true)
+output_directory("./")
