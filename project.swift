@@ -14,6 +14,11 @@ let frameworks: [Framework] = [
 
 let project = Project(
     name: "Cimon",
+    configs: [
+        Config(name: "Debug", type: .debug),
+        Config(name: "Staging", type: .release),
+        Config(name: "Release", type: .release),
+    ],
     targets: [
         Target(
             name: "Cimon",
@@ -28,6 +33,10 @@ let project = Project(
                     "Debug" : [
                         "CODE_SIGN_IDENTITY": "iPhone Developer",
                         "PROVISIONING_PROFILE_SPECIFIER": "match Development com.bivre.cimon"
+                    ],
+                    "Staging" : [
+                        "CODE_SIGN_IDENTITY": "iPhone Distribution",
+                        "PROVISIONING_PROFILE_SPECIFIER": "match AdHoc com.bivre.cimon"
                     ],
                     "Release" : [
                         "CODE_SIGN_IDENTITY": "iPhone Distribution",
