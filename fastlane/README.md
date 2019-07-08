@@ -25,12 +25,17 @@ fastlane ios fetch_certificates
 ```
 fastlane ios build_beta
 ```
-Description of what the lane does
-### ios run_app_tests
+ベータアプリのビルド
+### ios generate_beta
 ```
-fastlane ios run_app_tests
+fastlane ios generate_beta
 ```
-Description of what the lane does
+ベータアプリの生成
+### ios run_auto_tests
+```
+fastlane ios run_auto_tests
+```
+自動テストの実行
 
 ----
 

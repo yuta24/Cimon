@@ -8,9 +8,16 @@ platform :ios do
     sync_code_signing(type: "appstore")
   end
 
-  desc "ベータ配布向けアプリのビルド"
+  desc "ベータアプリのビルド"
   lane :build_beta do
+    sync_code_signing(type: "adhoc")
     build_ios_app(skip_package_ipa: true, export_method: "ad-hoc")
+  end
+
+  desc "ベータアプリの生成"
+  lane :generate_beta do
+    sync_code_signing(type: "adhoc")
+    build_ios_app(export_method: "ad-hoc")
   end
 
   desc "自動テストの実行"
