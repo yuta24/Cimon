@@ -7,7 +7,14 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import Shared
+
+typealias SettingsViewController = UIHostingController<SettingsView>
+
+extension SettingsViewController {
+    typealias Dependency = Settings.Dependency
+}
 
 enum Scenes {
     static var main: Reader<MainViewController.Dependency, MainViewController> {
@@ -47,8 +54,7 @@ enum Scenes {
 
     static var settings: Reader<SettingsViewController.Dependency, SettingsViewController> {
         return .init({ dependency in
-            return Storyboard<SettingsViewController>(name: "Settings")
-                .instantiate(dependency: dependency)
+            return UIHostingController(rootView: SettingsView(settings: .init(dependency: dependency)))
         })
     }
 }

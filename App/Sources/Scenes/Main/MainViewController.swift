@@ -117,7 +117,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        dependency.presenter.route(event: .settings).execute(self)
+        dependency.presenter.route(event: .settings).execute((self, .init(store: dependency.store)))
     }
 }
 
