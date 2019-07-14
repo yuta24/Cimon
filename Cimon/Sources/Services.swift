@@ -10,21 +10,6 @@ import APIKit
 import Domain
 import App
 
-private extension LocalStore {
-    func value<V>(_ key: StoreKey<V>) -> V? where V: Decodable {
-        var value: V?
-
-        let semaphore = DispatchSemaphore(value: 0)
-        store.value(key) { (_value) in
-            value = _value
-            semaphore.signal()
-        }
-        semaphore.wait()
-
-        return value
-    }
-}
-
 private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
     return store.value(.travisCIToken)
         .flatMap({ .customize(prefix: "token", token: $0.value) })

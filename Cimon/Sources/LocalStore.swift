@@ -29,4 +29,17 @@ class LocalStore: StoreProtocol {
         })
         completion(value)
     }
+
+    func value<V>(_ key: StoreKey<V>) -> V? where V: Decodable {
+        var value: V?
+
+        let semaphore = DispatchSemaphore(value: 0)
+        store.value(key) { (_value) in
+            value = _value
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return value
+    }
 }

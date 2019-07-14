@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum CI {
+public enum CI: CaseIterable {
     case travisci
     case circleci
     case bitrise

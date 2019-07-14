@@ -94,7 +94,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
         return .init({ (from, dependency) in
             switch event {
             case .settings:
-                let controller = Scenes.settings.execute(.init(store: dependency.store))
+                let controller = Scenes.settings.execute(.init(store: dependency.store, presenter: SettingsViewPresenter()))
                 let navigation = UINavigationController(rootViewController: controller, hasClose: true)
                 from.present(navigation, animated: true, completion: .none)
             }

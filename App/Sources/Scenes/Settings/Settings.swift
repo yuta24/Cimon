@@ -2,53 +2,86 @@
 //  Settings.swift
 //  App
 //
-//  Created by Yu Tawata on 2019/07/10.
+//  Created by Yu Tawata on 2019/07/13.
 //
 
 import Foundation
-import SwiftUI
-import Combine
 import Shared
 import Domain
 
-class Settings: BindableObject {
+enum SettingsScene {
     struct State {
-        var isTravisCI: Bool
-        var isCircleCI: Bool
-        var isBitrise: Bool
+        var travisCIToken: TravisCIToken!
+        var circleCIToken: CircleCIToken!
+        var bitriseToken: BitriseToken!
+        var version: String
 
         static var initial: State {
-            return .init(isTravisCI: false, isCircleCI: false, isBitrise: false)
+            return .init(
+                travisCIToken: nil,
+                circleCIToken: nil,
+                bitriseToken: nil,
+                version: "\(UIDevice.shortVersion)(\(UIDevice.buildVersion))")
         }
     }
 
     enum Message {
-        case update(value: Bool, path: WritableKeyPath<State, Bool>)
+        case load
     }
 
     struct Dependency {
         var store: StoreProtocol
     }
 
-    let didChange = PassthroughSubject<State, Never>()
+    enum Transition {
+        enum Event {
+        }
+    }
+}
 
-    private(set) var state: State {
+protocol SettingsViewPresenterProtocol {
+    var state: SettingsScene.State { get }
+
+    func subscribe(_ closure: @escaping (SettingsScene.State) -> Void)
+    func unsubscribe()
+    func dispatch(_ message: SettingsScene.Message) -> Reader<SettingsScene.Dependency, Void>
+
+    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void>
+}
+
+class SettingsViewPresenter: SettingsViewPresenterProtocol {
+    private(set) var state: SettingsScene.State = .initial {
         didSet {
-            didChange.send(state)
+            DispatchQueue.main.async {
+                self.closure?(self.state)
+            }
         }
     }
-    private let dependency: Dependency
 
-    init(dependency: Dependency) {
-        self.state = .initial
-        self.dependency = dependency
+    private var closure: ((SettingsScene.State) -> Void)?
+
+    func subscribe(_ closure: @escaping (SettingsScene.State) -> Void) {
+        self.closure = closure
+        closure(state)
     }
 
-    func dispatch(_ message: Message) {
-        logger.debug(message)
-        switch message {
-        case .update(let value, let path):
-            state[keyPath: path] = value
-        }
+    func unsubscribe() {
+        self.closure = nil
+    }
+
+    func dispatch(_ message: SettingsScene.Message) -> Reader<SettingsScene.Dependency, Void> {
+        return .init({ [weak self] (dependency) in
+            switch message {
+            case .load:
+                self?.state.travisCIToken = dependency.store.value(.travisCIToken)
+                self?.state.circleCIToken = dependency.store.value(.circleCIToken)
+                self?.state.bitriseToken = dependency.store.value(.bitriseToken)
+            }
+        })
+    }
+
+    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void> {
+        return .init({ (from) in
+        })
     }
 }
