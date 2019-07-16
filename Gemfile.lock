@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/yuta24/danger-periphery.git
+  revision: 0ea32928429f366bf47038c1f13ed747fed5594d
+  specs:
+    danger-periphery (0.0.1)
+      danger-plugin-api (~> 1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -73,6 +80,8 @@ GEM
       no_proxy_fix
       octokit (~> 4.7)
       terminal-table (~> 1)
+    danger-plugin-api (1.0.0)
+      danger (> 2.0)
     danger-swiftlint (0.22.0)
       danger
       rake (> 10)
@@ -250,6 +259,7 @@ DEPENDENCIES
   cocoapods
   cocoapods-binary
   danger
+  danger-periphery!
   danger-swiftlint
   fastlane
   google-api-client
