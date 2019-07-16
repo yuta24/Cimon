@@ -1,0 +1,11 @@
+workspace: Cimon.xcworkspace
+schemes: 
+  - Cimon
+targets:
+  - Cimon
+  - App
+  - Domain
+  - Shared
+  - TravisCIAPI
+  - CircleCIAPI
+  - BitriseAPI
