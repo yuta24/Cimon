@@ -1,0 +1,172 @@
+name: Cimon
+options: 
+  minimumXcodeGenVersion: "2.6.0"
+  carthageExecutablePath: "mint run Carthage/Carthage carthage"
+  bundleIdPrefix: "com.bivre"
+  deploymentTarget:
+    iOS: "13.0"
+configs:
+  Debug: debug
+  Staging: release
+  Release: release
+settings:
+  SWIFT_VERSION: "5.1"
+  DEVELOPMENT_TEAM: "PS98BD6732"
+  CODE_SIGN_STYLE: "Automatic"
+targets:
+  Shared:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Shared
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.shared"
+    scheme:
+      testTargets:
+        - SharedTests
+  SharedTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: SharedTests
+    dependencies:
+      - target: Shared
+      - target: Cimon
+  Domain:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Domain
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
+    dependencies:
+      - target: Shared
+    scheme:
+      testTargets:
+        - DomainTests
+  DomainTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: DomainTests
+    dependencies:
+      - target: Domain
+      - target: Cimon
+  App:
+    type: framework
+    platform: iOS
+    sources:
+      - path: App
+      - path: App/Sources/Generated/Assets.swift
+        optional: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.app"
+    dependencies:
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
+      - target: Shared
+      - target: Domain
+      - carthage: APIKit
+      - carthage: Nuke
+      - carthage: Pipeline
+      - carthage: ReactiveSwift
+      - carthage: Reachability
+    preBuildScripts:
+      - name: "[SwiftGen] Run Script"
+        script: "mint run SwiftGen/SwiftGen swiftgen config run --config App/swiftgen.yml"
+    scheme:
+      testTargets:
+        - AppTests
+  AppTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: AppTests
+    dependencies:
+      - target: App
+      - target: Cimon
+  Cimon:
+    type: application
+    platform: iOS
+    sources:
+      - path: Cimon
+      - path: Cimon/Sources/Generated/Assets.swift
+        optional: true
+      - path: GoogleService-Info.plist
+    settings:
+      base:
+        CODE_SIGN_STYLE: "Manual"
+        PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon"
+      configs:
+        Debug:
+          CODE_SIGN_IDENTITY: "iPhone Developer"
+          PROVISIONING_PROFILE_SPECIFIER: "match Development com.bivre.cimon"
+        Staging:
+          CODE_SIGN_IDENTITY: "iPhone Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "match AdHoc com.bivre.cimon"
+        Release:
+          CODE_SIGN_IDENTITY: "iPhone Distribution"
+          PROVISIONING_PROFILE_SPECIFIER: "match AppStore com.bivre.cimon"
+    dependencies:
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
+      - target: Shared
+      - target: Domain
+      - target: App
+      - carthage: APIKit
+      - carthage: Nuke
+      - carthage: Pipeline
+      - carthage: ReactiveSwift
+      - carthage: Reachability
+    preBuildScripts:
+      - name: "[SwiftGen] Run Script"
+        script: "mint run SwiftGen/SwiftGen swiftgen config run --config Cimon/swiftgen.yml"
+      - name: "[SwiftLint] Run Script"
+        script: "mint run realm/SwiftLint swiftlint"
+    postBuildScripts:
+      - name: "[Crashlytics] Run Script"
+        script: "${PODS_ROOT}/Fabric/run"
+        inputFiles: 
+          - "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
+    scheme:
+      testTargets:
+        - SharedTests
+        - DomainTests
+        - AppTests
+        - CimonTests
+  CimonTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: CimonTests
+    dependencies:
+      - target: Cimon
+  TravisCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: TravisCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
+    dependencies:
+      - carthage: APIKit
+  CircleCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: CircleCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
+    dependencies:
+      - carthage: APIKit
+  BitriseAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: BitriseAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+    dependencies:
+      - carthage: APIKit
