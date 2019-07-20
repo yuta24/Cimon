@@ -24,8 +24,26 @@ class SettingsViewController: UIViewController, Instantiatable {
     }
 
     enum ItemKind: Hashable {
-        case token(String)
+        case token(CI, String?)
         case version(String)
+
+        var title: String? {
+            switch self {
+            case .token(let ci, _):
+                return ci.description
+            case .version:
+                return "Version"
+            }
+        }
+
+        var value: String? {
+            switch self {
+            case .token(_, let rawValue):
+                return rawValue
+            case .version(let rawValue):
+                return rawValue
+            }
+        }
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -36,29 +54,28 @@ class SettingsViewController: UIViewController, Instantiatable {
         }
     }
 
-    private lazy var dataSource = UITableViewDiffableDataSource<SectionKind, ItemKind>(tableView: tableView) { (tableView, indexPath, itemKind) -> UITableViewCell? in
+    private lazy var dataSource = UITableViewDiffableDataSource<SectionKind, ItemKind>(tableView: tableView) { (_, indexPath, itemKind) -> UITableViewCell? in
         switch SectionKind(rawValue: indexPath.section)! {
         case .tokens:
-            let cell = UITableViewCell()
-            cell.textLabel
+            let cell = UITableViewCell.init(style: .value1, reuseIdentifier: nil)
+            cell.textLabel?.text = itemKind.title
+            cell.detailTextLabel?.text = itemKind.value.isNil ? "Unauthorized" : "Authorized"
+            cell.accessoryType = .disclosureIndicator
             return cell
         case .app:
-            let cell = UITableViewCell()
-            cell.textLabel
+            let cell = UITableViewCell.init(style: .value1, reuseIdentifier: nil)
+            cell.textLabel?.text = itemKind.title
+            cell.detailTextLabel?.text = itemKind.value
+            cell.selectionStyle = .none
             return cell
         }
     }
-//    (tableView: tableView) { (tableView, indexPath, item) -> UICollectionViewCell? in
-//        switch SectionKind(rawValue: indexPath.section)! {
-//        }
-//        let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: collectionView)
-//        cell.configure(.init(child: build))
-//        return UITableViewCell()
-//    }
     private var dependency: Dependency!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationItem.title = "Settings"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -81,10 +98,15 @@ class SettingsViewController: UIViewController, Instantiatable {
 
     private func configure(_ state: SettingsScene.State) {
         let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, ItemKind>(), { (snapshot) in
-//            snapshot.appendSections([])
-//            snapshot.appendItems(state.builds)
+            snapshot.appendSections([.tokens, .app])
+            snapshot.appendItems([
+                .token(.travisci, state.travisCIToken?.value),
+                .token(.circleci, state.circleCIToken?.value),
+                .token(.bitrise, state.bitriseToken?.value)
+            ], toSection: .tokens)
+            snapshot.appendItems([.version(state.version)], toSection: .app)
         })
-//        dataSource.apply(snapshot)
+        dataSource.apply(snapshot)
     }
 }
 

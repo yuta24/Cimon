@@ -11,9 +11,9 @@ import Domain
 
 enum SettingsScene {
     struct State {
-        var travisCIToken: TravisCIToken!
-        var circleCIToken: CircleCIToken!
-        var bitriseToken: BitriseToken!
+        var travisCIToken: TravisCIToken?
+        var circleCIToken: CircleCIToken?
+        var bitriseToken: BitriseToken?
         var version: String
 
         static var initial: State {
