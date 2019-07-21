@@ -52,4 +52,11 @@ enum Scenes {
                 .instantiate(dependency: dependency)
         })
     }
+
+    static var ciSetting: Reader<CISettingViewController.Dependency, CISettingViewController> {
+        return .init({ dependency in
+            return Storyboard<CISettingViewController>(name: "CISetting")
+                .instantiate(dependency: dependency)
+        })
+    }
 }

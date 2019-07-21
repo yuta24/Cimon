@@ -112,6 +112,28 @@ class SettingsViewController: UIViewController, Instantiatable {
 
 extension SettingsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        defer {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+
+        switch SectionKind(rawValue: indexPath.section)! {
+        case .tokens:
+            let ci: CI = {
+                switch indexPath.item {
+                case 0:
+                    return .travisci
+                case 1:
+                    return .circleci
+                case 2:
+                    return .bitrise
+                default:
+                    fatalError()
+                }
+            }()
+            dependency.presenter.route(event: .detail(ci))
+                .execute((self, dependency.store))
+        case .app:
+            break
+        }
     }
 }

@@ -35,6 +35,7 @@ enum SettingsScene {
 
     enum Transition {
         enum Event {
+            case detail(CI)
         }
     }
 }
@@ -46,7 +47,7 @@ protocol SettingsViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: SettingsScene.Message) -> Reader<SettingsScene.Dependency, Void>
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: SettingsScene.Transition.Event) -> Reader<(UIViewController, StoreProtocol), Void>
 }
 
 class SettingsViewPresenter: SettingsViewPresenterProtocol {
@@ -80,8 +81,13 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
         })
     }
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void> {
+    func route(event: SettingsScene.Transition.Event) -> Reader<(UIViewController, StoreProtocol), Void> {
         return .init({ (from) in
+            switch event {
+            case .detail(let ci):
+                let controller = Scenes.ciSetting.execute(.init(store: from.1, presenter: CISettingViewPresenter()))
+                from.0.navigationController?.pushViewController(controller, animated: true)
+            }
         })
     }
 }
