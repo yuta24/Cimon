@@ -42,7 +42,11 @@ extension BitriseBuildView: Configurable {
     func configure(_ context: BitriseBuildView.Context) {
         statusColorView.backgroundColor = context.ext.status?.color
         statusLabel.text = context.statusText
-        buildNumberLabel.text = context.buildNumber.flatMap(String.init)
+        buildNumberLabel.text = context.buildNumber
+            .flatMap(String.init)
+            .flatMap({
+                "# \($0)"
+            })
         slugLabel.text = context.slug
         branchLabel.text = context.branch
         descriptionLabel.text = context.commitMessage
