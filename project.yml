@@ -40,7 +40,12 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
     dependencies:
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
       - target: Shared
+      - carthage: APIKit
+      - carthage: ReactiveSwift
     scheme:
       testTargets:
         - DomainTests

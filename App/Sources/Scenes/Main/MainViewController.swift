@@ -64,11 +64,12 @@ class MainViewController: UIViewController, Instantiatable {
                 presenter: CircleCIViewPresenter()))
         circleCIController.delegate = self
 
-        let bitriseController = Scenes.bitrise
-            .execute(.init(
-                network: self.dependency.services[.bitrise]!,
-                store: self.dependency.store,
-                presenter: BitriseViewPresenter()))
+        let bitriseController = Scenes.bitrise.execute(
+            BitriseViewPresenter(
+                dependency: .init(
+                    fetchUseCase: FetchBuildsFromBitrise(
+                        network: self.dependency.services[.bitrise]!),
+                    store: self.dependency.store)))
         bitriseController.delegate = self
 
         return [

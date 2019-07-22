@@ -34,7 +34,7 @@ enum BitriseScene {
     }
 
     struct Dependency {
-        var network: NetworkServiceProtocol
+        var fetchUseCase: FetchBuildsFromBitriseProtocol
         var store: StoreProtocol
     }
 
@@ -49,7 +49,7 @@ protocol BitriseViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void>
+    func dispatch(_ message: BitriseScene.Message)
 
     func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -65,6 +65,12 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     private var closure: ((BitriseScene.State) -> Void)?
 
+    private let dependency: BitriseScene.Dependency
+
+    init(dependency: BitriseScene.Dependency) {
+        self.dependency = dependency
+    }
+
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -74,58 +80,56 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: BitriseScene.Message) -> Reader<BitriseScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            switch message {
-            case .load:
-                dependency.store.value(.bitriseToken, { (value) in
-                    self?.state.token = value
-                })
-            case .fetch:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(ownerSlug: .none, isOnHold: .none, status: .none, next: .none, limit: 25))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        if let data = response.data {
-                            self?.state.builds = data
-                        }
-                        self?.state.next = response.paging?.next
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .fetchNext:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                guard let next = self?.state.next else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(ownerSlug: .none, isOnHold: .none, status: .none, next: next, limit: 25))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        if let data = response.data {
-                            self?.state.builds.append(contentsOf: data)
-                        }
-                        self?.state.next = response.paging?.next
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .token(let raw):
-                let token = raw.flatMap(BitriseToken.init)
-                dependency.store.set(token, for: .bitriseToken)
-                self?.state.token = token
+    func dispatch(_ message: BitriseScene.Message) {
+        switch message {
+        case .load:
+            dependency.store.value(.bitriseToken, { [weak self] (value) in
+                self?.state.token = value
+            })
+        case .fetch:
+            guard !state.isLoading else {
+                return
             }
-        })
+            state.isLoading = true
+            dependency.fetchUseCase.run(ownerSlug: .none, isOnHold: .none, status: .none, next: .none, limit: 25)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    if let data = response.data {
+                        self?.state.builds = data
+                    }
+                    self?.state.next = response.paging?.next
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .fetchNext:
+            guard !state.isLoading else {
+                return
+            }
+            guard let next = state.next else {
+                return
+            }
+            state.isLoading = true
+            dependency.fetchUseCase.run(ownerSlug: .none, isOnHold: .none, status: .none, next: next, limit: 25)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    if let data = response.data {
+                        self?.state.builds.append(contentsOf: data)
+                    }
+                    self?.state.next = response.paging?.next
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .token(let raw):
+            let token = raw.flatMap(BitriseToken.init)
+            dependency.store.set(token, for: .bitriseToken)
+            state.token = token
+        }
     }
 
     func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void> {

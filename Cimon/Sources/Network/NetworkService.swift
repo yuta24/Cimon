@@ -9,6 +9,7 @@ import Foundation
 import App
 import APIKit
 import ReactiveSwift
+import Domain
 
 public class NetworkService: NetworkServiceProtocol {
     let session: Session

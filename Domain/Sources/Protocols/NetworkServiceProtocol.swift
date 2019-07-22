@@ -1,8 +1,8 @@
 //
-//  NetworkService.swift
-//  App
+//  NetworkServiceProtocol.swift
+//  Domain
 //
-//  Created by Yu Tawata on 2019/05/05.
+//  Created by tawata-yu on 2019/07/22.
 //
 
 import Foundation
