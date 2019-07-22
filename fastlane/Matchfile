@@ -1,4 +1,4 @@
-git_url("https://machine-bivre@github.com/yuta24/mobile-signing.git")
+git_url("git@github.com:yuta24/mobile-signing.git")
 storage_mode("git")
 app_identifier("com.bivre.cimon")
 readonly(true)

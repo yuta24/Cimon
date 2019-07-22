@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14845" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14799.2"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Settings View Controller-->
-        <scene sceneID="7gH-Rj-ek8">
+        <scene sceneID="efk-cs-ihZ">
             <objects>
-                <viewController storyboardIdentifier="SettingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Tf-iW-Rad" customClass="SettingsViewController" customModule="App" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="LOc-fc-Tl0">
+                <viewController storyboardIdentifier="SettingsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="XfC-gV-kLy" customClass="SettingsViewController" customModule="App" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LVi-wi-nVV">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fzm-TP-PCU">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pld-Gn-CU7">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="WQW-UW-DA3">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="WQW-UW-DA3" secondAttribute="bottom" id="ATa-X0-jwz"/>
+                                    <constraint firstItem="WQW-UW-DA3" firstAttribute="top" secondItem="Pld-Gn-CU7" secondAttribute="top" id="B2S-FC-vOV"/>
+                                    <constraint firstItem="WQW-UW-DA3" firstAttribute="leading" secondItem="Pld-Gn-CU7" secondAttribute="leading" id="DSC-dZ-gRl"/>
+                                    <constraint firstAttribute="trailing" secondItem="WQW-UW-DA3" secondAttribute="trailing" id="OzW-wD-d1M"/>
+                                </constraints>
+                            </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="s4h-dc-v2k" firstAttribute="bottom" secondItem="fzm-TP-PCU" secondAttribute="bottom" id="IQc-8J-1v7"/>
-                            <constraint firstItem="fzm-TP-PCU" firstAttribute="top" secondItem="s4h-dc-v2k" secondAttribute="top" id="TTV-Zy-7SM"/>
-                            <constraint firstItem="s4h-dc-v2k" firstAttribute="trailing" secondItem="fzm-TP-PCU" secondAttribute="trailing" id="oqZ-Hp-rqS"/>
-                            <constraint firstItem="fzm-TP-PCU" firstAttribute="leading" secondItem="s4h-dc-v2k" secondAttribute="leading" id="pzB-I9-gwI"/>
+                            <constraint firstItem="Pld-Gn-CU7" firstAttribute="top" secondItem="LVi-wi-nVV" secondAttribute="top" id="4GT-Lt-48A"/>
+                            <constraint firstItem="Pld-Gn-CU7" firstAttribute="leading" secondItem="LVi-wi-nVV" secondAttribute="leading" id="C21-XG-vyF"/>
+                            <constraint firstAttribute="bottom" secondItem="Pld-Gn-CU7" secondAttribute="bottom" id="YdY-GM-NO4"/>
+                            <constraint firstAttribute="trailing" secondItem="Pld-Gn-CU7" secondAttribute="trailing" id="xkE-yO-Uss"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="s4h-dc-v2k"/>
+                        <viewLayoutGuide key="safeArea" id="Nhq-SP-UsV"/>
                     </view>
                     <connections>
-                        <outlet property="tableView" destination="fzm-TP-PCU" id="rDK-v4-ieK"/>
+                        <outlet property="contentView" destination="Pld-Gn-CU7" id="JGb-Ph-1ty"/>
+                        <outlet property="tableView" destination="WQW-UW-DA3" id="1CM-tp-UVy"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="X8A-9N-0NB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Hk-HL-3sj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="139" y="109"/>
         </scene>
     </scenes>
 </document>

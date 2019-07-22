@@ -9,5 +9,19 @@ import Foundation
 import UIKit
 
 let mainSceneStyle = { (view: UIView) in
-    view.backgroundColor = UIColor.systemBackground
+    switch view {
+    case let view as UITableView:
+        switch view.style {
+        case .plain:
+            view.backgroundColor = UIColor.systemBackground
+        case .grouped:
+            view.backgroundColor = UIColor.systemGroupedBackground
+        case .insetGrouped:
+            view.backgroundColor = UIColor.systemGroupedBackground
+        @unknown default:
+            view.backgroundColor = UIColor.systemBackground
+        }
+    default:
+        view.backgroundColor = UIColor.systemBackground
+    }
 }

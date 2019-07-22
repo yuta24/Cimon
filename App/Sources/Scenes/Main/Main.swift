@@ -40,6 +40,10 @@ enum MainScene {
         case update(CI)
     }
 
+    struct Dependency {
+        var store: StoreProtocol
+    }
+
     enum Transition {
         enum Event {
             case settings
@@ -54,7 +58,7 @@ protocol MainViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: MainScene.Message)
 
-    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(event: MainScene.Transition.Event) -> Reader<(UIViewController, MainScene.Dependency), Void>
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -86,11 +90,11 @@ class MainViewPresenter: MainViewPresenterProtocol {
         }
     }
 
-    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
+    func route(event: MainScene.Transition.Event) -> Reader<(UIViewController, MainScene.Dependency), Void> {
+        return .init({ (from, dependency) in
             switch event {
             case .settings:
-                let controller = Scenes.settings.execute(.init())
+                let controller = Scenes.settings.execute(.init(store: dependency.store, presenter: SettingsViewPresenter()))
                 let navigation = UINavigationController(rootViewController: controller, hasClose: true)
                 from.present(navigation, animated: true, completion: .none)
             }

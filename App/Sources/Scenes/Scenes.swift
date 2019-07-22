@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import Shared
 
 enum Scenes {
@@ -48,6 +49,13 @@ enum Scenes {
     static var settings: Reader<SettingsViewController.Dependency, SettingsViewController> {
         return .init({ dependency in
             return Storyboard<SettingsViewController>(name: "Settings")
+                .instantiate(dependency: dependency)
+        })
+    }
+
+    static var ciSetting: Reader<CISettingViewController.Dependency, CISettingViewController> {
+        return .init({ dependency in
+            return Storyboard<CISettingViewController>(name: "CISetting")
                 .instantiate(dependency: dependency)
         })
     }
