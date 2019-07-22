@@ -50,11 +50,12 @@ class MainViewController: UIViewController, Instantiatable {
         options: .none)
 
     private lazy var pages: [CI: UIViewController] = {
-        let travisCIController = Scenes.travisCI
-            .execute(.init(
-                network: self.dependency.services[.travisci]!,
-                store: self.dependency.store,
-                presenter: TravisCIViewPresenter()))
+        let travisCIController = Scenes.travisCI.execute(
+            TravisCIViewPresenter(
+                dependency: .init(
+                    fetchUseCase: FetchBuildsFromTravisCI(
+                        network: self.dependency.services[.travisci]!),
+                    store: self.dependency.store)))
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI.execute(

@@ -13,11 +13,7 @@ import Shared
 import Domain
 
 class TravisCIViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        let network: NetworkServiceProtocol
-        let store: StoreProtocol
-        let presenter: TravisCIViewPresenterProtocol
-    }
+    typealias Dependency = TravisCIViewPresenterProtocol
 
     enum SectionKind: Int {
         case builds
@@ -75,7 +71,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
         return cell
     }
     private let refreshControl = UIRefreshControl()
-    private var dependency: Dependency!
+    private var presenter: TravisCIViewPresenterProtocol!
     private var observations = [NSKeyValueObservation]()
 
     override func viewDidLoad() {
@@ -86,8 +82,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
                 guard let `self` = self else {
                     return
                 }
-                self.dependency.presenter.dispatch(.fetch)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
+                self.presenter.dispatch(.fetch)
             }
         }
 
@@ -98,8 +93,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
             logger.debug(tableView.nearBottom)
 
             if tableView.nearBottom {
-                self.dependency.presenter.dispatch(.fetchNext)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
+                self.presenter.dispatch(.fetchNext)
             }
         })
     }
@@ -107,22 +101,20 @@ class TravisCIViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        TravisCIScene.Dependency(network: dependency.network, store: dependency.store) |> {
-            self.dependency.presenter.dispatch(.load).execute($0)
-            self.dependency.presenter.dispatch(.fetch).execute($0)
-        }
+        presenter.dispatch(.load)
+        presenter.dispatch(.fetch)
 
-        dependency.presenter.subscribe(configure(_:))
+        presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        dependency.presenter.unsubscribe()
+        presenter.unsubscribe()
     }
 
     func inject(dependency: TravisCIViewController.Dependency) {
-        self.dependency = dependency
+        self.presenter = dependency
     }
 
     private func configure(_ state: TravisCIScene.State) {
@@ -150,9 +142,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
             guard let `self` = self else {
                 return
             }
-            self.dependency.presenter
-                .dispatch(.token(alert?.textFields?.first?.text))
-                .execute(.init(network: self.dependency.network, store: self.dependency.store))
+            self.presenter.dispatch(.token(alert?.textFields?.first?.text))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)
