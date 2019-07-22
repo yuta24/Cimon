@@ -34,7 +34,7 @@ enum CircleCIScene {
     }
 
     struct Dependency {
-        var network: NetworkServiceProtocol
+        var fetchUseCase: FetchBuildsFromCircleCIProtocol
         var store: StoreProtocol
     }
 
@@ -49,7 +49,7 @@ protocol CircleCIViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void>
+    func dispatch(_ message: CircleCIScene.Message)
 
     func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -65,6 +65,12 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     private var closure: ((CircleCIScene.State) -> Void)?
 
+    private let dependency: CircleCIScene.Dependency
+
+    init(dependency: CircleCIScene.Dependency) {
+        self.dependency = dependency
+    }
+
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -74,54 +80,52 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: CircleCIScene.Message) -> Reader<CircleCIScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            switch message {
-            case .load:
-                dependency.store.value(.circleCIToken, { (value) in
-                    self?.state.token = value
-                })
-            case .fetch:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: 0, shallow: false))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        self?.state.builds = response
-                        self?.state.offset = self?.state.builds.count
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .fetchNext:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                guard let offset = self?.state.offset else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.RecentBuilds(limit: 25, offset: offset, shallow: false))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        self?.state.builds.append(contentsOf: response)
-                        self?.state.offset = response.isEmpty ? nil : self?.state.builds.count
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .token(let raw):
-                let token = raw.flatMap(CircleCIToken.init)
-                dependency.store.set(token, for: .circleCIToken)
-                self?.state.token = token
+    func dispatch(_ message: CircleCIScene.Message) {
+        switch message {
+        case .load:
+            dependency.store.value(.circleCIToken, { [weak self] (value) in
+                self?.state.token = value
+            })
+        case .fetch:
+            guard !state.isLoading else {
+                return
             }
-        })
+            state.isLoading = true
+            dependency.fetchUseCase.run(limit: 25, offset: 0, shallow: false)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.builds = response
+                    self?.state.offset = self?.state.builds.count
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .fetchNext:
+            guard !state.isLoading else {
+                return
+            }
+            guard let offset = state.offset else {
+                return
+            }
+            state.isLoading = true
+            dependency.fetchUseCase.run(limit: 25, offset: offset, shallow: false)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.builds.append(contentsOf: response)
+                    self?.state.offset = response.isEmpty ? nil : self?.state.builds.count
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .token(let raw):
+            let token = raw.flatMap(CircleCIToken.init)
+            dependency.store.set(token, for: .circleCIToken)
+            state.token = token
+        }
     }
 
     func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void> {
