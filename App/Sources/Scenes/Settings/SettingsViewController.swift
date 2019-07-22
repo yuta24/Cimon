@@ -12,6 +12,7 @@ import BitriseAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class SettingsViewController: UIViewController, Instantiatable {
     struct Dependency {
         let store: StoreProtocol

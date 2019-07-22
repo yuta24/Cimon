@@ -14,6 +14,7 @@ protocol MainPageDelegate: class {
     func onScrollChanged(_ contentOffset: CGPoint)
 }
 
+// sourcery: scene
 class MainViewController: UIViewController, Instantiatable {
     enum Translator {
         static func convert(viewController: UIViewController) -> CI? {

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct OwnerAccountResponseModel: Codable {
     enum CodingKeys: String, CodingKey {
         case accountType = "account_type"
@@ -18,12 +19,14 @@ public struct OwnerAccountResponseModel: Codable {
     public var name: String?
     public var slug: String?
 
-    public init(
-        accountType: String?,
-        name: String?,
-        slug: String?) {
+    // sourcery:inline:OwnerAccountResponseModel.Init
+    // swiftlint:disable line_length
+    public init(accountType: String?, name: String?, slug: String?) {
         self.accountType = accountType
         self.name = name
         self.slug = slug
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

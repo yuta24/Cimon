@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct Paging: Codable {
     enum CodingKeys: String, CodingKey {
         case next = "next"
@@ -18,12 +19,14 @@ public struct Paging: Codable {
     public var pageItemLimit: Int?
     public var totalItemCount: Int?
 
-    public init(
-        next: String?,
-        pageItemLimit: Int?,
-        totalItemCount: Int?) {
+    // sourcery:inline:Paging.Init
+    // swiftlint:disable line_length
+    public init(next: String?, pageItemLimit: Int?, totalItemCount: Int?) {
         self.next = next
         self.pageItemLimit = pageItemLimit
         self.totalItemCount = totalItemCount
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

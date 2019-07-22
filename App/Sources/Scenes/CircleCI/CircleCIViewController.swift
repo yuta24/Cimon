@@ -12,6 +12,7 @@ import CircleCIAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class CircleCIViewController: UIViewController, Instantiatable {
     typealias Dependency = CircleCIViewPresenterProtocol
 

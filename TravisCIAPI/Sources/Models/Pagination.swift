@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct Pagination: Codable {
     enum CodingKeys: String, CodingKey {
         case limit = "limit"
@@ -20,7 +21,7 @@ public struct Pagination: Codable {
         case last = "last"
     }
 
-    public struct Linking: Codable {
+    public struct Linking: AutoInit, Codable {
         enum CodingKeys: String, CodingKey {
             case href = "@href"
             case offset = "offset"
@@ -31,14 +32,8 @@ public struct Pagination: Codable {
         public var offset: Int
         public var limit: Int
 
-        public init(
-            href: String,
-            offset: Int,
-            limit: Int) {
-            self.href = href
-            self.offset = offset
-            self.limit = limit
-        }
+        // sourcery:inline:Pagination.Init
+        // sourcery:end
     }
 
     public var limit: Int
@@ -51,16 +46,9 @@ public struct Pagination: Codable {
     public var first: Linking
     public var last: Linking
 
-    public init(
-        limit: Int,
-        offset: Int,
-        count: Int,
-        isFirst: Bool,
-        isLast: Bool,
-        next: Linking?,
-        prev: Linking?,
-        first: Linking,
-        last: Linking) {
+    // sourcery:inline:Pagination.Init
+    // swiftlint:disable line_length
+    public init(limit: Int, offset: Int, count: Int, isFirst: Bool, isLast: Bool, next: Linking?, prev: Linking?, first: Linking, last: Linking) {
         self.limit = limit
         self.offset = offset
         self.count = count
@@ -70,5 +58,8 @@ public struct Pagination: Codable {
         self.prev = prev
         self.first = first
         self.last = last
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

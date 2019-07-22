@@ -11,6 +11,7 @@ import Pipeline
 import Shared
 import Domain
 
+// sourcery: scene
 class BitriseDetailViewController: UIViewController, Instantiatable {
     struct Dependency {
         let network: NetworkServiceProtocol

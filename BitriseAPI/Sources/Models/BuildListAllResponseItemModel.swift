@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct BuildListAllResponseItemModel: Codable {
     enum CodingKeys: String, CodingKey {
         case abortReason = "abort_reason"
@@ -60,31 +61,9 @@ public struct BuildListAllResponseItemModel: Codable {
     public var triggeredBy: String?
     public var triggeredWorkflow: String?
 
-    public init(
-        abortReason: String?,
-        branch: String?,
-        buildNumber: Int?,
-        commitHash: String?,
-        commitMessage: String?,
-        commitViewUrlString: String?,
-        environmentPrepareFinishedAt: String?,
-        finishedAt: String?,
-        isOnHold: Bool?,
-//        originalBuildParams: String?,
-        pullRequestId: Int?,
-        pullRequestTargetBranch: String?,
-        pullRequestViewUrlString: String?,
-        repository: AppResponseItemModel?,
-        slug: String?,
-        stackConfigType: String?,
-        stackIdentifier: String?,
-        startedOnWorkerAt: String?,
-        status: Int?,
-        statusText: String?,
-        tag: String?,
-        triggeredAt: String?,
-        triggeredBy: String?,
-        triggeredWorkflow: String?) {
+    // sourcery:inline:BuildListAllResponseItemModel.Init
+    // swiftlint:disable line_length
+    public init(abortReason: String?, branch: String?, buildNumber: Int?, commitHash: String?, commitMessage: String?, commitViewUrlString: String?, environmentPrepareFinishedAt: String?, finishedAt: String?, isOnHold: Bool?, pullRequestId: Int?, pullRequestTargetBranch: String?, pullRequestViewUrlString: String?, repository: AppResponseItemModel?, slug: String?, stackConfigType: String?, stackIdentifier: String?, startedOnWorkerAt: String?, status: Int?, statusText: String?, tag: String?, triggeredAt: String?, triggeredBy: String?, triggeredWorkflow: String?) {
         self.abortReason = abortReason
         self.branch = branch
         self.buildNumber = buildNumber
@@ -94,7 +73,6 @@ public struct BuildListAllResponseItemModel: Codable {
         self.environmentPrepareFinishedAt = environmentPrepareFinishedAt
         self.finishedAt = finishedAt
         self.isOnHold = isOnHold
-//        self.originalBuildParams = originalBuildParams
         self.pullRequestId = pullRequestId
         self.pullRequestTargetBranch = pullRequestTargetBranch
         self.pullRequestViewUrlString = pullRequestViewUrlString
@@ -109,5 +87,8 @@ public struct BuildListAllResponseItemModel: Codable {
         self.triggeredAt = triggeredAt
         self.triggeredBy = triggeredBy
         self.triggeredWorkflow = triggeredWorkflow
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

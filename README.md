@@ -17,3 +17,15 @@ This project using [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 ```hcl
 $ ./scripts/bootstrap.sh
 ```
+
+## Others
+
+###
+
+We use [Sourcery](https://github.com/krzysztofzablocki/Sourcery).
+You can generate code using below script.
+
+```hcl
+$ ./scripts/generate_code.sh
+```
+

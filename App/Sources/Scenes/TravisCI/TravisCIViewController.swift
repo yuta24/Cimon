@@ -12,6 +12,7 @@ import TravisCIAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class TravisCIViewController: UIViewController, Instantiatable {
     typealias Dependency = TravisCIViewPresenterProtocol
 

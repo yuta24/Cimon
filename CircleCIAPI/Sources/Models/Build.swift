@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct Build: Codable {
     enum CodingKeys: String, CodingKey {
         case body
@@ -44,21 +45,6 @@ public struct Build: Codable {
         public var name: String
         public var vcsType: String
         public var id: Int
-
-        public init(
-            isUser: Bool,
-            login: String,
-            avatarUrlString: String,
-            name: String,
-            vcsType: String,
-            id: Int) {
-            self.isUser = isUser
-            self.login = login
-            self.avatarUrlString = avatarUrlString
-            self.name = name
-            self.vcsType = vcsType
-            self.id = id
-        }
     }
 
     public var body: String?
@@ -79,24 +65,9 @@ public struct Build: Codable {
     public var queuedAt: String
     public var authorEmail: String?
 
-    public init(
-        body: String?,
-        reponame: String,
-        buildUrlString: String,
-        branch: String,
-        username: String,
-        user: User,
-        vcsRevision: String,
-        buildNum: Int,
-        committerEmail: String?,
-        status: String,
-        committerName: String?,
-        subject: String?,
-        buildTimeMillis: Int,
-        vcsUrl: String,
-        authorName: String?,
-        queuedAt: String,
-        authorEmail: String?) {
+    // sourcery:inline:Build.Init
+    // swiftlint:disable line_length
+    public init(body: String?, reponame: String, buildUrlString: String, branch: String, username: String, user: User, vcsRevision: String, buildNum: Int, committerEmail: String?, status: String, committerName: String?, subject: String?, buildTimeMillis: Int, vcsUrl: String, authorName: String?, queuedAt: String, authorEmail: String?) {
         self.body = body
         self.reponame = reponame
         self.buildUrlString = buildUrlString
@@ -114,5 +85,8 @@ public struct Build: Codable {
         self.authorName = authorName
         self.queuedAt = queuedAt
         self.authorEmail = authorEmail
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

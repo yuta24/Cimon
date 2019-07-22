@@ -12,6 +12,7 @@ import BitriseAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class BitriseViewController: UIViewController, Instantiatable {
     typealias Dependency = BitriseViewPresenterProtocol
 
