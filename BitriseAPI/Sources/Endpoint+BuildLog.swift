@@ -1,5 +1,5 @@
 //
-//  BuildLog.swift
+//  Endpoint+BuildLog.swift
 //  BitriseAPI
 //
 //  Created by Yu Tawata on 2019/07/01.
@@ -9,7 +9,7 @@ import Foundation
 import APIKit
 
 public extension Endpoint {
-    struct BuildLog: BitriseRequest {
+    struct BuildLogRequest: BitriseRequest {
         public typealias Response = BuildLogInfoResponseModel
 
         public enum Status: Int {

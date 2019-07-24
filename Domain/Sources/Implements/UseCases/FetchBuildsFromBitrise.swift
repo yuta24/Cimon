@@ -18,7 +18,7 @@ public class FetchBuildsFromBitrise: FetchBuildsFromBitriseProtocol {
         self.network = network
     }
 
-    public func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.Builds.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError> {
-        return network.response(Endpoint.Builds.init(ownerSlug: ownerSlug, isOnHold: isOnHold, status: status, next: next, limit: limit))
+    public func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError> {
+        return network.response(Endpoint.BuildsRequest.init(ownerSlug: ownerSlug, isOnHold: isOnHold, status: status, next: next, limit: limit))
     }
 }

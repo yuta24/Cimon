@@ -92,7 +92,7 @@ class BitriseDetailViewPresenter: BitriseDetailViewPresenterProtocol {
                     return
                 }
                 self.state.isLoading = true
-                dependency.network.response(Endpoint.BuildLog(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
+                dependency.network.response(Endpoint.BuildLogRequest(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
                     .on(failed: { (error) in
                         logger.debug(error)
                         self.state.isLoading = false

@@ -15,12 +15,12 @@ public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init (window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, services: [CI: NetworkServiceProtocol]) {
+    public init (window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
             $0.rootViewController = MainViewController.Dependency(
                 store: store,
-                presenter: MainViewPresenter(ci: .travisci),
-                services: services)
+                networks: networks,
+                presenter: MainViewPresenter(ci: .travisci, dependency: .init(store: store, networks: networks)))
                 |> Scenes.main.execute
                 |> UINavigationController.init
             $0.makeKeyAndVisible()

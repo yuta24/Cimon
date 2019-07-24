@@ -1,5 +1,5 @@
 //
-//  RecentBuilds.swift
+//  Endpoint+RecentBuilds.swift
 //  CircleCIAPI
 //
 //  Created by Yu Tawata on 2019/05/07.
@@ -9,7 +9,7 @@ import Foundation
 import APIKit
 
 public extension Endpoint {
-    struct RecentBuilds: CircleCIRequest {
+    struct RecentBuildsRequest: CircleCIRequest {
         public typealias Response = [Build]
 
         public var path: String {

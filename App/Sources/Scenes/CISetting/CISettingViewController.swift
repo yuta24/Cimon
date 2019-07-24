@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Nuke
 import Pipeline
 import BitriseAPI
 import Shared
@@ -15,11 +16,23 @@ import Domain
 // sourcery: scene
 class CISettingViewController: UIViewController, Instantiatable {
     struct Dependency {
-        let store: StoreProtocol
-        let presenter: CISettingViewPresenterProtocol
+        var presenter: CISettingViewPresenterProtocol
     }
 
     @IBOutlet weak var contentView: UIView!
+
+    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel! {
+        didSet {
+            nameLabel.text = .none
+            nameLabel.textAlignment = .center
+        }
+    }
+    @IBOutlet weak var actionButton: RoundedButton! {
+        didSet {
+            actionButton.setTitle(.none, for: .normal)
+        }
+    }
 
     private var dependency: Dependency!
 
@@ -32,7 +45,7 @@ class CISettingViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        dependency.presenter.dispatch(.load).execute(.init(store: dependency.store))
+        dependency.presenter.dispatch(.load)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -48,5 +61,14 @@ class CISettingViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: CISettingScene.State) {
+        navigationItem.title = state.ci.description
+
+        if let url = state.avatarUrl {
+            loadImage(with: url, into: avatarImageView)
+        }
+        nameLabel.text = state.name
+
+        let title = state.authorized ? "Deauthorize" : "Authorize"
+        actionButton.setTitle(title, for: .normal)
     }
 }

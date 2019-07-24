@@ -14,7 +14,9 @@ import Domain
 
 // sourcery: scene
 class BitriseViewController: UIViewController, Instantiatable {
-    typealias Dependency = BitriseViewPresenterProtocol
+    struct Dependency {
+        var presenter: BitriseViewPresenterProtocol
+    }
 
     enum SectionKind: Int {
         case builds
@@ -72,7 +74,7 @@ class BitriseViewController: UIViewController, Instantiatable {
         return cell
     }
     private let refreshControl = UIRefreshControl()
-    private var presenter: BitriseViewPresenterProtocol!
+    private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
     override func viewDidLoad() {
@@ -83,7 +85,7 @@ class BitriseViewController: UIViewController, Instantiatable {
                 guard let `self` = self else {
                     return
                 }
-                self.presenter.dispatch(.fetch)
+                self.dependency.presenter.dispatch(.fetch)
             }
         }
 
@@ -93,7 +95,7 @@ class BitriseViewController: UIViewController, Instantiatable {
             }
 
             if collectionView.nearBottom {
-                self.presenter.dispatch(.fetchNext)
+                self.dependency.presenter.dispatch(.fetchNext)
             }
         })
     }
@@ -101,20 +103,20 @@ class BitriseViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        presenter.dispatch(.load)
-        presenter.dispatch(.fetch)
+        dependency.presenter.dispatch(.load)
+        dependency.presenter.dispatch(.fetch)
 
-        presenter.subscribe(configure(_:))
+        dependency.presenter.subscribe(configure(_:))
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        presenter.unsubscribe()
+        dependency.presenter.unsubscribe()
     }
 
     func inject(dependency: BitriseViewController.Dependency) {
-        self.presenter = dependency
+        self.dependency = dependency
     }
 
     private func configure(_ state: BitriseScene.State) {
@@ -142,7 +144,7 @@ class BitriseViewController: UIViewController, Instantiatable {
             guard let `self` = self else {
                 return
             }
-            self.presenter.dispatch(.token(alert?.textFields?.first?.text))
+            self.dependency.presenter.dispatch(.token(alert?.textFields?.first?.text))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)

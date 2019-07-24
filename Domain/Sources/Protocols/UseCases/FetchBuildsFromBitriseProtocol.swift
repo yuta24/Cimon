@@ -12,5 +12,5 @@ import Shared
 import BitriseAPI
 
 public protocol FetchBuildsFromBitriseProtocol {
-    func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.Builds.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError>
+    func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError>
 }

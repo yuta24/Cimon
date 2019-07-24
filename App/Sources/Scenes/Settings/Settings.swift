@@ -31,6 +31,7 @@ enum SettingsScene {
 
     struct Dependency {
         var store: StoreProtocol
+        var networks: [CI: NetworkServiceProtocol]
     }
 
     enum Transition {
@@ -45,9 +46,9 @@ protocol SettingsViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (SettingsScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: SettingsScene.Message) -> Reader<SettingsScene.Dependency, Void>
+    func dispatch(_ message: SettingsScene.Message)
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<(UIViewController, StoreProtocol), Void>
+    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class SettingsViewPresenter: SettingsViewPresenterProtocol {
@@ -61,6 +62,12 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
 
     private var closure: ((SettingsScene.State) -> Void)?
 
+    private let dependency: SettingsScene.Dependency
+
+    init(dependency: SettingsScene.Dependency) {
+        self.dependency = dependency
+    }
+
     func subscribe(_ closure: @escaping (SettingsScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -70,23 +77,26 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: SettingsScene.Message) -> Reader<SettingsScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            switch message {
-            case .load:
-                self?.state.travisCIToken = dependency.store.value(.travisCIToken)
-                self?.state.circleCIToken = dependency.store.value(.circleCIToken)
-                self?.state.bitriseToken = dependency.store.value(.bitriseToken)
-            }
-        })
+    func dispatch(_ message: SettingsScene.Message) {
+        switch message {
+        case .load:
+            state.travisCIToken = dependency.store.value(.travisCIToken)
+            state.circleCIToken = dependency.store.value(.circleCIToken)
+            state.bitriseToken = dependency.store.value(.bitriseToken)
+        }
     }
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<(UIViewController, StoreProtocol), Void> {
+    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void> {
         return .init({ (from) in
             switch event {
             case .detail(let ci):
-                let controller = Scenes.ciSetting.execute(.init(store: from.1, presenter: CISettingViewPresenter()))
-                from.0.navigationController?.pushViewController(controller, animated: true)
+                let interactor = CISettingInteractor(
+                    store: self.dependency.store,
+                    fetchMeTravisCI: FetchMeFromTravisCI(network: self.dependency.networks[.travisci]!),
+                    fetchMeCircleCI: FetchMeFromCircleCI(network: self.dependency.networks[.circleci]!),
+                    fetchMeBitrise: FetchMeFromBitrise(network: self.dependency.networks[.bitrise]!))
+                let controller = Scenes.ciSetting.execute(.init(presenter: CISettingViewPresenter(ci: ci, dependency: .init(interactor: interactor))))
+                from.navigationController?.pushViewController(controller, animated: true)
             }
         })
     }

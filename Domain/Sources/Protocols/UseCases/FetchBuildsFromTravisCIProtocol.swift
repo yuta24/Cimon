@@ -12,5 +12,5 @@ import Shared
 import TravisCIAPI
 
 public protocol FetchBuildsFromTravisCIProtocol {
-    func run(limit: Int, offset: Int) -> SignalProducer<Endpoint.Builds.Response, SessionTaskError>
+    func run(limit: Int, offset: Int) -> SignalProducer<Endpoint.BuildsRequest.Response, SessionTaskError>
 }

@@ -19,6 +19,6 @@ public class FetchBuildsFromCircleCI: FetchBuildsFromCircleCIProtocol {
     }
 
     public func run(limit: Int, offset: Int, shallow: Bool) -> SignalProducer<[Build], SessionTaskError> {
-        return network.response(Endpoint.RecentBuilds(limit: limit, offset: offset, shallow: shallow))
+        return network.response(Endpoint.RecentBuildsRequest(limit: limit, offset: offset, shallow: shallow))
     }
 }

@@ -1,16 +1,16 @@
 //
-//  FetchMeFromBitriseProtocol.swift
+//  FetchMeFromCircleCIProtocol.swift
 //  Domain
 //
-//  Created by Yu Tawata on 2019/07/22.
+//  Created by Yu Tawata on 2019/07/24.
 //
 
 import Foundation
 import APIKit
 import ReactiveSwift
 import Shared
-import BitriseAPI
+import CircleCIAPI
 
-public protocol FetchMeFromBitriseProtocol {
+public protocol FetchMeFromCircleCIProtocol {
     func run() -> SignalProducer<Endpoint.MeRequest.Response, SessionTaskError>
 }

@@ -11,8 +11,23 @@ import Domain
 
 enum CISettingScene {
     struct State {
+        var isLoading: Bool
+        let ci: CI!
+        var token: String?
+        var name: String?
+        var avatarUrl: URL?
+
+        var authorized: Bool {
+            return !token.isNil
+        }
+
         static var initial: State {
-            return .init()
+            return .init(
+                isLoading: false,
+                ci: .none,
+                token: .none,
+                name: .none,
+                avatarUrl: .none)
         }
     }
 
@@ -21,7 +36,7 @@ enum CISettingScene {
     }
 
     struct Dependency {
-        var store: StoreProtocol
+        var interactor: CISettingInteractorProtocol
     }
 
     enum Transition {
@@ -35,7 +50,7 @@ protocol CISettingViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (CISettingScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: CISettingScene.Message) -> Reader<CISettingScene.Dependency, Void>
+    func dispatch(_ message: CISettingScene.Message)
 
     func route(event: CISettingScene.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -51,6 +66,13 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
 
     private var closure: ((CISettingScene.State) -> Void)?
 
+    private let dependency: CISettingScene.Dependency
+
+    init(ci: CI, dependency: CISettingScene.Dependency) {
+        self.state = .init(isLoading: false, ci: ci)
+        self.dependency = dependency
+    }
+
     func subscribe(_ closure: @escaping (CISettingScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -60,9 +82,26 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: CISettingScene.Message) -> Reader<CISettingScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-        })
+    func dispatch(_ message: CISettingScene.Message) {
+        switch message {
+        case .load:
+            guard !state.isLoading else {
+                return
+            }
+            state.isLoading = true
+            state.token = dependency.interactor.fetchToken(state.ci)
+            dependency.interactor.fetchMe(state.ci)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.name = response.name
+                    self?.state.avatarUrl = response.avatarUrl
+                    self?.state.isLoading = false
+                })
+                .start()
+        }
     }
 
     func route(event: CISettingScene.Transition.Event) -> Reader<UIViewController, Void> {
