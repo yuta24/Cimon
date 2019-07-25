@@ -21,7 +21,13 @@ class CISettingViewController: UIViewController, Instantiatable {
 
     @IBOutlet weak var contentView: UIView!
 
-    @IBOutlet weak var avatarImageView: UIImageView!
+    @IBOutlet weak var avatarImageView: RoundedImageView! {
+        didSet {
+            avatarImageView.image = UIImage.make(color: .systemGray4)
+            avatarImageView.borderWidth = 4
+            avatarImageView.borderColor = Asset.primary.color
+        }
+    }
     @IBOutlet weak var nameLabel: UILabel! {
         didSet {
             nameLabel.text = .none

@@ -25,16 +25,21 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BtW-Ef-5Ie">
                                                 <rect key="frame" x="0.0" y="0.0" width="240" height="204.5"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0i-Pb-dIp">
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0i-Pb-dIp" customClass="RoundedImageView" customModule="App" customModuleProvider="target">
                                                         <rect key="frame" x="40" y="0.0" width="160" height="160"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" secondItem="D0i-Pb-dIp" secondAttribute="height" multiplier="1:1" id="cgc-NY-Jw0"/>
                                                             <constraint firstAttribute="width" constant="160" id="olF-Fm-gvk"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="80"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R90-8b-Y4b">
                                                         <rect key="frame" x="99" y="184" width="42" height="20.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -55,6 +60,7 @@
                                                     <constraint firstAttribute="width" constant="240" id="KuW-nT-hkW"/>
                                                     <constraint firstAttribute="height" constant="56" id="dng-cQ-DAJ"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                 <state key="normal" title="Button">
                                                     <color key="titleColor" name="base02"/>
                                                 </state>

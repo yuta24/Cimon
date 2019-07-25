@@ -33,6 +33,8 @@ enum CISettingScene {
 
     enum Message {
         case load
+        case authorize(String)
+        case deauthorize
     }
 
     struct Dependency {
@@ -100,6 +102,12 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
                     self?.state.avatarUrl = response.avatarUrl
                     self?.state.isLoading = false
                 })
+                .start()
+        case .authorize(let token):
+            dependency.interactor.authorize(state.ci, token: token)
+                .start()
+        case .deauthorize:
+            dependency.interactor.deauthorize(state.ci)
                 .start()
         }
     }
