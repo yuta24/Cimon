@@ -21,6 +21,7 @@ class CISettingViewController: UIViewController, Instantiatable {
 
     @IBOutlet weak var contentView: UIView!
 
+    @IBOutlet weak var userView: UIView!
     @IBOutlet weak var avatarImageView: RoundedImageView! {
         didSet {
             avatarImageView.image = UIImage.make(color: .systemGray4)
@@ -34,13 +35,23 @@ class CISettingViewController: UIViewController, Instantiatable {
             nameLabel.textAlignment = .center
         }
     }
+    @IBOutlet weak var tokenTextField: UITextField! {
+        didSet {
+            tokenTextField.textAlignment = .center
+            tokenTextField.placeholder = "Set your access token"
+        }
+    }
     @IBOutlet weak var actionButton: RoundedButton! {
         didSet {
             actionButton.setTitle(.none, for: .normal)
+            actionButton.addEventHandler(for: .touchUpInside) { [weak self] in
+                self?.onActionHandler()
+            }
         }
     }
 
     private var dependency: Dependency!
+    private var onActionHandler: () -> Void = {}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +84,26 @@ class CISettingViewController: UIViewController, Instantiatable {
             loadImage(with: url, into: avatarImageView)
         }
         nameLabel.text = state.name
+
+        userView.isHidden = !state.authorized
+        tokenTextField.isHidden = state.authorized
+
+        if state.authorized {
+            onActionHandler = { [weak self] in
+                self?.dependency.presenter.dispatch(.deauthorize)
+            }
+        } else {
+            onActionHandler = { [weak self] in
+                guard let token = self?.tokenTextField.text else {
+                    return
+                }
+                guard !token.isEmpty else {
+                    return
+                }
+                self?.dependency.presenter.dispatch(.authorize(token))
+            }
+        }
+
 
         let title = state.authorized ? "Deauthorize" : "Authorize"
         actionButton.setTitle(title, for: .normal)

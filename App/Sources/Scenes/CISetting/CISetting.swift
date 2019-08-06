@@ -104,11 +104,25 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
                 })
                 .start()
         case .authorize(let token):
-            dependency.interactor.authorize(state.ci, token: token)
+            let ci = state.ci!
+            dependency.interactor.authorize(ci, token: token)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.token = self?.dependency.interactor.fetchToken(ci)
+                    self?.state.name = response.name
+                    self?.state.avatarUrl = response.avatarUrl
+                    self?.state.isLoading = false
+                })
                 .start()
         case .deauthorize:
             dependency.interactor.deauthorize(state.ci)
                 .start()
+            state.name = nil
+            state.avatarUrl = nil
+            state.token = dependency.interactor.fetchToken(state.ci)
         }
     }
 

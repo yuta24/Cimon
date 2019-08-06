@@ -14,7 +14,7 @@ import Domain
 protocol CISettingInteractorProtocol {
     func fetchToken(_ ci: CI) -> String?
     func fetchMe(_ ci: CI) -> SignalProducer<(name: String?, avatarUrl: URL?), SessionTaskError>
-    func authorize(_ ci: CI, token: String) -> SignalProducer<Void, Never>
+    func authorize(_ ci: CI, token: String) -> SignalProducer<(name: String?, avatarUrl: URL?), SessionTaskError>
     func deauthorize(_ ci: CI) -> SignalProducer<Void, Never>
 }
 
@@ -67,7 +67,7 @@ class CISettingInteractor: CISettingInteractorProtocol {
         }
     }
 
-    func authorize(_ ci: CI, token: String) -> SignalProducer<Void, Never> {
+    func authorize(_ ci: CI, token: String) -> SignalProducer<(name: String?, avatarUrl: URL?), SessionTaskError> {
         return SignalProducer<Void, Never>.init({ [weak self] (observer, lifetime) in
             switch ci {
             case .travisci:
@@ -84,6 +84,9 @@ class CISettingInteractor: CISettingInteractorProtocol {
                 // no operation
             }
         })
+        .flatMap(.concat) { [unowned self] (_) in
+            self.fetchMe(ci)
+        }
     }
 
     func deauthorize(_ ci: CI) -> SignalProducer<Void, Never> {
