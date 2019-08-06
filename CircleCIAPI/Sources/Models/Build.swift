@@ -29,6 +29,7 @@ public struct Build: Codable {
         case authorEmail = "author_email"
     }
 
+    // sourcery: public-initializer
     public struct User: Codable {
         enum CodingKeys: String, CodingKey {
             case isUser = "is_user"
@@ -45,6 +46,20 @@ public struct Build: Codable {
         public var name: String
         public var vcsType: String
         public var id: Int
+
+        // sourcery:inline:Build.User.Init
+        // swiftlint:disable line_length
+        public init(isUser: Bool, login: String, avatarUrlString: String, name: String, vcsType: String, id: Int) {
+            self.isUser = isUser
+            self.login = login
+            self.avatarUrlString = avatarUrlString
+            self.name = name
+            self.vcsType = vcsType
+            self.id = id
+
+        }
+        // swiftlint:enabled line_length
+        // sourcery:end
     }
 
     public var body: String?

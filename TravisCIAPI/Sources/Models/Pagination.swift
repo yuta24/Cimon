@@ -21,6 +21,7 @@ public struct Pagination: Codable {
         case last = "last"
     }
 
+    // sourcery: public-initializer
     public struct Linking: AutoInit, Codable {
         enum CodingKeys: String, CodingKey {
             case href = "@href"
@@ -32,7 +33,15 @@ public struct Pagination: Codable {
         public var offset: Int
         public var limit: Int
 
-        // sourcery:inline:Pagination.Init
+        // sourcery:inline:Pagination.Linking.Init
+        // swiftlint:disable line_length
+        public init(href: String, offset: Int, limit: Int) {
+            self.href = href
+            self.offset = offset
+            self.limit = limit
+
+        }
+        // swiftlint:enabled line_length
         // sourcery:end
     }
 

@@ -24,5 +24,15 @@ public struct Me: Codable {
     public var bitbucket: Int?
 
     // sourcery:inline:Me.Init
+    // swiftlint:disable line_length
+    public init(login: String, avatarUrlString: String, name: String, githubId: Int?, bitbucket: Int?) {
+        self.login = login
+        self.avatarUrlString = avatarUrlString
+        self.name = name
+        self.githubId = githubId
+        self.bitbucket = bitbucket
+
+    }
+    // swiftlint:enabled line_length
     // sourcery:end
 }

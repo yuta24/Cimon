@@ -78,8 +78,6 @@ targets:
       - carthage: ReactiveSwift
       - carthage: Reachability
     preBuildScripts:
-      - name: "[Sourcery] Run Script"
-        script: "mint run krzysztofzablocki/Sourcery sourcery --config App/.sourcery.yml"
       - name: "[SwiftGen] Run Script"
         script: "mint run SwiftGen/SwiftGen swiftgen config run --config App/swiftgen.yml"
     scheme:
