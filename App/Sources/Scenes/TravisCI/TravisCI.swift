@@ -35,7 +35,7 @@ enum TravisCIScene {
     }
 
     struct Dependency {
-        var network: NetworkServiceProtocol
+        var fetchUseCase: FetchBuildsFromTravisCIProtocol
         var store: StoreProtocol
     }
 
@@ -50,7 +50,7 @@ protocol TravisCIViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void>
+    func dispatch(_ message: TravisCIScene.Message)
 
     func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void>
 }
@@ -66,6 +66,12 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     private var closure: ((TravisCIScene.State) -> Void)?
 
+    private let dependency: TravisCIScene.Dependency
+
+    init(dependency: TravisCIScene.Dependency) {
+        self.dependency = dependency
+    }
+
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
@@ -75,54 +81,52 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCIScene.Message) -> Reader<TravisCIScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            switch message {
-            case .load:
-                dependency.store.value(.travisCIToken, { (value) in
-                    self?.state.token = value
-                })
-            case .fetch:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(limit: 25, offset: 0))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        self?.state.builds = response.builds
-                        self?.state.offset = response.pagination.next?.offset
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .fetchNext:
-                guard self.condition(where: { !$0.state.isLoading }) else {
-                    return
-                }
-                guard let offset = self?.state.offset else {
-                    return
-                }
-                self?.state.isLoading = true
-                dependency.network.response(Endpoint.Builds(limit: 25, offset: offset))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self?.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        self?.state.builds.append(contentsOf: response.builds)
-                        self?.state.offset = response.pagination.next?.offset
-                        self?.state.isLoading = false
-                    })
-                    .start()
-            case .token(let raw):
-                let token = raw.flatMap(TravisCIToken.init)
-                dependency.store.set(token, for: .travisCIToken)
-                self?.state.token = token
+    func dispatch(_ message: TravisCIScene.Message) {
+        switch message {
+        case .load:
+            dependency.store.value(.travisCIToken, { [weak self] (value) in
+                self?.state.token = value
+            })
+        case .fetch:
+            guard !state.isLoading else {
+                return
             }
-        })
+            state.isLoading = true
+            dependency.fetchUseCase.run(limit: 25, offset: 0)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.builds = response.builds
+                    self?.state.offset = response.pagination.next?.offset
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .fetchNext:
+            guard !state.isLoading else {
+                return
+            }
+            guard let offset = state.offset else {
+                return
+            }
+            state.isLoading = true
+            dependency.fetchUseCase.run(limit: 25, offset: offset)
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.builds.append(contentsOf: response.builds)
+                    self?.state.offset = response.pagination.next?.offset
+                    self?.state.isLoading = false
+                })
+                .start()
+        case .token(let raw):
+            let token = raw.flatMap(TravisCIToken.init)
+            dependency.store.set(token, for: .travisCIToken)
+            state.token = token
+        }
     }
 
     func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void> {

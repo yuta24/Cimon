@@ -1,0 +1,7 @@
+sources:
+  - Sources
+templates:
+  - Templates
+output:
+  Sources/Generated
+disableCache: true

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct Commit: Codable {
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -24,18 +25,17 @@ public struct Commit: Codable {
     public var compareUrlString: String
     public var committedAt: String?
 
-    public init(
-        id: Int,
-        sha: String,
-        ref: String,
-        message: String,
-        compareUrlString: String,
-        committedAt: String?) {
+    // sourcery:inline:Commit.Init
+    // swiftlint:disable line_length
+    public init(id: Int, sha: String, ref: String, message: String, compareUrlString: String, committedAt: String?) {
         self.id = id
         self.sha = sha
         self.ref = ref
         self.message = message
         self.compareUrlString = compareUrlString
         self.committedAt = committedAt
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct AppResponseItemModel: Codable {
     enum CodingKeys: String, CodingKey {
         case avatarUrlString = "avatar_url"
@@ -36,19 +37,9 @@ public struct AppResponseItemModel: Codable {
     public var status: Int?
     public var title: String?
 
-    public init(
-        avatarUrlString: String?,
-        isDisabled: Bool?,
-        isPublic: Bool?,
-        owner: OwnerAccountResponseModel?,
-        projectType: String?,
-        provider: String?,
-        repoOwner: String?,
-        repoSlug: String?,
-        repoUrlString: String?,
-        slug: String?,
-        status: Int?,
-        title: String?) {
+    // sourcery:inline:AppResponseItemModel.Init
+    // swiftlint:disable line_length
+    public init(avatarUrlString: String?, isDisabled: Bool?, isPublic: Bool?, owner: OwnerAccountResponseModel?, projectType: String?, provider: String?, repoOwner: String?, repoSlug: String?, repoUrlString: String?, slug: String?, status: Int?, title: String?) {
         self.avatarUrlString = avatarUrlString
         self.isDisabled = isDisabled
         self.isPublic = isPublic
@@ -61,5 +52,8 @@ public struct AppResponseItemModel: Codable {
         self.slug = slug
         self.status = status
         self.title = title
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

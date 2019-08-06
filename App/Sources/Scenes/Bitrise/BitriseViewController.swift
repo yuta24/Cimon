@@ -12,11 +12,10 @@ import BitriseAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class BitriseViewController: UIViewController, Instantiatable {
     struct Dependency {
-        let network: NetworkServiceProtocol
-        let store: StoreProtocol
-        let presenter: BitriseViewPresenterProtocol
+        var presenter: BitriseViewPresenterProtocol
     }
 
     enum SectionKind: Int {
@@ -87,7 +86,6 @@ class BitriseViewController: UIViewController, Instantiatable {
                     return
                 }
                 self.dependency.presenter.dispatch(.fetch)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         }
 
@@ -98,7 +96,6 @@ class BitriseViewController: UIViewController, Instantiatable {
 
             if collectionView.nearBottom {
                 self.dependency.presenter.dispatch(.fetchNext)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         })
     }
@@ -106,10 +103,8 @@ class BitriseViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        BitriseScene.Dependency(network: dependency.network, store: dependency.store) |> {
-            self.dependency.presenter.dispatch(.load).execute($0)
-            self.dependency.presenter.dispatch(.fetch).execute($0)
-        }
+        dependency.presenter.dispatch(.load)
+        dependency.presenter.dispatch(.fetch)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -149,9 +144,7 @@ class BitriseViewController: UIViewController, Instantiatable {
             guard let `self` = self else {
                 return
             }
-            self.dependency.presenter
-                .dispatch(.token(alert?.textFields?.first?.text))
-                .execute(.init(network: self.dependency.network, store: self.dependency.store))
+            self.dependency.presenter.dispatch(.token(alert?.textFields?.first?.text))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)

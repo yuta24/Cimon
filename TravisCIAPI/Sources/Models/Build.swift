@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct Build: Codable {
     enum CodingKeys: String, CodingKey {
         case id = "id"
@@ -43,23 +44,9 @@ public struct Build: Codable {
     public var tag: Tag?
     public var commit: Commit
 
-    public init(
-        id: Int,
-        number: String,
-        state: String,
-        duration: Int,
-        eventType: String,
-        previousState: String?,
-        pullRequestTitle: String?,
-        pullRequestNumber: Int?,
-        startedAt: String?,
-        finishedAt: String,
-        `private`: Bool,
-
-        repository: Repository?,
-        branch: Branch?,
-        tag: Tag?,
-        commit: Commit) {
+    // sourcery:inline:Build.Init
+    // swiftlint:disable line_length
+    public init(id: Int, number: String, state: String, duration: Int, eventType: String, previousState: String?, pullRequestTitle: String?, pullRequestNumber: Int?, startedAt: String?, finishedAt: String, `private`: Bool, repository: Repository?, branch: Branch?, tag: Tag?, commit: Commit) {
         self.id = id
         self.number = number
         self.state = state
@@ -70,10 +57,13 @@ public struct Build: Codable {
         self.pullRequestNumber = pullRequestNumber
         self.startedAt = startedAt
         self.finishedAt = finishedAt
-        self.private = `private`
+        self.`private` = `private`
         self.repository = repository
         self.branch = branch
         self.tag = tag
         self.commit = commit
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

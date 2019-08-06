@@ -1,0 +1,11 @@
+<% for type in types.all where type is Struct && type.annotations.keys.contains("public-initializer") { -%>
+// sourcery:inline:<%= type.name %>.Init
+// swiftlint:disable line_length
+public init(<%= type.storedVariables.map({ "\($0.name): \($0.typeName)" }).joined(separator: ", ") %>) {
+    <%_ for variable in type.storedVariables { -%>
+    self.<%= variable.name %> = <%= variable.name %>
+    <%_ } _%>
+}
+// swiftlint:enabled line_length
+// sourcery:end
+<%_ } %>

@@ -12,11 +12,10 @@ import CircleCIAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class CircleCIViewController: UIViewController, Instantiatable {
     struct Dependency {
-        let network: NetworkServiceProtocol
-        let store: StoreProtocol
-        let presenter: CircleCIViewPresenterProtocol
+        var presenter: CircleCIViewPresenterProtocol
     }
 
     enum SectionKind: Int {
@@ -87,7 +86,6 @@ class CircleCIViewController: UIViewController, Instantiatable {
                     return
                 }
                 self.dependency.presenter.dispatch(.fetch)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         }
 
@@ -99,7 +97,6 @@ class CircleCIViewController: UIViewController, Instantiatable {
 
             if tableView.nearBottom {
                 self.dependency.presenter.dispatch(.fetchNext)
-                    .execute(.init(network: self.dependency.network, store: self.dependency.store))
             }
         })
     }
@@ -107,10 +104,8 @@ class CircleCIViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        CircleCIScene.Dependency(network: dependency.network, store: dependency.store) |> {
-            self.dependency.presenter.dispatch(.load).execute($0)
-            self.dependency.presenter.dispatch(.fetch).execute($0)
-        }
+        dependency.presenter.dispatch(.load)
+        dependency.presenter.dispatch(.fetch)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -150,9 +145,7 @@ class CircleCIViewController: UIViewController, Instantiatable {
             guard let `self` = self else {
                 return
             }
-            self.dependency.presenter
-                .dispatch(.token(alert?.textFields?.first?.text))
-                .execute(.init(network: self.dependency.network, store: self.dependency.store))
+            self.dependency.presenter.dispatch(.token(alert?.textFields?.first?.text))
         })
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: .none))
         present(alert, animated: true)

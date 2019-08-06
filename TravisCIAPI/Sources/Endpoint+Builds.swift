@@ -1,5 +1,5 @@
 //
-//  Builds.swift
+//  Endpoint+Builds.swift
 //  TravisCIAPI
 //
 //  Created by Yu Tawata on 2019/05/05.
@@ -9,7 +9,7 @@ import Foundation
 import APIKit
 
 public extension Endpoint {
-    struct Builds: TravisCIRequest {
+    struct BuildsRequest: TravisCIRequest {
         public struct Response: Codable {
             enum CodingKeys: String, CodingKey {
                 case pagination = "@pagination"

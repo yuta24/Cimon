@@ -1,5 +1,5 @@
 //
-//  Builds.swift
+//  Endpoint+Builds.swift
 //  BitriseAPI
 //
 //  Created by Yu Tawata on 2019/05/06.
@@ -9,7 +9,7 @@ import Foundation
 import APIKit
 
 public extension Endpoint {
-    struct Builds: BitriseRequest {
+    struct BuildsRequest: BitriseRequest {
         public typealias Response = BuildListAllResponseModel
 
         public enum Status: Int {

@@ -1,5 +1,5 @@
 name: Cimon
-options: 
+options:
   minimumXcodeGenVersion: "2.6.0"
   carthageExecutablePath: "mint run Carthage/Carthage carthage"
   bundleIdPrefix: "com.bivre"
@@ -40,7 +40,12 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
     dependencies:
+      - target: TravisCIAPI
+      - target: CircleCIAPI
+      - target: BitriseAPI
       - target: Shared
+      - carthage: APIKit
+      - carthage: ReactiveSwift
     scheme:
       testTargets:
         - DomainTests
@@ -128,7 +133,7 @@ targets:
     postBuildScripts:
       - name: "[Crashlytics] Run Script"
         script: "${PODS_ROOT}/Fabric/run"
-        inputFiles: 
+        inputFiles:
           - "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
     scheme:
       testTargets:

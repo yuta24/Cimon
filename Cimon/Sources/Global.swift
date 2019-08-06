@@ -27,7 +27,7 @@ let app = process(
         window: UIWindow(frame: UIScreen.main.bounds),
         store: store,
         reporter: reporter,
-        services: [
+        networks: [
             .travisci: travisCIService,
             .circleci: circleCIService,
             .bitrise: bitriseService]),

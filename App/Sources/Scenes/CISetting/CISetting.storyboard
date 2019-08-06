@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14854.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14806.4"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,10 +18,74 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lnb-e4-Ip4">
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="Vxa-1W-iKQ">
+                                        <rect key="frame" x="87" y="190" width="240" height="342.5"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BtW-Ef-5Ie">
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="204.5"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="D0i-Pb-dIp" customClass="RoundedImageView" customModule="App" customModuleProvider="target">
+                                                        <rect key="frame" x="40" y="0.0" width="160" height="160"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="D0i-Pb-dIp" secondAttribute="height" multiplier="1:1" id="cgc-NY-Jw0"/>
+                                                            <constraint firstAttribute="width" constant="160" id="olF-Fm-gvk"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="80"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R90-8b-Y4b">
+                                                        <rect key="frame" x="99" y="184" width="42" height="20.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <constraints>
+                                                    <constraint firstItem="D0i-Pb-dIp" firstAttribute="centerX" secondItem="BtW-Ef-5Ie" secondAttribute="centerX" id="0fm-d5-rTG"/>
+                                                    <constraint firstItem="R90-8b-Y4b" firstAttribute="centerX" secondItem="BtW-Ef-5Ie" secondAttribute="centerX" id="4ob-Mw-RuO"/>
+                                                    <constraint firstItem="D0i-Pb-dIp" firstAttribute="top" secondItem="BtW-Ef-5Ie" secondAttribute="top" id="9mE-1v-xaX"/>
+                                                    <constraint firstItem="R90-8b-Y4b" firstAttribute="top" secondItem="D0i-Pb-dIp" secondAttribute="bottom" constant="24" id="SVN-0D-DZW"/>
+                                                    <constraint firstAttribute="bottom" secondItem="R90-8b-Y4b" secondAttribute="bottom" id="ZTc-a1-GhP"/>
+                                                </constraints>
+                                            </view>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dPE-hk-CXg">
+                                                <rect key="frame" x="0.0" y="228.5" width="240" height="34"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zkm-Li-fUB" customClass="RoundedButton" customModule="App" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="286.5" width="240" height="56"/>
+                                                <color key="backgroundColor" name="accent"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="240" id="KuW-nT-hkW"/>
+                                                    <constraint firstAttribute="height" constant="56" id="dng-cQ-DAJ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                <state key="normal" title="Button">
+                                                    <color key="titleColor" name="base02"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="28"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstItem="Vxa-1W-iKQ" firstAttribute="centerY" secondItem="lnb-e4-Ip4" secondAttribute="centerY" constant="-48" id="5VX-6x-toL"/>
+                                    <constraint firstItem="Vxa-1W-iKQ" firstAttribute="centerX" secondItem="lnb-e4-Ip4" secondAttribute="centerX" id="zcj-38-hTn"/>
+                                </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="lnb-e4-Ip4" firstAttribute="leading" secondItem="414-yI-nFJ" secondAttribute="leading" id="7hP-MQ-nGP"/>
                             <constraint firstItem="414-yI-nFJ" firstAttribute="trailing" secondItem="lnb-e4-Ip4" secondAttribute="trailing" id="gHW-VS-O52"/>
@@ -30,7 +95,12 @@
                         <viewLayoutGuide key="safeArea" id="414-yI-nFJ"/>
                     </view>
                     <connections>
+                        <outlet property="actionButton" destination="Zkm-Li-fUB" id="xBc-vc-jd9"/>
+                        <outlet property="avatarImageView" destination="D0i-Pb-dIp" id="5am-iv-T8I"/>
                         <outlet property="contentView" destination="lnb-e4-Ip4" id="Yg3-Rn-lCQ"/>
+                        <outlet property="nameLabel" destination="R90-8b-Y4b" id="rXV-vI-Nr0"/>
+                        <outlet property="tokenTextField" destination="dPE-hk-CXg" id="7uk-EW-yU1"/>
+                        <outlet property="userView" destination="BtW-Ef-5Ie" id="wUQ-r1-TiM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xB7-ag-JSF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -38,4 +108,12 @@
             <point key="canvasLocation" x="172" y="90"/>
         </scene>
     </scenes>
+    <resources>
+        <namedColor name="accent">
+            <color red="0.72156862745098038" green="0.40784313725490196" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="base02">
+            <color red="0.97647058823529409" green="0.99215686274509807" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
 </document>

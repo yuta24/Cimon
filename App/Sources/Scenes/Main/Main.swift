@@ -42,6 +42,7 @@ enum MainScene {
 
     struct Dependency {
         var store: StoreProtocol
+        var networks: [CI: NetworkServiceProtocol]
     }
 
     enum Transition {
@@ -58,7 +59,7 @@ protocol MainViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: MainScene.Message)
 
-    func route(event: MainScene.Transition.Event) -> Reader<(UIViewController, MainScene.Dependency), Void>
+    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void>
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -70,8 +71,11 @@ class MainViewPresenter: MainViewPresenterProtocol {
 
     private var closure: ((MainScene.State) -> Void)?
 
-    init(ci: CI) {
+    private let dependency: MainScene.Dependency
+
+    init(ci: CI, dependency: MainScene.Dependency) {
         self.state = .init(selected: ci)
+        self.dependency = dependency
     }
 
     func subscribe(_ closure: @escaping (MainScene.State) -> Void) {
@@ -90,11 +94,11 @@ class MainViewPresenter: MainViewPresenterProtocol {
         }
     }
 
-    func route(event: MainScene.Transition.Event) -> Reader<(UIViewController, MainScene.Dependency), Void> {
-        return .init({ (from, dependency) in
+    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void> {
+        return .init({ (from) in
             switch event {
             case .settings:
-                let controller = Scenes.settings.execute(.init(store: dependency.store, presenter: SettingsViewPresenter()))
+                let controller = Scenes.settings.execute(.init(presenter: SettingsViewPresenter.init(dependency: .init(store: self.dependency.store, networks: self.dependency.networks))))
                 let navigation = UINavigationController(rootViewController: controller, hasClose: true)
                 from.present(navigation, animated: true, completion: .none)
             }

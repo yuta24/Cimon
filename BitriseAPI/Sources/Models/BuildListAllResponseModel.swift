@@ -7,6 +7,7 @@
 
 import Foundation
 
+// sourcery: public-initializer
 public struct BuildListAllResponseModel: Codable {
     enum CodingKeys: String, CodingKey {
         case data
@@ -16,10 +17,13 @@ public struct BuildListAllResponseModel: Codable {
     public var data: [BuildListAllResponseItemModel]?
     public var paging: Paging?
 
-    public init(
-        data: [BuildListAllResponseItemModel],
-        paging: Paging) {
+    // sourcery:inline:BuildListAllResponseModel.Init
+    // swiftlint:disable line_length
+    public init(data: [BuildListAllResponseItemModel]?, paging: Paging?) {
         self.data = data
         self.paging = paging
+
     }
+    // swiftlint:enabled line_length
+    // sourcery:end
 }

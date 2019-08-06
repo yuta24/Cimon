@@ -14,6 +14,7 @@ protocol MainPageDelegate: class {
     func onScrollChanged(_ contentOffset: CGPoint)
 }
 
+// sourcery: scene
 class MainViewController: UIViewController, Instantiatable {
     enum Translator {
         static func convert(viewController: UIViewController) -> CI? {
@@ -37,9 +38,9 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        let store: StoreProtocol
-        let presenter: MainViewPresenterProtocol
-        let services: [CI: NetworkServiceProtocol]
+        var store: StoreProtocol
+        var networks: [CI: NetworkServiceProtocol]
+        var presenter: MainViewPresenterProtocol
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -50,25 +51,31 @@ class MainViewController: UIViewController, Instantiatable {
         options: .none)
 
     private lazy var pages: [CI: UIViewController] = {
-        let travisCIController = Scenes.travisCI
-            .execute(.init(
-                network: self.dependency.services[.travisci]!,
-                store: self.dependency.store,
-                presenter: TravisCIViewPresenter()))
+        let travisCIController = Scenes.travisCI.execute(
+            .init(presenter:
+                TravisCIViewPresenter(
+                    dependency: .init(
+                        fetchUseCase: FetchBuildsFromTravisCI(
+                            network: self.dependency.networks[.travisci]!),
+                        store: self.dependency.store))))
         travisCIController.delegate = self
 
-        let circleCIController = Scenes.circleCI
-            .execute(.init(
-                network: self.dependency.services[.circleci]!,
-                store: self.dependency.store,
-                presenter: CircleCIViewPresenter()))
+        let circleCIController = Scenes.circleCI.execute(
+            .init(presenter:
+                CircleCIViewPresenter(
+                    dependency: .init(
+                        fetchUseCase: FetchBuildsFromCircleCI(
+                            network: self.dependency.networks[.circleci]!),
+                        store: self.dependency.store))))
         circleCIController.delegate = self
 
-        let bitriseController = Scenes.bitrise
-            .execute(.init(
-                network: self.dependency.services[.bitrise]!,
-                store: self.dependency.store,
-                presenter: BitriseViewPresenter()))
+        let bitriseController = Scenes.bitrise.execute(
+            .init(presenter:
+                BitriseViewPresenter(
+                    dependency: .init(
+                        fetchUseCase: FetchBuildsFromBitrise(
+                            network: self.dependency.networks[.bitrise]!),
+                        store: self.dependency.store))))
         bitriseController.delegate = self
 
         return [
@@ -117,7 +124,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        dependency.presenter.route(event: .settings).execute((self, .init(store: dependency.store)))
+        dependency.presenter.route(event: .settings).execute(self)
     }
 }
 

@@ -12,10 +12,10 @@ import BitriseAPI
 import Shared
 import Domain
 
+// sourcery: scene
 class SettingsViewController: UIViewController, Instantiatable {
     struct Dependency {
-        let store: StoreProtocol
-        let presenter: SettingsViewPresenterProtocol
+        var presenter: SettingsViewPresenterProtocol
     }
 
     enum SectionKind: Int {
@@ -81,7 +81,7 @@ class SettingsViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        dependency.presenter.dispatch(.load).execute(.init(store: dependency.store))
+        dependency.presenter.dispatch(.load)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -130,8 +130,7 @@ extension SettingsViewController: UITableViewDelegate {
                     fatalError()
                 }
             }()
-            dependency.presenter.route(event: .detail(ci))
-                .execute((self, dependency.store))
+            dependency.presenter.route(event: .detail(ci)).execute(self)
         case .app:
             break
         }
