@@ -20,7 +20,11 @@ class BitriseDetailViewController: UIViewController, Instantiatable {
     }
 
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textView: UITextView! {
+        didSet {
+            apply(textView, terminalStyle)
+        }
+    }
 
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView! {
         didSet {
@@ -38,9 +42,7 @@ class BitriseDetailViewController: UIViewController, Instantiatable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        BitriseDetailScene.Dependency(network: dependency.network, store: dependency.store) |> {
-            self.dependency.presenter.dispatch(.fetch).execute($0)
-        }
+        dependency.presenter.dispatch(.fetch)
 
         dependency.presenter.subscribe(configure(_:))
     }
@@ -62,6 +64,8 @@ class BitriseDetailViewController: UIViewController, Instantiatable {
             activityIndicatorView.stopAnimating()
         }
 
-        contentView.isHidden = state.isUnregistered
+        contentView.isHidden = !state.isUnregistered
+
+        textView.text = state.log?.logChunks?.map({ $0.chunk }).joined(separator: "\n")
     }
 }

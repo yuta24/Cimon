@@ -14,11 +14,12 @@ import Domain
 enum BitriseDetailScene {
     struct State {
         static var initial: State {
-            return .init(isLoading: false, token: .none)
+            return .init(isLoading: false, token: .none, log: .none)
         }
 
         var isLoading: Bool
         var token: BitriseToken?
+        var log: BuildLogInfoResponseModel?
 
         var isUnregistered: Bool {
             return token == nil
@@ -30,8 +31,8 @@ enum BitriseDetailScene {
     }
 
     struct Dependency {
-        var network: NetworkServiceProtocol
         var store: StoreProtocol
+        var network: NetworkServiceProtocol
     }
 
     enum Transition {
@@ -45,9 +46,9 @@ protocol BitriseDetailViewPresenterProtocol {
 
     func subscribe(_ closure: @escaping (BitriseDetailScene.State) -> Void)
     func unsubscribe()
-    func dispatch(_ message: BitriseDetailScene.Message) -> Reader<BitriseDetailScene.Dependency, Void>
+    func dispatch(_ message: BitriseDetailScene.Message)
 
-    func route(event: BitriseDetailScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: BitriseDetailScene.Transition.Event)
 }
 
 class BitriseDetailViewPresenter: BitriseDetailViewPresenterProtocol {
@@ -67,8 +68,11 @@ class BitriseDetailViewPresenter: BitriseDetailViewPresenterProtocol {
     private var closure: ((BitriseDetailScene.State) -> Void)?
     private let context: Context
 
-    init(_ context: Context) {
+    private let dependency: BitriseDetailScene.Dependency
+
+    init(_ context: Context, dependency: BitriseDetailScene.Dependency) {
         self.context = context
+        self.dependency = dependency
     }
 
     func subscribe(_ closure: @escaping (BitriseDetailScene.State) -> Void) {
@@ -80,33 +84,26 @@ class BitriseDetailViewPresenter: BitriseDetailViewPresenterProtocol {
         self.closure = nil
     }
 
-    func dispatch(_ message: BitriseDetailScene.Message) -> Reader<BitriseDetailScene.Dependency, Void> {
-        return .init({ [weak self] (dependency) in
-            guard let `self` = self else {
+    func dispatch(_ message: BitriseDetailScene.Message) {
+        switch message {
+        case .fetch:
+            guard !state.isLoading else {
                 return
             }
-
-            switch message {
-            case .fetch:
-                guard !self.state.isLoading else {
-                    return
-                }
-                self.state.isLoading = true
-                dependency.network.response(Endpoint.BuildLogRequest(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
-                    .on(failed: { (error) in
-                        logger.debug(error)
-                        self.state.isLoading = false
-                    }, value: { (response) in
-                        logger.debug(response)
-                        self.state.isLoading = false
-                    })
-                    .start()
-            }
-        })
+            state.isLoading = true
+            dependency.network.response(Endpoint.BuildLogRequest(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
+                .on(failed: { [weak self] (error) in
+                    logger.debug(error)
+                    self?.state.isLoading = false
+                }, value: { [weak self] (response) in
+                    logger.debug(response)
+                    self?.state.isLoading = false
+                    self?.state.log = response
+                })
+                .start()
+        }
     }
 
-    func route(event: BitriseDetailScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: BitriseDetailScene.Transition.Event) {
     }
 }

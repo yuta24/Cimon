@@ -48,7 +48,7 @@ protocol SettingsViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: SettingsScene.Message)
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: SettingsScene.Transition.Event)
 }
 
 class SettingsViewPresenter: SettingsViewPresenterProtocol {
@@ -86,18 +86,16 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
         }
     }
 
-    func route(event: SettingsScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-            switch event {
-            case .detail(let ci):
-                let interactor = CISettingInteractor(
-                    store: self.dependency.store,
-                    fetchMeTravisCI: FetchMeFromTravisCI(network: self.dependency.networks[.travisci]!),
-                    fetchMeCircleCI: FetchMeFromCircleCI(network: self.dependency.networks[.circleci]!),
-                    fetchMeBitrise: FetchMeFromBitrise(network: self.dependency.networks[.bitrise]!))
-                let controller = Scenes.ciSetting.execute(.init(presenter: CISettingViewPresenter(ci: ci, dependency: .init(interactor: interactor))))
-                from.navigationController?.pushViewController(controller, animated: true)
-            }
-        })
+    func route(from: UIViewController, event: SettingsScene.Transition.Event) {
+        switch event {
+        case .detail(let ci):
+            let interactor = CISettingInteractor(
+                store: self.dependency.store,
+                fetchMeTravisCI: FetchMeFromTravisCI(network: self.dependency.networks[.travisci]!),
+                fetchMeCircleCI: FetchMeFromCircleCI(network: self.dependency.networks[.circleci]!),
+                fetchMeBitrise: FetchMeFromBitrise(network: self.dependency.networks[.bitrise]!))
+            let controller = Scenes.ciSetting.execute(.init(presenter: CISettingViewPresenter(ci: ci, dependency: .init(interactor: interactor))))
+            from.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 }

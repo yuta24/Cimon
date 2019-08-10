@@ -130,7 +130,7 @@ extension SettingsViewController: UITableViewDelegate {
                     fatalError()
                 }
             }()
-            dependency.presenter.route(event: .detail(ci)).execute(self)
+            dependency.presenter.route(from: self, event: .detail(ci))
         case .app:
             break
         }

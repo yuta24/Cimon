@@ -25,3 +25,10 @@ let mainSceneStyle = { (view: UIView) in
         view.backgroundColor = UIColor.systemBackground
     }
 }
+
+let terminalStyle = { (view: UITextView) in
+    view.backgroundColor = .black
+    view.textColor = .white
+    view.font = UIFont.monospacedSystemFont(ofSize: 14, weight: .regular)
+    view.isEditable = false
+}

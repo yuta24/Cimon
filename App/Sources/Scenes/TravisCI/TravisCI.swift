@@ -52,7 +52,7 @@ protocol TravisCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: TravisCIScene.Message)
 
-    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: TravisCIScene.Transition.Event)
 }
 
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
@@ -129,8 +129,6 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         }
     }
 
-    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: TravisCIScene.Transition.Event) {
     }
 }
