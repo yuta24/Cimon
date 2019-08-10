@@ -32,7 +32,7 @@ class MainViewController: UIViewController, Instantiatable {
 
         static func convert(ci: CI) -> Reader<MainViewController, UIViewController?> {
             return .init({ (controller) -> UIViewController? in
-                return controller.pages[ci]
+                return controller.pages.first(where: { (_ci, _) in _ci == ci })?.1
             })
         }
     }
@@ -44,13 +44,23 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var tabBar: TabBar! {
+        didSet {
+            tabBar.itemSelected = { [weak self] (index) in
+                DispatchQueue.main.async {
+                    self?.update(index)
+                }
+            }
+        }
+    }
+    @IBOutlet weak var pageView: UIView!
 
     private let page: UIPageViewController = UIPageViewController(
         transitionStyle: .scroll,
         navigationOrientation: .horizontal,
         options: .none)
 
-    private lazy var pages: [CI: UIViewController] = {
+    private lazy var pages: [(CI, UIViewController)] = {
         let travisCIController = Scenes.travisCI.execute(
             .init(presenter:
                 TravisCIViewPresenter(
@@ -79,9 +89,9 @@ class MainViewController: UIViewController, Instantiatable {
         bitriseController.delegate = self
 
         return [
-            .travisci: travisCIController,
-            .circleci: circleCIController,
-            .bitrise: bitriseController]
+            (.travisci, travisCIController),
+            (.circleci, circleCIController),
+            (.bitrise, bitriseController)]
     }()
 
     private var dependency: Dependency!
@@ -89,18 +99,21 @@ class MainViewController: UIViewController, Instantiatable {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.title = "Cimon"
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: Asset.settings.image,
             style: .plain,
             target: self,
             action: #selector(onLeftTapped(_:)))
 
-        add(child: page)
+        add(child: page, to: pageView)
         page.view.anchor.fixedToSuperView()
         page.dataSource = self
         page.delegate = self
-        let initial = [pages[dependency.presenter.state.selected]!]
+        let initial = [pages.first(where: { (_ci, _) in _ci == dependency.presenter.state.selected })!.1]
         page.setViewControllers(initial, direction: .forward, animated: true, completion: .none)
+
+        tabBar.configure(.init(titles: pages.map({ (ci, _) in ci.description })))
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -120,7 +133,40 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: MainScene.State) {
-        navigationItem.title = state.selected.description
+        if let index = pages.firstIndex(where: { (ci, _) in ci == state.selected }) {
+            tabBar.move(to: index)
+        }
+    }
+
+    private func update(_ index: Int) {
+        let item = pages[index]
+        let direction: UIPageViewController.NavigationDirection? = {
+            switch (dependency.presenter.state.selected, item.0) {
+            case (.travisci, .circleci):
+                return .forward
+            case (.travisci, .bitrise):
+                return .forward
+            case (.circleci, .bitrise):
+                return .forward
+            case (.bitrise, .circleci):
+                return .reverse
+            case (.bitrise, .travisci):
+                return .reverse
+            case (.circleci, .travisci):
+                return .reverse
+            default:
+                return nil
+            }
+        }()
+
+        if let _direction = direction {
+            page.setViewControllers([item.1], direction: _direction, animated: true) { [weak self] (finished) in
+                guard finished else {
+                    return
+                }
+                self?.dependency.presenter.dispatch(.update(item.0))
+            }
+        }
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
@@ -156,6 +202,7 @@ extension MainViewController: UIPageViewControllerDelegate {
         guard completed else {
             return
         }
+
         pageViewController.viewControllers?.first
             .flatMap { Translator.convert(viewController: $0) }
             .flatMap { dependency.presenter.dispatch(.update($0)) }
