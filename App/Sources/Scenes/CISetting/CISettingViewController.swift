@@ -104,7 +104,6 @@ class CISettingViewController: UIViewController, Instantiatable {
             }
         }
 
-
         let title = state.authorized ? "Deauthorize" : "Authorize"
         actionButton.setTitle(title, for: .normal)
     }

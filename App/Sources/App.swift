@@ -15,7 +15,7 @@ public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init (window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
+    public init(window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
             $0.rootViewController = MainViewController.Dependency(
                 store: store,
