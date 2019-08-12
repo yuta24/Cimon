@@ -157,7 +157,9 @@ extension BitriseViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+        defer {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }
 
         if let item = dataSource.itemIdentifier(for: indexPath), let repository = item.repository?.slug, let build = item.slug {
             dependency.presenter.route(from: self, event: .detail(repository: repository, build: build))

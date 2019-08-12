@@ -49,6 +49,13 @@ enum Scenes {
          })
     }
 
+    static var travisCIDetail: Reader<TravisCIDetailViewController.Dependency, TravisCIDetailViewController> {
+        return .init({ dependency in
+            return Storyboard<TravisCIDetailViewController>(name: "TravisCIDetail")
+                .instantiate(dependency: dependency)
+         })
+    }
+
     static var travisCI: Reader<TravisCIViewController.Dependency, TravisCIViewController> {
         return .init({ dependency in
             return Storyboard<TravisCIViewController>(name: "TravisCI")

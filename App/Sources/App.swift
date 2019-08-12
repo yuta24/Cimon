@@ -25,7 +25,7 @@ public class App {
                 |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
-        self.environment = Environment(store: store, reporter: reporter)
+        self.environment = Environment(store: store, networks: networks, reporter: reporter)
     }
 
     public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

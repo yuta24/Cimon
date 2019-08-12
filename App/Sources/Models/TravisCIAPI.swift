@@ -9,12 +9,12 @@ import Foundation
 import TravisCIAPI
 import Shared
 
-extension TravisCIAPI.Build: Hashable {
+extension TravisCIAPI.Standard.Build: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 
-    public static func == (lhs: Build, rhs: Build) -> Bool {
+    public static func == (lhs: Standard.Build, rhs: Standard.Build) -> Bool {
         return lhs.id == rhs.id
             && lhs.number == rhs.number
             && lhs.state == rhs.state
@@ -23,10 +23,22 @@ extension TravisCIAPI.Build: Hashable {
     }
 }
 
-extension TravisCIAPI.Build: ExtendProvider {
+extension TravisCIAPI.Standard.Job: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+
+    public static func == (lhs: Standard.Job, rhs: Standard.Job) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.number == rhs.number
+            && lhs.state == rhs.state
+    }
 }
 
-extension Extend where Base == TravisCIAPI.Build {
+extension TravisCIAPI.Standard.Build: ExtendProvider {
+}
+
+extension Extend where Base == TravisCIAPI.Standard.Build {
     enum TravisCI {
         enum Status: String {
             case passed

@@ -67,7 +67,8 @@ class MainViewController: UIViewController, Instantiatable {
                     dependency: .init(
                         fetchUseCase: FetchBuildsFromTravisCI(
                             network: self.dependency.networks[.travisci]!),
-                        store: self.dependency.store))))
+                        store: self.dependency.store,
+                        network: self.dependency.networks[.travisci]!))))
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI.execute(
