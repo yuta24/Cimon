@@ -23,4 +23,5 @@ else
   echo "  + chisel found."
 fi
 
+gem install bundler:1.17.3
 bundle install --path vendor/bundle
