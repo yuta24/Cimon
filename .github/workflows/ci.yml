@@ -11,3 +11,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup
       run: ./scripts/setup.sh
+    - name: Bootstrap
+      run: ./scripts/bootstrap.sh
