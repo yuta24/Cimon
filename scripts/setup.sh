@@ -4,23 +4,47 @@ set -eu
 
 ln -sf ../../scripts/hooks/pre-push .git/hooks/pre-push
 
-brew install libxml2 # For SwiftGen via Mint
-
-# Mint
-if [ ! $(which mint) ]; then
-  echo "  + Installing mint..."
-  brew install mint
+if [ ! $(which xcodegen) ]; then
+  echo "  + Installing XcodeGen..."
+  brew install xcodegen
 else
-  echo "  + Mint found."
+  echo "  + XcodeGen found."
 fi
 
-# chisel
-if [ ! $(which chisel) ]; then
-  echo "  + Installing chisel..."
-  brew install chisel
-  defaults write com.apple.dt.lldb DefaultPythonVersion 2
+if [ ! $(which carthage) ]; then
+  echo "  + Installing Carthage..."
+  brew install carthage
 else
-  echo "  + chisel found."
+  echo "  + Carthage found."
+fi
+
+if [ ! $(which swiftgen) ]; then
+  echo "  + Installing SwiftGen..."
+  brew install swiftgen
+else
+  echo "  + SwiftGen found."
+fi
+
+if [ ! $(which swiftlint) ]; then
+  echo "  + Installing SwiftLint..."
+  brew install swiftlint
+else
+  echo "  + SwiftLint found."
+fi
+
+if [ ! $(which periphery) ]; then
+  echo "  + Installing Periphery..."
+  brew tap peripheryapp/periphery
+  brew cask install periphery
+else
+  echo "  + Periphery found."
+fi
+
+if [ ! $(which sourcery) ]; then
+  echo "  + Installing Sourcery..."
+  brew install sourcery
+else
+  echo "  + Sourcery found."
 fi
 
 bundle install --path vendor/bundle

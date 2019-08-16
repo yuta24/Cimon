@@ -1,7 +1,6 @@
 name: Cimon
 options:
   minimumXcodeGenVersion: "2.6.0"
-  carthageExecutablePath: "mint run Carthage/Carthage carthage"
   bundleIdPrefix: "com.bivre"
   deploymentTarget:
     iOS: "13.0"
@@ -79,7 +78,7 @@ targets:
       - carthage: Reachability
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
-        script: "mint run SwiftGen/SwiftGen swiftgen config run --config App/swiftgen.yml"
+        script: "swiftgen config run --config App/swiftgen.yml"
     scheme:
       testTargets:
         - AppTests
@@ -127,9 +126,9 @@ targets:
       - carthage: Reachability
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
-        script: "mint run SwiftGen/SwiftGen swiftgen config run --config Cimon/swiftgen.yml"
+        script: "swiftgen config run --config Cimon/swiftgen.yml"
       - name: "[SwiftLint] Run Script"
-        script: "mint run realm/SwiftLint swiftlint"
+        script: "swiftlint"
     postBuildScripts:
       - name: "[Crashlytics] Run Script"
         script: "${PODS_ROOT}/Fabric/run"
