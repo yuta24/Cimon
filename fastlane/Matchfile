@@ -1,4 +1,5 @@
 git_url("git@github.com:yuta24/mobile-signing.git")
 storage_mode("git")
 app_identifier("com.bivre.cimon")
+team_id("PS98BD6732")
 readonly(true)
