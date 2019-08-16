@@ -9,8 +9,8 @@ PROJECT_NAME=Cimon
 # bootstrap
 
 echo "  + Generate xcodeproje by XcodeGen."
-mint run yonaskolb/XcodeGen xcodegen
-XCODE_XCCONFIG_FILE=${PROJECT_DIR}/workaround.xcconfig mint run Carthage/Carthage carthage bootstrap --platform iOS --no-use-binaries --cache-builds
+xcodegen
+XCODE_XCCONFIG_FILE=${PROJECT_DIR}/workaround.xcconfig carthage bootstrap --platform iOS --no-use-binaries --cache-builds
 bundle exec pod install
 
 echo ""

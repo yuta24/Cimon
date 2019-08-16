@@ -2,10 +2,10 @@
 
 # generate
 
-mint run krzysztofzablocki/Sourcery sourcery --config TravisCIAPI/.sourcery.yml
-mint run krzysztofzablocki/Sourcery sourcery --config CircleCIAPI/.sourcery.yml
-mint run krzysztofzablocki/Sourcery sourcery --config BitriseAPI/.sourcery.yml
-mint run krzysztofzablocki/Sourcery sourcery --config App/.sourcery.yml
+sourcery --config TravisCIAPI/.sourcery.yml
+sourcery --config CircleCIAPI/.sourcery.yml
+sourcery --config BitriseAPI/.sourcery.yml
+sourcery --config App/.sourcery.yml
 
 echo ""
 echo "********************************************************"
