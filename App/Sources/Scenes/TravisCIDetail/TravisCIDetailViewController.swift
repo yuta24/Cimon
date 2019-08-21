@@ -100,13 +100,13 @@ class TravisCIDetailViewController: UIViewController, Instantiatable {
 
         contentView.isHidden = !state.isUnregistered
 
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, ItemKind>(), { (snapshot) in
-            if let detail = state.detail {
-                snapshot.appendSections([.build, .jobs])
-                snapshot.appendItems([.build(detail.0)], toSection: .build)
-                snapshot.appendItems(detail.1.map(ItemKind.job), toSection: .jobs)
-            }
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, ItemKind>()
+        if let detail = state.detail {
+            snapshot.appendSections([.build, .jobs])
+            snapshot.appendItems([.build(detail.0)], toSection: .build)
+            snapshot.appendItems(detail.1.map(ItemKind.job), toSection: .jobs)
+        }
+
         dataSource.apply(snapshot)
     }
 }

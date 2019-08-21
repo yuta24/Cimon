@@ -130,10 +130,10 @@ class BitriseViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, BuildListAllResponseItemModel>(), { (snapshot) in
-            snapshot.appendSections([.builds])
-            snapshot.appendItems(state.builds)
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, BuildListAllResponseItemModel>()
+        snapshot.appendSections([.builds])
+        snapshot.appendItems(state.builds)
+
         dataSource.apply(snapshot)
     }
 

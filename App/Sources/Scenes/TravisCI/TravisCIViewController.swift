@@ -131,10 +131,10 @@ class TravisCIViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, Standard.Build>(), { (snapshot) in
-            snapshot.appendSections([.builds])
-            snapshot.appendItems(state.builds)
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Standard.Build>()
+        snapshot.appendSections([.builds])
+        snapshot.appendItems(state.builds)
+
         dataSource.apply(snapshot)
     }
 
