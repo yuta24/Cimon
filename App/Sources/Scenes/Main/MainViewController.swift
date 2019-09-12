@@ -67,7 +67,8 @@ class MainViewController: UIViewController, Instantiatable {
                     dependency: .init(
                         fetchUseCase: FetchBuildsFromTravisCI(
                             network: self.dependency.networks[.travisci]!),
-                        store: self.dependency.store))))
+                        store: self.dependency.store,
+                        network: self.dependency.networks[.travisci]!))))
         travisCIController.delegate = self
 
         let circleCIController = Scenes.circleCI.execute(
@@ -85,7 +86,8 @@ class MainViewController: UIViewController, Instantiatable {
                     dependency: .init(
                         fetchUseCase: FetchBuildsFromBitrise(
                             network: self.dependency.networks[.bitrise]!),
-                        store: self.dependency.store))))
+                        store: self.dependency.store,
+                        network: self.dependency.networks[.bitrise]!))))
         bitriseController.delegate = self
 
         return [
@@ -170,7 +172,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        dependency.presenter.route(event: .settings).execute(self)
+        dependency.presenter.route(from: self, event: .settings)
     }
 }
 

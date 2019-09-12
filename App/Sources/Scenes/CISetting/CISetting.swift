@@ -54,7 +54,7 @@ protocol CISettingViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: CISettingScene.Message)
 
-    func route(event: CISettingScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: CISettingScene.Transition.Event)
 }
 
 class CISettingViewPresenter: CISettingViewPresenterProtocol {
@@ -126,8 +126,6 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
         }
     }
 
-    func route(event: CISettingScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: CISettingScene.Transition.Event) {
     }
 }

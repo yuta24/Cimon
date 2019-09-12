@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 import BitriseAPI
 import Shared
 import Domain
@@ -36,10 +37,12 @@ enum BitriseScene {
     struct Dependency {
         var fetchUseCase: FetchBuildsFromBitriseProtocol
         var store: StoreProtocol
+        var network: NetworkServiceProtocol
     }
 
     enum Transition {
         enum Event {
+            case detail(repository: String, build: String)
         }
     }
 }
@@ -51,7 +54,7 @@ protocol BitriseViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: BitriseScene.Message)
 
-    func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: BitriseScene.Transition.Event)
 }
 
 class BitriseViewPresenter: BitriseViewPresenterProtocol {
@@ -132,8 +135,12 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         }
     }
 
-    func route(event: BitriseScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: BitriseScene.Transition.Event) {
+        switch event {
+        case .detail(let repository, let build):
+            let presenter = BitriseDetailViewPresenter(.init(appSlug: repository, buildSlug: build), dependency: .init(store: self.dependency.store, network: self.dependency.network))
+            let controller = Scenes.bitriseDetail.execute(.init(network: self.dependency.network, store: self.dependency.store, presenter: presenter))
+            from.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 }

@@ -37,7 +37,7 @@ class TravisCIBuildView: RoundedView {
 }
 
 extension TravisCIBuildView: Configurable {
-    typealias Context = TravisCIAPI.Build
+    typealias Context = TravisCIAPI.Standard.Build
 
     func configure(_ context: TravisCIBuildView.Context) {
         statusColorView.backgroundColor = context.ext.status?.color
@@ -45,7 +45,7 @@ extension TravisCIBuildView: Configurable {
         buildNumberLabel.text = "# \(context.number)"
         slugLabel.text = context.repository?.slug
         branchLabel.text = context.branch?.name
-        descriptionLabel.text = context.commit.message
+        descriptionLabel.text = context.commit?.message
         timestampLabel.text = context.startedAt
         durationLabel.text = "\(context.duration)"
     }

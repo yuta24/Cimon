@@ -15,7 +15,7 @@ public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init (window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
+    public init(window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
             $0.rootViewController = MainViewController.Dependency(
                 store: store,
@@ -25,7 +25,7 @@ public class App {
                 |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
-        self.environment = Environment(store: store, reporter: reporter)
+        self.environment = Environment(store: store, networks: networks, reporter: reporter)
     }
 
     public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

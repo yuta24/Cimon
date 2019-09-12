@@ -68,7 +68,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
 
     weak var delegate: MainPageDelegate?
 
-    private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, Build>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
+    private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, Standard.Build>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
         let cell = TravisCIBuildStatusCell.dequeue(for: indexPath, from: collectionView)
         cell.configure(.init(child: build))
         return cell
@@ -131,10 +131,10 @@ class TravisCIViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, Build>(), { (snapshot) in
-            snapshot.appendSections([.builds])
-            snapshot.appendItems(state.builds)
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, Standard.Build>()
+        snapshot.appendSections([.builds])
+        snapshot.appendItems(state.builds)
+
         dataSource.apply(snapshot)
     }
 
@@ -158,6 +158,12 @@ extension TravisCIViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+        defer {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }
+
+        if let item = dataSource.itemIdentifier(for: indexPath) {
+            dependency.presenter.route(from: self, event: .detail(buildId: item.id))
+        }
     }
 }

@@ -11,10 +11,12 @@ import Domain
 
 public class Environment {
     let store: StoreProtocol
+    let networks: [CI: NetworkServiceProtocol]
     let reporter: ReporterProtocol
 
-    init(store: StoreProtocol, reporter: ReporterProtocol) {
+    init(store: StoreProtocol, networks: [CI: NetworkServiceProtocol], reporter: ReporterProtocol) {
         self.store = store
+        self.networks = networks
         self.reporter = reporter
     }
 }

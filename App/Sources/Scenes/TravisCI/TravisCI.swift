@@ -19,7 +19,7 @@ enum TravisCIScene {
 
         var isLoading: Bool
         var token: TravisCIToken?
-        var builds: [Build]
+        var builds: [Standard.Build]
         var offset: Int?
 
         var isUnregistered: Bool {
@@ -37,10 +37,12 @@ enum TravisCIScene {
     struct Dependency {
         var fetchUseCase: FetchBuildsFromTravisCIProtocol
         var store: StoreProtocol
+        var network: NetworkServiceProtocol
     }
 
     enum Transition {
         enum Event {
+            case detail(buildId: Int)
         }
     }
 }
@@ -52,7 +54,7 @@ protocol TravisCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: TravisCIScene.Message)
 
-    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: TravisCIScene.Transition.Event)
 }
 
 class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
@@ -129,8 +131,23 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         }
     }
 
-    func route(event: TravisCIScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: TravisCIScene.Transition.Event) {
+        switch event {
+        case .detail(let buildId):
+            let presenter = TravisCIDetailViewPresenter(
+                .init(buildId: buildId),
+                dependency: .init(
+                    interactor: TravisCIDetailInteractor(
+                        fetchBuildTravisCI: FetchBuildFromTravisCI(network: dependency.network),
+                        fetchJobsTravisCI: FetchJobsFromTravisCI(network: dependency.network)),
+                    store: dependency.store,
+                    network: dependency.network))
+            let controller = Scenes.travisCIDetail.execute(
+                .init(
+                    network: dependency.network,
+                    store: dependency.store,
+                    presenter: presenter))
+            from.navigationController?.pushViewController(controller, animated: true)
+        }
     }
 }

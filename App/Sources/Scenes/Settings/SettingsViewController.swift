@@ -97,15 +97,15 @@ class SettingsViewController: UIViewController, Instantiatable {
     }
 
     private func configure(_ state: SettingsScene.State) {
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, ItemKind>(), { (snapshot) in
-            snapshot.appendSections([.tokens, .app])
-            snapshot.appendItems([
-                .token(.travisci, state.travisCIToken?.value),
-                .token(.circleci, state.circleCIToken?.value),
-                .token(.bitrise, state.bitriseToken?.value)
-            ], toSection: .tokens)
-            snapshot.appendItems([.version(state.version)], toSection: .app)
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, ItemKind>()
+        snapshot.appendSections([.tokens, .app])
+        snapshot.appendItems([
+            .token(.travisci, state.travisCIToken?.value),
+            .token(.circleci, state.circleCIToken?.value),
+            .token(.bitrise, state.bitriseToken?.value)
+        ], toSection: .tokens)
+        snapshot.appendItems([.version(state.version)], toSection: .app)
+
         dataSource.apply(snapshot)
     }
 }
@@ -130,7 +130,7 @@ extension SettingsViewController: UITableViewDelegate {
                     fatalError()
                 }
             }()
-            dependency.presenter.route(event: .detail(ci)).execute(self)
+            dependency.presenter.route(from: self, event: .detail(ci))
         case .app:
             break
         }

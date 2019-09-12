@@ -10,15 +10,7 @@ import APIKit
 
 public extension Endpoint {
     struct BuildsRequest: TravisCIRequest {
-        public struct Response: Codable {
-            enum CodingKeys: String, CodingKey {
-                case pagination = "@pagination"
-                case builds = "builds"
-            }
-
-            public var pagination: Pagination
-            public var builds: [Build]
-        }
+        public typealias Response = Builds
 
         public var path: String {
             return "/builds"

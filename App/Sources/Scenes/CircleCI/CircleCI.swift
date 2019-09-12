@@ -51,7 +51,7 @@ protocol CircleCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: CircleCIScene.Message)
 
-    func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: CircleCIScene.Transition.Event)
 }
 
 class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
@@ -128,8 +128,6 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         }
     }
 
-    func route(event: CircleCIScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-        })
+    func route(from: UIViewController, event: CircleCIScene.Transition.Event) {
     }
 }

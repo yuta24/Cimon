@@ -59,7 +59,7 @@ protocol MainViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: MainScene.Message)
 
-    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void>
+    func route(from: UIViewController, event: MainScene.Transition.Event)
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -94,14 +94,12 @@ class MainViewPresenter: MainViewPresenterProtocol {
         }
     }
 
-    func route(event: MainScene.Transition.Event) -> Reader<UIViewController, Void> {
-        return .init({ (from) in
-            switch event {
-            case .settings:
-                let controller = Scenes.settings.execute(.init(presenter: SettingsViewPresenter.init(dependency: .init(store: self.dependency.store, networks: self.dependency.networks))))
-                let navigation = UINavigationController(rootViewController: controller, hasClose: true)
-                from.present(navigation, animated: true, completion: .none)
-            }
-        })
+    func route(from: UIViewController, event: MainScene.Transition.Event) {
+        switch event {
+        case .settings:
+            let controller = Scenes.settings.execute(.init(presenter: SettingsViewPresenter(dependency: .init(store: self.dependency.store, networks: self.dependency.networks))))
+            let navigation = UINavigationController(rootViewController: controller, hasClose: true)
+            from.present(navigation, animated: true, completion: .none)
+        }
     }
 }

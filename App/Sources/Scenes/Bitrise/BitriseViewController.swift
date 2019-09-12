@@ -130,10 +130,10 @@ class BitriseViewController: UIViewController, Instantiatable {
         contentView.isHidden = state.isUnregistered
         unregisteredView.isHidden = !state.isUnregistered
 
-        let snapshot = apply(NSDiffableDataSourceSnapshot<SectionKind, BuildListAllResponseItemModel>(), { (snapshot) in
-            snapshot.appendSections([.builds])
-            snapshot.appendItems(state.builds)
-        })
+        var snapshot = NSDiffableDataSourceSnapshot<SectionKind, BuildListAllResponseItemModel>()
+        snapshot.appendSections([.builds])
+        snapshot.appendItems(state.builds)
+
         dataSource.apply(snapshot)
     }
 
@@ -157,6 +157,12 @@ extension BitriseViewController: UICollectionViewDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+        defer {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }
+
+        if let item = dataSource.itemIdentifier(for: indexPath), let repository = item.repository?.slug, let build = item.slug {
+            dependency.presenter.route(from: self, event: .detail(repository: repository, build: build))
+        }
     }
 }
