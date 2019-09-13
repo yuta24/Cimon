@@ -56,6 +56,15 @@ targets:
     dependencies:
       - target: Domain
       - target: Cimon
+  Core:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Core
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.core"
+    dependencies:
+      - target: Shared
   App:
     type: framework
     platform: iOS
@@ -70,6 +79,7 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Shared
+      - target: Core
       - target: Domain
       - carthage: APIKit
       - carthage: Nuke
