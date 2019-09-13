@@ -21,12 +21,14 @@ func configure() {
 let logger = LightLogger.self
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
+let sceneFactory = SceneFactory()
 
 let app = process(
     App(
         window: UIWindow(frame: UIScreen.main.bounds),
         store: store,
         reporter: reporter,
+        sceneFactory: sceneFactory,
         networks: [
             .travisci: travisCIService,
             .circleci: circleCIService,

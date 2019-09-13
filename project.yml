@@ -127,6 +127,7 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Shared
+      - target: Core
       - target: Domain
       - target: App
       - carthage: APIKit

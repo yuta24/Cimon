@@ -10,12 +10,13 @@ import UIKit
 import Pipeline
 import Shared
 import Domain
+import Core
 
 public class App {
     public let window: UIWindow
     public let environment: Environment
 
-    public init(window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, networks: [CI: NetworkServiceProtocol]) {
+    public init(window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, sceneFactory: SceneFactoryProtocol, networks: [CI: NetworkServiceProtocol]) {
         self.window = apply(window, {
             $0.rootViewController = MainViewController.Dependency(
                 store: store,
@@ -25,7 +26,7 @@ public class App {
                 |> UINavigationController.init
             $0.makeKeyAndVisible()
         })
-        self.environment = Environment(store: store, networks: networks, reporter: reporter)
+        self.environment = Environment(store: store, networks: networks, sceneFactory: sceneFactory, reporter: reporter)
     }
 
     public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
