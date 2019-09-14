@@ -6,3 +6,5 @@ xcassets:
   outputs:
     templateName: swift4
     output: Assets.swift
+    params:
+      publicAccess: true

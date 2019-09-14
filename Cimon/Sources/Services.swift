@@ -8,6 +8,7 @@
 import Foundation
 import APIKit
 import Domain
+import Core
 import App
 
 private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {

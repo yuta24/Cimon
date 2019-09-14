@@ -8,6 +8,7 @@
 import Foundation
 import CircleCIAPI
 import Shared
+import Core
 
 extension CircleCIAPI.Build: Hashable {
     public func hash(into hasher: inout Hasher) {

@@ -10,6 +10,7 @@ import ReactiveSwift
 import TravisCIAPI
 import Shared
 import Domain
+import Core
 
 enum TravisCIScene {
     struct State {

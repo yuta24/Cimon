@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 @IBDesignable
-class RoundedView: UIView {
+open class RoundedView: UIView {
     @IBInspectable
     var cornerRadius: CGFloat {
         get {
@@ -83,7 +83,7 @@ class RoundedView: UIView {
         }
     }
 
-    override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.shadowRadius).cgPath
         super.draw(rect)
     }

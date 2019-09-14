@@ -11,11 +11,16 @@ import Pipeline
 import BitriseAPI
 import Shared
 import Domain
+import Core
 
 // sourcery: scene
-class BitriseViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        var presenter: BitriseViewPresenterProtocol
+public class BitriseViewController: UIViewController, Instantiatable {
+    public struct Dependency {
+        public let presenter: BitriseViewPresenterProtocol
+
+        public init(presenter: BitriseViewPresenterProtocol) {
+            self.presenter = presenter
+        }
     }
 
     enum SectionKind: Int {
@@ -66,8 +71,6 @@ class BitriseViewController: UIViewController, Instantiatable {
         }
     }
 
-    weak var delegate: MainPageDelegate?
-
     private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, BuildListAllResponseItemModel>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
         let cell = BitriseBuildStatusCell.dequeue(for: indexPath, from: collectionView)
         cell.configure(.init(child: build))
@@ -77,7 +80,7 @@ class BitriseViewController: UIViewController, Instantiatable {
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         apply(refreshControl) { (control) in
@@ -100,7 +103,7 @@ class BitriseViewController: UIViewController, Instantiatable {
         })
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         dependency.presenter.dispatch(.load)
@@ -109,13 +112,13 @@ class BitriseViewController: UIViewController, Instantiatable {
         dependency.presenter.subscribe(configure(_:))
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         dependency.presenter.unsubscribe()
     }
 
-    func inject(dependency: BitriseViewController.Dependency) {
+    public func inject(dependency: BitriseViewController.Dependency) {
         self.dependency = dependency
     }
 
@@ -152,11 +155,10 @@ class BitriseViewController: UIViewController, Instantiatable {
 }
 
 extension BitriseViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        delegate?.onScrollChanged(scrollView.contentOffset)
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         defer {
             collectionView.deselectItem(at: indexPath, animated: true)
         }

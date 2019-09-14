@@ -61,17 +61,33 @@ targets:
     platform: iOS
     sources:
       - path: Core
+      - path: Core/Sources/Generated/Assets.swift
+        optional: true
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.core"
     dependencies:
       - target: Shared
+      - target: Domain
+    preBuildScripts:
+      - name: "[SwiftGen] Run Script"
+        script: "swiftgen config run --config Core/swiftgen.yml"
+  Bitrise:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Bitrise
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+    dependencies:
+      - target: BitriseAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
   App:
     type: framework
     platform: iOS
     sources:
       - path: App
-      - path: App/Sources/Generated/Assets.swift
-        optional: true
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.app"
     dependencies:
@@ -81,14 +97,12 @@ targets:
       - target: Shared
       - target: Core
       - target: Domain
+      - target: Bitrise
       - carthage: APIKit
       - carthage: Nuke
       - carthage: Pipeline
       - carthage: ReactiveSwift
       - carthage: Reachability
-    preBuildScripts:
-      - name: "[SwiftGen] Run Script"
-        script: "swiftgen config run --config App/swiftgen.yml"
     scheme:
       testTargets:
         - AppTests
@@ -127,8 +141,9 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Shared
-      - target: Core
       - target: Domain
+      - target: Core
+      - target: Bitrise
       - target: App
       - carthage: APIKit
       - carthage: Nuke
@@ -164,7 +179,7 @@ targets:
     sources:
       - path: TravisCIAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
     dependencies:
       - carthage: APIKit
   CircleCIAPI:
@@ -173,7 +188,7 @@ targets:
     sources:
       - path: CircleCIAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
     dependencies:
       - carthage: APIKit
   BitriseAPI:
@@ -182,6 +197,6 @@ targets:
     sources:
       - path: BitriseAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
     dependencies:
       - carthage: APIKit

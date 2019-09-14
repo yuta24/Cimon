@@ -8,6 +8,7 @@
 import Foundation
 import TravisCIAPI
 import Shared
+import Core
 
 extension TravisCIAPI.Standard.Build: Hashable {
     public func hash(into hasher: inout Hasher) {

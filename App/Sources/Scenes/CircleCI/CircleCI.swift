@@ -9,6 +9,7 @@ import Foundation
 import CircleCIAPI
 import Shared
 import Domain
+import Core
 
 enum CircleCIScene {
     struct State {

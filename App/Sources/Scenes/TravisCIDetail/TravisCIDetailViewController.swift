@@ -11,6 +11,7 @@ import Pipeline
 import TravisCIAPI
 import Shared
 import Domain
+import Core
 
 // sourcery: scene
 class TravisCIDetailViewController: UIViewController, Instantiatable {

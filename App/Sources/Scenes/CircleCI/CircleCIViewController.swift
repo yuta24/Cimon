@@ -11,6 +11,7 @@ import Pipeline
 import CircleCIAPI
 import Shared
 import Domain
+import Core
 
 // sourcery: scene
 class CircleCIViewController: UIViewController, Instantiatable {
@@ -65,8 +66,6 @@ class CircleCIViewController: UIViewController, Instantiatable {
             activityIndicatorView.hidesWhenStopped = true
         }
     }
-
-    weak var delegate: MainPageDelegate?
 
     private lazy var dataSource = UICollectionViewDiffableDataSource<SectionKind, Build>(collectionView: collectionView) { (collectionView, indexPath, build) -> UICollectionViewCell? in
         let cell = CircleCIBuildStatusCell.dequeue(for: indexPath, from: collectionView)
@@ -154,7 +153,6 @@ class CircleCIViewController: UIViewController, Instantiatable {
 
 extension CircleCIViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        delegate?.onScrollChanged(scrollView.contentOffset)
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

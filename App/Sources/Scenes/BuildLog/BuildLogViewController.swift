@@ -10,6 +10,7 @@ import UIKit
 import Pipeline
 import Shared
 import Domain
+import Core
 
 class BuildLogViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!

@@ -9,10 +9,8 @@ import Foundation
 import UIKit
 import Shared
 import Domain
-
-protocol MainPageDelegate: class {
-    func onScrollChanged(_ contentOffset: CGPoint)
-}
+import Bitrise
+import Core
 
 // sourcery: scene
 class MainViewController: UIViewController, Instantiatable {
@@ -60,41 +58,7 @@ class MainViewController: UIViewController, Instantiatable {
         navigationOrientation: .horizontal,
         options: .none)
 
-    private lazy var pages: [(CI, UIViewController)] = {
-        let travisCIController = Scenes.travisCI.execute(
-            .init(presenter:
-                TravisCIViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromTravisCI(
-                            network: self.dependency.networks[.travisci]!),
-                        store: self.dependency.store,
-                        network: self.dependency.networks[.travisci]!))))
-        travisCIController.delegate = self
-
-        let circleCIController = Scenes.circleCI.execute(
-            .init(presenter:
-                CircleCIViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromCircleCI(
-                            network: self.dependency.networks[.circleci]!),
-                        store: self.dependency.store))))
-        circleCIController.delegate = self
-
-        let bitriseController = Scenes.bitrise.execute(
-            .init(presenter:
-                BitriseViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromBitrise(
-                            network: self.dependency.networks[.bitrise]!),
-                        store: self.dependency.store,
-                        network: self.dependency.networks[.bitrise]!))))
-        bitriseController.delegate = self
-
-        return [
-            (.travisci, travisCIController),
-            (.circleci, circleCIController),
-            (.bitrise, bitriseController)]
-    }()
+    var pages = [(CI, UIViewController)]()
 
     private var dependency: Dependency!
 
@@ -173,11 +137,6 @@ class MainViewController: UIViewController, Instantiatable {
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
         dependency.presenter.route(from: self, event: .settings)
-    }
-}
-
-extension MainViewController: MainPageDelegate {
-    func onScrollChanged(_ contentOffset: CGPoint) {
     }
 }
 

@@ -10,13 +10,23 @@ import UIKit
 import Pipeline
 import Shared
 import Domain
+import Core
 
 // sourcery: scene
-class BitriseDetailViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        let network: NetworkServiceProtocol
-        let store: StoreProtocol
-        let presenter: BitriseDetailViewPresenterProtocol
+public class BitriseDetailViewController: UIViewController, Instantiatable {
+    public struct Dependency {
+        public let network: NetworkServiceProtocol
+        public let store: StoreProtocol
+        public let presenter: BitriseDetailViewPresenterProtocol
+
+        public init(
+            network: NetworkServiceProtocol,
+            store: StoreProtocol,
+            presenter: BitriseDetailViewPresenterProtocol) {
+            self.network = network
+            self.store = store
+            self.presenter = presenter
+        }
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -35,11 +45,11 @@ class BitriseDetailViewController: UIViewController, Instantiatable {
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         dependency.presenter.dispatch(.fetch)
@@ -47,13 +57,13 @@ class BitriseDetailViewController: UIViewController, Instantiatable {
         dependency.presenter.subscribe(configure(_:))
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         dependency.presenter.unsubscribe()
     }
 
-    func inject(dependency: BitriseDetailViewController.Dependency) {
+    public func inject(dependency: BitriseDetailViewController.Dependency) {
         self.dependency = dependency
     }
 

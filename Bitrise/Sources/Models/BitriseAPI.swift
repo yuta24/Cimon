@@ -8,6 +8,7 @@
 import Foundation
 import BitriseAPI
 import Shared
+import Core
 
 extension BitriseAPI.BuildListAllResponseItemModel: Hashable {
     public func hash(into hasher: inout Hasher) {

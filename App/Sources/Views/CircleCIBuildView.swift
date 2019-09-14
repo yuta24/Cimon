@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import CircleCIAPI
 import Shared
+import Core
 
 @IBDesignable
 class CircleCIBuildView: RoundedView {

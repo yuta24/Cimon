@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import BitriseAPI
 import Shared
+import Core
 
 @IBDesignable
 class BitriseBuildView: RoundedView {

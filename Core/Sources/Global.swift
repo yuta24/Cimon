@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import APIKit
 import Shared
 
-let logger = LightLogger.self
+public let logger = LightLogger.self

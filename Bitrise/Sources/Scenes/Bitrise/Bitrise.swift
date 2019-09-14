@@ -10,9 +10,10 @@ import UIKit
 import BitriseAPI
 import Shared
 import Domain
+import Core
 
-enum BitriseScene {
-    struct State {
+public enum BitriseScene {
+    public struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], next: .none)
         }
@@ -27,27 +28,21 @@ enum BitriseScene {
         }
     }
 
-    enum Message {
+    public enum Message {
         case load
         case fetch
         case fetchNext
         case token(String?)
     }
 
-    struct Dependency {
-        var fetchUseCase: FetchBuildsFromBitriseProtocol
-        var store: StoreProtocol
-        var network: NetworkServiceProtocol
-    }
-
-    enum Transition {
-        enum Event {
+    public enum Transition {
+        public enum Event {
             case detail(repository: String, build: String)
         }
     }
 }
 
-protocol BitriseViewPresenterProtocol {
+public protocol BitriseViewPresenterProtocol {
     var state: BitriseScene.State { get }
 
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void)
@@ -57,8 +52,8 @@ protocol BitriseViewPresenterProtocol {
     func route(from: UIViewController, event: BitriseScene.Transition.Event)
 }
 
-class BitriseViewPresenter: BitriseViewPresenterProtocol {
-    private(set) var state: BitriseScene.State = .initial {
+public class BitriseViewPresenter: BitriseViewPresenterProtocol {
+    public private(set) var state: BitriseScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -68,22 +63,22 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     private var closure: ((BitriseScene.State) -> Void)?
 
-    private let dependency: BitriseScene.Dependency
+    private let dependency: Bitrise.Dependency
 
-    init(dependency: BitriseScene.Dependency) {
+    public init(dependency: Bitrise.Dependency) {
         self.dependency = dependency
     }
 
-    func subscribe(_ closure: @escaping (BitriseScene.State) -> Void) {
+    public func subscribe(_ closure: @escaping (BitriseScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
 
-    func unsubscribe() {
+    public func unsubscribe() {
         self.closure = nil
     }
 
-    func dispatch(_ message: BitriseScene.Message) {
+    public func dispatch(_ message: BitriseScene.Message) {
         switch message {
         case .load:
             dependency.store.value(.bitriseToken, { [weak self] (value) in
@@ -135,11 +130,11 @@ class BitriseViewPresenter: BitriseViewPresenterProtocol {
         }
     }
 
-    func route(from: UIViewController, event: BitriseScene.Transition.Event) {
+    public func route(from: UIViewController, event: BitriseScene.Transition.Event) {
         switch event {
         case .detail(let repository, let build):
-            let presenter = BitriseDetailViewPresenter(.init(appSlug: repository, buildSlug: build), dependency: .init(store: self.dependency.store, network: self.dependency.network))
-            let controller = Scenes.bitriseDetail.execute(.init(network: self.dependency.network, store: self.dependency.store, presenter: presenter))
+            let controller = dependency.sceneFactory.bitriseDetail(context: .init(appSlug: repository, buildSlug: build), with: .init(store: dependency.store, network: dependency.network))
+//                Scenes.bitriseDetail.execute(.init(network: self.dependency.network, store: self.dependency.store, presenter: presenter))
             from.navigationController?.pushViewController(controller, animated: true)
         }
     }

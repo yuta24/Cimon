@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import TravisCIAPI
 import Shared
+import Core
 
 @IBDesignable
 class TravisCIBuildView: RoundedView {

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-let mainSceneStyle = { (view: UIView) in
+public let mainSceneStyle = { (view: UIView) in
     switch view {
     case let view as UITableView:
         switch view.style {
@@ -26,7 +26,7 @@ let mainSceneStyle = { (view: UIView) in
     }
 }
 
-let terminalStyle = { (view: UITextView) in
+public let terminalStyle = { (view: UITextView) in
     view.backgroundColor = .black
     view.textColor = .white
     view.font = UIFont.monospacedSystemFont(ofSize: 14, weight: .regular)

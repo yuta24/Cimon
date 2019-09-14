@@ -7,10 +7,20 @@
 
 import Foundation
 import UIKit
+import Shared
+import Bitrise
 import Core
 
 final class SceneFactory: SceneFactoryProtocol {
-    func settings(_ context: Settings.Context, with dependency: Settings.Dependency) -> UIViewController {
-        return UIViewController()
+    func bitrise(context: Bitrise.Context, with dependency: Bitrise.Dependency) -> UIViewController {
+        let presenter = BitriseViewPresenter(dependency: dependency)
+        let controller = Storyboard<BitriseViewController>(name: "Bitrise").instantiate(dependency: .init(presenter: presenter))
+        return controller
+    }
+
+    func bitriseDetail(context: BitriseDetail.Context, with dependency: BitriseDetail.Dependency) -> UIViewController {
+        let presenter = BitriseDetailViewPresenter(.init(appSlug: context.appSlug, buildSlug: context.buildSlug), dependency: dependency)
+        let controller = Storyboard<BitriseDetailViewController>(name: "BitriseDetail").instantiate(dependency: .init(network: dependency.network, store: dependency.store, presenter: presenter))
+        return controller
     }
 }

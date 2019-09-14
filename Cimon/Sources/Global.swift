@@ -18,7 +18,6 @@ func configure() {
     UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
 }
 
-let logger = LightLogger.self
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
 let sceneFactory = SceneFactory()
