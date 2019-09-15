@@ -83,6 +83,18 @@ targets:
       - target: Shared
       - target: Domain
       - target: Core
+  CircleCI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: CircleCI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
+    dependencies:
+      - target: CircleCIAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
   App:
     type: framework
     platform: iOS
@@ -98,6 +110,7 @@ targets:
       - target: Core
       - target: Domain
       - target: Bitrise
+      - target: CircleCI
       - carthage: APIKit
       - carthage: Nuke
       - carthage: Pipeline
@@ -144,6 +157,7 @@ targets:
       - target: Domain
       - target: Core
       - target: Bitrise
+      - target: CircleCI
       - target: App
       - carthage: APIKit
       - carthage: Nuke

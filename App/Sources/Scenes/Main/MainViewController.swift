@@ -10,6 +10,7 @@ import UIKit
 import Shared
 import Domain
 import Bitrise
+import CircleCI
 import Core
 
 // sourcery: scene

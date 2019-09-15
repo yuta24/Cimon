@@ -31,16 +31,13 @@ public class App {
                             store: store,
                             network: networks[.travisci]!))))
 
-            let circleCIController = Scenes.circleCI.execute(
-                .init(presenter:
-                    CircleCIViewPresenter(
-                        dependency: .init(
-                            fetchUseCase: FetchBuildsFromCircleCI(
-                                network: networks[.circleci]!),
-                            store: store))))
+            let circleCIController = sceneFactory.circleCI(
+                context: .none,
+                with: .init(fetchUseCase: FetchBuildsFromCircleCI(network: networks[.circleci]!), store: store))
 
-            let bitriseController = sceneFactory.bitrise(context: .none, with: .init(fetchUseCase: FetchBuildsFromBitrise(
-                network: networks[.bitrise]!), store: store, network: networks[.bitrise]!, sceneFactory: sceneFactory))
+            let bitriseController = sceneFactory.bitrise(
+                context: .none,
+                with: .init(fetchUseCase: FetchBuildsFromBitrise(network: networks[.bitrise]!), store: store, network: networks[.bitrise]!, sceneFactory: sceneFactory))
 
             return [
                 (.travisci, travisCIController),

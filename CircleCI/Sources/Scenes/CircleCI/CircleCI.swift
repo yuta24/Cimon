@@ -11,8 +11,8 @@ import Shared
 import Domain
 import Core
 
-enum CircleCIScene {
-    struct State {
+public enum CircleCIScene {
+    public struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], offset: 0)
         }
@@ -27,25 +27,20 @@ enum CircleCIScene {
         }
     }
 
-    enum Message {
+    public enum Message {
         case load
         case fetch
         case fetchNext
         case token(String?)
     }
 
-    struct Dependency {
-        var fetchUseCase: FetchBuildsFromCircleCIProtocol
-        var store: StoreProtocol
-    }
-
-    enum Transition {
-        enum Event {
+    public enum Transition {
+        public enum Event {
         }
     }
 }
 
-protocol CircleCIViewPresenterProtocol {
+public protocol CircleCIViewPresenterProtocol {
     var state: CircleCIScene.State { get }
 
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void)
@@ -55,8 +50,8 @@ protocol CircleCIViewPresenterProtocol {
     func route(from: UIViewController, event: CircleCIScene.Transition.Event)
 }
 
-class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
-    private(set) var state: CircleCIScene.State = .initial {
+public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
+    public private(set) var state: CircleCIScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -66,22 +61,22 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     private var closure: ((CircleCIScene.State) -> Void)?
 
-    private let dependency: CircleCIScene.Dependency
+    private let dependency: CircleCI.Dependency
 
-    init(dependency: CircleCIScene.Dependency) {
+    public init(dependency: CircleCI.Dependency) {
         self.dependency = dependency
     }
 
-    func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void) {
+    public func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
 
-    func unsubscribe() {
+    public func unsubscribe() {
         self.closure = nil
     }
 
-    func dispatch(_ message: CircleCIScene.Message) {
+    public func dispatch(_ message: CircleCIScene.Message) {
         switch message {
         case .load:
             dependency.store.value(.circleCIToken, { [weak self] (value) in
@@ -129,6 +124,6 @@ class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         }
     }
 
-    func route(from: UIViewController, event: CircleCIScene.Transition.Event) {
+    public func route(from: UIViewController, event: CircleCIScene.Transition.Event) {
     }
 }

@@ -10,6 +10,24 @@ import UIKit
 import Shared
 import Domain
 
+public enum CircleCI {
+    public struct Context {
+        public static let none = Context()
+    }
+
+    public struct Dependency {
+        public var fetchUseCase: FetchBuildsFromCircleCIProtocol
+        public var store: StoreProtocol
+
+        public init(
+            fetchUseCase: FetchBuildsFromCircleCIProtocol,
+            store: StoreProtocol) {
+            self.fetchUseCase = fetchUseCase
+            self.store = store
+        }
+    }
+}
+
 public enum Bitrise {
     public struct Context {
         public static let none = Context()
@@ -61,6 +79,7 @@ public enum BitriseDetail {
 }
 
 public protocol SceneFactoryProtocol: class {
+    func circleCI(context: CircleCI.Context, with dependency: CircleCI.Dependency) -> UIViewController
     func bitrise(context: Bitrise.Context, with dependency: Bitrise.Dependency) -> UIViewController
     func bitriseDetail(context: BitriseDetail.Context, with dependency: BitriseDetail.Dependency) -> UIViewController
 }

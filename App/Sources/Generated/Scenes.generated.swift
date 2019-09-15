@@ -14,13 +14,6 @@ enum Scenes {
          })
     }
 
-    static var circleCI: Reader<CircleCIViewController.Dependency, CircleCIViewController> {
-        return .init({ dependency in
-            return Storyboard<CircleCIViewController>(name: "CircleCI")
-                .instantiate(dependency: dependency)
-         })
-    }
-
     static var main: Reader<MainViewController.Dependency, MainViewController> {
         return .init({ dependency in
             return Storyboard<MainViewController>(name: "Main")

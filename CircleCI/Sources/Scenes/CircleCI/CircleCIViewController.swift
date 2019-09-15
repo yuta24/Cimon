@@ -14,9 +14,13 @@ import Domain
 import Core
 
 // sourcery: scene
-class CircleCIViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        var presenter: CircleCIViewPresenterProtocol
+public class CircleCIViewController: UIViewController, Instantiatable {
+    public struct Dependency {
+        public let presenter: CircleCIViewPresenterProtocol
+
+        public init(presenter: CircleCIViewPresenterProtocol) {
+            self.presenter = presenter
+        }
     }
 
     enum SectionKind: Int {
@@ -76,7 +80,7 @@ class CircleCIViewController: UIViewController, Instantiatable {
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         apply(refreshControl) { (control) in
@@ -100,7 +104,7 @@ class CircleCIViewController: UIViewController, Instantiatable {
         })
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         dependency.presenter.dispatch(.load)
@@ -109,13 +113,13 @@ class CircleCIViewController: UIViewController, Instantiatable {
         dependency.presenter.subscribe(configure(_:))
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         dependency.presenter.unsubscribe()
     }
 
-    func inject(dependency: CircleCIViewController.Dependency) {
+    public func inject(dependency: CircleCIViewController.Dependency) {
         self.dependency = dependency
     }
 
@@ -152,10 +156,10 @@ class CircleCIViewController: UIViewController, Instantiatable {
 }
 
 extension CircleCIViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
