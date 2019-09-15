@@ -27,13 +27,23 @@ public enum TravisCIDetailScene {
         }
     }
 
-    public enum Message {
-        case fetch
+    public struct Dependency {
+        public var interactor: TravisCIDetailInteractorProtocol
+        public var store: StoreProtocol
+        public var network: NetworkServiceProtocol
+
+        public init(
+            interactor: TravisCIDetailInteractorProtocol,
+            store: StoreProtocol,
+            network: NetworkServiceProtocol) {
+            self.interactor = interactor
+            self.store = store
+            self.network = network
+        }
     }
 
-    public enum Transition {
-        public enum Event {
-        }
+    public enum Message {
+        case fetch
     }
 }
 
@@ -44,7 +54,7 @@ public protocol TravisCIDetailViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: TravisCIDetailScene.Message)
 
-    func route(from: UIViewController, event: TravisCIDetailScene.Transition.Event)
+    func route(from: UIViewController, event: TravisCIDetail.Transition.Event)
 }
 
 public class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
@@ -67,9 +77,9 @@ public class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
     private var closure: ((TravisCIDetailScene.State) -> Void)?
 
     private let context: Context
-    private let dependency: TravisCIDetail.Dependency
+    private let dependency: TravisCIDetailScene.Dependency
 
-    public init(_ context: Context, dependency: TravisCIDetail.Dependency) {
+    public init(_ context: Context, dependency: TravisCIDetailScene.Dependency) {
         self.context = context
         self.dependency = dependency
     }
@@ -103,6 +113,6 @@ public class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
         }
     }
 
-    public func route(from: UIViewController, event: TravisCIDetailScene.Transition.Event) {
+    public func route(from: UIViewController, event: TravisCIDetail.Transition.Event) {
     }
 }

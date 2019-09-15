@@ -12,19 +12,11 @@ import Shared
 import Domain
 import Core
 
-// sourcery: scene
 public class BitriseDetailViewController: UIViewController, Instantiatable {
     public struct Dependency {
-        public let network: NetworkServiceProtocol
-        public let store: StoreProtocol
         public let presenter: BitriseDetailViewPresenterProtocol
 
-        public init(
-            network: NetworkServiceProtocol,
-            store: StoreProtocol,
-            presenter: BitriseDetailViewPresenterProtocol) {
-            self.network = network
-            self.store = store
+        public init(presenter: BitriseDetailViewPresenterProtocol) {
             self.presenter = presenter
         }
     }

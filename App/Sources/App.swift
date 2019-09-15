@@ -14,39 +14,34 @@ import Core
 
 public class App {
     public let window: UIWindow
-    public let environment: Environment
+    public let sceneFactory: SceneFactoryProtocol
 
-    public init(window: UIWindow, store: StoreProtocol, reporter: ReporterProtocol, sceneFactory: SceneFactoryProtocol, networks: [CI: NetworkServiceProtocol]) {
-        let mainViewController = MainViewPresenter(ci: .travisci, dependency: .init(store: store, networks: networks))
-            |> { MainViewController.Dependency(store: store, networks: networks, presenter: $0) }
-            |> { Scenes.main.execute($0) }
+    public init(window: UIWindow, environment: Environment) {
+        let sceneFactory = SceneFactory(environment: { () -> Environment in
+            return environment
+        })
 
-        let pages: [(CI, UIViewController)] = {
-            let travisCIController = sceneFactory.travisCI(
-                context: .none,
-                with: .init(fetchUseCase: FetchBuildsFromTravisCI(network: networks[.travisci]!), store: store, network: networks[.travisci]!, sceneFactory: sceneFactory))
+        self.window = window
+        self.sceneFactory = sceneFactory
 
-            let circleCIController = sceneFactory.circleCI(
-                context: .none,
-                with: .init(fetchUseCase: FetchBuildsFromCircleCI(network: networks[.circleci]!), store: store))
+        let mainViewController = sceneFactory.main(
+            context: .init(
+                selected: .travisci,
+                pages: { () -> [(CI, UIViewController)] in
+                    let travisCIController = sceneFactory.travisCI(context: .none)
+                    let circleCIController = sceneFactory.circleCI(context: .none)
+                    let bitriseController = sceneFactory.bitrise(context: .none)
 
-            let bitriseController = sceneFactory.bitrise(
-                context: .none,
-                with: .init(fetchUseCase: FetchBuildsFromBitrise(network: networks[.bitrise]!), store: store, network: networks[.bitrise]!, sceneFactory: sceneFactory))
+                    return [
+                        (.travisci, travisCIController),
+                        (.circleci, circleCIController),
+                        (.bitrise, bitriseController)]
+                }()))
 
-            return [
-                (.travisci, travisCIController),
-                (.circleci, circleCIController),
-                (.bitrise, bitriseController)]
-        }()
-
-        mainViewController.pages = pages
-
-        self.window = apply(window, {
+        apply(window, {
             $0.rootViewController = UINavigationController(rootViewController: mainViewController)
             $0.makeKeyAndVisible()
         })
-        self.environment = Environment(store: store, networks: networks, sceneFactory: sceneFactory, reporter: reporter)
     }
 
     public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

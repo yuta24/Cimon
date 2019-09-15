@@ -13,28 +13,28 @@ import Shared
 import Domain
 import Core
 
-class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
+public class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
     private let fetchBuildTravisCI: FetchBuildFromTravisCIProtocol
     private let fetchJobsTravisCI: FetchJobsFromTravisCIProtocol
 
-    init(
+    public init(
         fetchBuildTravisCI: FetchBuildFromTravisCIProtocol,
         fetchJobsTravisCI: FetchJobsFromTravisCIProtocol) {
         self.fetchBuildTravisCI = fetchBuildTravisCI
         self.fetchJobsTravisCI = fetchJobsTravisCI
     }
 
-    func fetchDetail(buildId: Int) -> SignalProducer<(Standard.Build, [Standard.Job]), SessionTaskError> {
+    public func fetchDetail(buildId: Int) -> SignalProducer<(Standard.Build, [Standard.Job]), SessionTaskError> {
         return fetchBuildTravisCI.run(buildId: buildId)
             .combineLatest(with: fetchJobsTravisCI.run(buildId: buildId))
             .map({ ($0.0, $0.1.jobs) })
     }
 
-    func fetchBuild(buildId: Int) -> SignalProducer<Standard.Build, SessionTaskError> {
+    public func fetchBuild(buildId: Int) -> SignalProducer<Standard.Build, SessionTaskError> {
         return fetchBuildTravisCI.run(buildId: buildId)
     }
 
-    func fetchJobs(buildId: Int) -> SignalProducer<[Standard.Job], SessionTaskError> {
+    public func fetchJobs(buildId: Int) -> SignalProducer<[Standard.Job], SessionTaskError> {
         return fetchJobsTravisCI.run(buildId: buildId)
             .map(\.jobs)
     }

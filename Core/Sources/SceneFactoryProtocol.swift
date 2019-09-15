@@ -10,26 +10,32 @@ import UIKit
 import Shared
 import Domain
 
+public enum Main {
+    public struct Context {
+        public var selected: CI
+        public var pages: [(CI, UIViewController)]
+
+        public init(selected: CI, pages: [(CI, UIViewController)]) {
+            self.selected = selected
+            self.pages = pages
+        }
+    }
+
+    public enum Transition {
+        public enum Event {
+            case settings
+        }
+    }
+}
+
 public enum TravisCI {
     public struct Context {
         public static let none = Context()
     }
 
-    public struct Dependency {
-        public var fetchUseCase: FetchBuildsFromTravisCIProtocol
-        public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
-        public var sceneFactory: SceneFactoryProtocol
-
-        public init(
-            fetchUseCase: FetchBuildsFromTravisCIProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol,
-            sceneFactory: SceneFactoryProtocol) {
-            self.fetchUseCase = fetchUseCase
-            self.store = store
-            self.network = network
-            self.sceneFactory = sceneFactory
+    public enum Transition {
+        public enum Event {
+            case detail(buildId: Int)
         }
     }
 }
@@ -43,18 +49,8 @@ public enum TravisCIDetail {
         }
     }
 
-    public struct Dependency {
-        public var interactor: TravisCIDetailInteractorProtocol
-        public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
-
-        public init(
-            interactor: TravisCIDetailInteractorProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol) {
-            self.interactor = interactor
-            self.store = store
-            self.network = network
+    public enum Transition {
+        public enum Event {
         }
     }
 }
@@ -64,15 +60,8 @@ public enum CircleCI {
         public static let none = Context()
     }
 
-    public struct Dependency {
-        public var fetchUseCase: FetchBuildsFromCircleCIProtocol
-        public var store: StoreProtocol
-
-        public init(
-            fetchUseCase: FetchBuildsFromCircleCIProtocol,
-            store: StoreProtocol) {
-            self.fetchUseCase = fetchUseCase
-            self.store = store
+    public enum Transition {
+        public enum Event {
         }
     }
 }
@@ -82,21 +71,9 @@ public enum Bitrise {
         public static let none = Context()
     }
 
-    public struct Dependency {
-        public var fetchUseCase: FetchBuildsFromBitriseProtocol
-        public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
-        public var sceneFactory: SceneFactoryProtocol
-
-        public init(
-            fetchUseCase: FetchBuildsFromBitriseProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol,
-            sceneFactory: SceneFactoryProtocol) {
-            self.fetchUseCase = fetchUseCase
-            self.store = store
-            self.network = network
-            self.sceneFactory = sceneFactory
+    public enum Transition {
+        public enum Event {
+            case detail(repository: String, build: String)
         }
     }
 }
@@ -114,23 +91,46 @@ public enum BitriseDetail {
         }
     }
 
-    public struct Dependency {
-        public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
+    public enum Transition {
+        public enum Event {
+        }
+    }
+}
 
-        public init(
-            store: StoreProtocol,
-            network: NetworkServiceProtocol) {
-            self.store = store
-            self.network = network
+public enum Settings {
+    public struct Context {
+        public static let none = Context()
+    }
+
+    public enum Transition {
+        public enum Event {
+            case detail(CI)
+        }
+    }
+}
+
+public enum CISetting {
+    public struct Context {
+        public var ci: CI
+
+        public init(ci: CI) {
+            self.ci = ci
+        }
+    }
+
+    public enum Transition {
+        public enum Event {
         }
     }
 }
 
 public protocol SceneFactoryProtocol: class {
-    func travisCI(context: TravisCI.Context, with dependency: TravisCI.Dependency) -> UIViewController
-    func travisCIDetail(context: TravisCIDetail.Context, with dependency: TravisCIDetail.Dependency) -> UIViewController
-    func circleCI(context: CircleCI.Context, with dependency: CircleCI.Dependency) -> UIViewController
-    func bitrise(context: Bitrise.Context, with dependency: Bitrise.Dependency) -> UIViewController
-    func bitriseDetail(context: BitriseDetail.Context, with dependency: BitriseDetail.Dependency) -> UIViewController
+    func main(context: Main.Context) -> UIViewController
+    func travisCI(context: TravisCI.Context) -> UIViewController
+    func travisCIDetail(context: TravisCIDetail.Context) -> UIViewController
+    func circleCI(context: CircleCI.Context) -> UIViewController
+    func bitrise(context: Bitrise.Context) -> UIViewController
+    func bitriseDetail(context: BitriseDetail.Context) -> UIViewController
+    func settings(context: Settings.Context) -> UIViewController
+    func ciSetting(context: CISetting.Context) -> UIViewController
 }

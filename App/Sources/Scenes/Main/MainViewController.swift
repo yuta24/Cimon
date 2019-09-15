@@ -14,10 +14,9 @@ import CircleCI
 import Bitrise
 import Core
 
-// sourcery: scene
 class MainViewController: UIViewController, Instantiatable {
-    enum Translator {
-        static func convert(viewController: UIViewController) -> CI? {
+    enum Transformer {
+        static func transform(viewController: UIViewController) -> CI? {
             switch viewController {
             case is TravisCIViewController:
                 return .travisci
@@ -30,7 +29,7 @@ class MainViewController: UIViewController, Instantiatable {
             }
         }
 
-        static func convert(ci: CI) -> Reader<MainViewController, UIViewController?> {
+        static func transform(ci: CI) -> Reader<MainViewController, UIViewController?> {
             return .init({ (controller) -> UIViewController? in
                 return controller.pages.first(where: { (_ci, _) in _ci == ci })?.1
             })
@@ -38,8 +37,6 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        var store: StoreProtocol
-        var networks: [CI: NetworkServiceProtocol]
         var presenter: MainViewPresenterProtocol
     }
 
@@ -145,13 +142,13 @@ class MainViewController: UIViewController, Instantiatable {
 extension MainViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.before
-            .flatMap(Translator.convert)?
+            .flatMap(Transformer.transform)?
             .execute(self)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.after
-            .flatMap(Translator.convert)?
+            .flatMap(Transformer.transform)?
             .execute(self)
     }
 }
@@ -167,7 +164,8 @@ extension MainViewController: UIPageViewControllerDelegate {
         }
 
         pageViewController.viewControllers?.first
-            .flatMap { Translator.convert(viewController: $0) }
-            .flatMap { dependency.presenter.dispatch(.update($0)) }
+            .flatMap(Transformer.transform(viewController:))
+            .flatMap(MainScene.Message.update)
+            .flatMap(dependency.presenter.dispatch)
     }
 }

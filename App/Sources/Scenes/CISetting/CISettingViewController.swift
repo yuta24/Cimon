@@ -14,7 +14,6 @@ import Shared
 import Domain
 import Core
 
-// sourcery: scene
 class CISettingViewController: UIViewController, Instantiatable {
     struct Dependency {
         var presenter: CISettingViewPresenterProtocol

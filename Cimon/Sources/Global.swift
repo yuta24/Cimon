@@ -20,18 +20,19 @@ func configure() {
 
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
-let sceneFactory = SceneFactory()
+
+let environment = Environment(
+    store: store,
+    networks: [
+        .travisci: travisCIService,
+        .circleci: circleCIService,
+        .bitrise: bitriseService],
+    reporter: reporter)
 
 let app = process(
     App(
         window: UIWindow(frame: UIScreen.main.bounds),
-        store: store,
-        reporter: reporter,
-        sceneFactory: sceneFactory,
-        networks: [
-            .travisci: travisCIService,
-            .circleci: circleCIService,
-            .bitrise: bitriseService]),
+        environment: environment),
     pre: {
         configure()
     })

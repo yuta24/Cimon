@@ -13,7 +13,6 @@ import Shared
 import Domain
 import Core
 
-// sourcery: scene
 class SettingsViewController: UIViewController, Instantiatable {
     struct Dependency {
         var presenter: SettingsViewPresenterProtocol

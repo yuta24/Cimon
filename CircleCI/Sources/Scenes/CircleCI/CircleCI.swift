@@ -27,16 +27,26 @@ public enum CircleCIScene {
         }
     }
 
+    public struct Dependency {
+        public var fetchUseCase: FetchBuildsFromCircleCIProtocol
+        public var store: StoreProtocol
+        public var route: (UIViewController, CircleCI.Transition.Event) -> Void
+
+        public init(
+            fetchUseCase: FetchBuildsFromCircleCIProtocol,
+            store: StoreProtocol,
+            route: @escaping (UIViewController, CircleCI.Transition.Event) -> Void) {
+            self.fetchUseCase = fetchUseCase
+            self.store = store
+            self.route = route
+        }
+    }
+
     public enum Message {
         case load
         case fetch
         case fetchNext
         case token(String?)
-    }
-
-    public enum Transition {
-        public enum Event {
-        }
     }
 }
 
@@ -47,7 +57,7 @@ public protocol CircleCIViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: CircleCIScene.Message)
 
-    func route(from: UIViewController, event: CircleCIScene.Transition.Event)
+    func route(from: UIViewController, event: CircleCI.Transition.Event)
 }
 
 public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
@@ -61,9 +71,9 @@ public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
 
     private var closure: ((CircleCIScene.State) -> Void)?
 
-    private let dependency: CircleCI.Dependency
+    private let dependency: CircleCIScene.Dependency
 
-    public init(dependency: CircleCI.Dependency) {
+    public init(dependency: CircleCIScene.Dependency) {
         self.dependency = dependency
     }
 
@@ -124,6 +134,7 @@ public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
         }
     }
 
-    public func route(from: UIViewController, event: CircleCIScene.Transition.Event) {
+    public func route(from: UIViewController, event: CircleCI.Transition.Event) {
+        dependency.route(from, event)
     }
 }

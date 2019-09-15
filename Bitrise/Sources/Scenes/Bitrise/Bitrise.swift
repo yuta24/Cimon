@@ -28,17 +28,29 @@ public enum BitriseScene {
         }
     }
 
+    public struct Dependency {
+        public var fetchUseCase: FetchBuildsFromBitriseProtocol
+        public var store: StoreProtocol
+        public var network: NetworkServiceProtocol
+        public var route: (UIViewController, Bitrise.Transition.Event) -> Void
+
+        public init(
+            fetchUseCase: FetchBuildsFromBitriseProtocol,
+            store: StoreProtocol,
+            network: NetworkServiceProtocol,
+            route: @escaping (UIViewController, Bitrise.Transition.Event) -> Void) {
+            self.fetchUseCase = fetchUseCase
+            self.store = store
+            self.network = network
+            self.route = route
+        }
+    }
+
     public enum Message {
         case load
         case fetch
         case fetchNext
         case token(String?)
-    }
-
-    public enum Transition {
-        public enum Event {
-            case detail(repository: String, build: String)
-        }
     }
 }
 
@@ -49,7 +61,7 @@ public protocol BitriseViewPresenterProtocol {
     func unsubscribe()
     func dispatch(_ message: BitriseScene.Message)
 
-    func route(from: UIViewController, event: BitriseScene.Transition.Event)
+    func route(from: UIViewController, event: Bitrise.Transition.Event)
 }
 
 public class BitriseViewPresenter: BitriseViewPresenterProtocol {
@@ -63,9 +75,9 @@ public class BitriseViewPresenter: BitriseViewPresenterProtocol {
 
     private var closure: ((BitriseScene.State) -> Void)?
 
-    private let dependency: Bitrise.Dependency
+    private let dependency: BitriseScene.Dependency
 
-    public init(dependency: Bitrise.Dependency) {
+    public init(dependency: BitriseScene.Dependency) {
         self.dependency = dependency
     }
 
@@ -130,11 +142,7 @@ public class BitriseViewPresenter: BitriseViewPresenterProtocol {
         }
     }
 
-    public func route(from: UIViewController, event: BitriseScene.Transition.Event) {
-        switch event {
-        case .detail(let repository, let build):
-            let controller = dependency.sceneFactory.bitriseDetail(context: .init(appSlug: repository, buildSlug: build), with: .init(store: dependency.store, network: dependency.network))
-            from.navigationController?.pushViewController(controller, animated: true)
-        }
+    public func route(from: UIViewController, event: Bitrise.Transition.Event) {
+        dependency.route(from, event)
     }
 }

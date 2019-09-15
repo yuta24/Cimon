@@ -13,19 +13,11 @@ import Shared
 import Domain
 import Core
 
-// sourcery: scene
 public class TravisCIDetailViewController: UIViewController, Instantiatable {
     public struct Dependency {
-        public let network: NetworkServiceProtocol
-        public let store: StoreProtocol
         public let presenter: TravisCIDetailViewPresenterProtocol
 
-        public init(
-            network: NetworkServiceProtocol,
-            store: StoreProtocol,
-            presenter: TravisCIDetailViewPresenterProtocol) {
-            self.network = network
-            self.store = store
+        public init(presenter: TravisCIDetailViewPresenterProtocol) {
             self.presenter = presenter
         }
     }

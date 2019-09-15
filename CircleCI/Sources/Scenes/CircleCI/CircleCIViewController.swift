@@ -13,7 +13,6 @@ import Shared
 import Domain
 import Core
 
-// sourcery: scene
 public class CircleCIViewController: UIViewController, Instantiatable {
     public struct Dependency {
         public let presenter: CircleCIViewPresenterProtocol
