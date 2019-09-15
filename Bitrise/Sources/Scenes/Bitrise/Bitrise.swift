@@ -134,7 +134,6 @@ public class BitriseViewPresenter: BitriseViewPresenterProtocol {
         switch event {
         case .detail(let repository, let build):
             let controller = dependency.sceneFactory.bitriseDetail(context: .init(appSlug: repository, buildSlug: build), with: .init(store: dependency.store, network: dependency.network))
-//                Scenes.bitriseDetail.execute(.init(network: self.dependency.network, store: self.dependency.store, presenter: presenter))
             from.navigationController?.pushViewController(controller, animated: true)
         }
     }

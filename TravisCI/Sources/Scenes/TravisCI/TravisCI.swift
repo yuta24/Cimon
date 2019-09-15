@@ -12,8 +12,8 @@ import Shared
 import Domain
 import Core
 
-enum TravisCIScene {
-    struct State {
+public enum TravisCIScene {
+    public struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, builds: [], offset: 0)
         }
@@ -28,27 +28,21 @@ enum TravisCIScene {
         }
     }
 
-    enum Message {
+    public enum Message {
         case load
         case fetch
         case fetchNext
         case token(String?)
     }
 
-    struct Dependency {
-        var fetchUseCase: FetchBuildsFromTravisCIProtocol
-        var store: StoreProtocol
-        var network: NetworkServiceProtocol
-    }
-
-    enum Transition {
-        enum Event {
+    public enum Transition {
+        public enum Event {
             case detail(buildId: Int)
         }
     }
 }
 
-protocol TravisCIViewPresenterProtocol {
+public protocol TravisCIViewPresenterProtocol {
     var state: TravisCIScene.State { get }
 
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void)
@@ -58,8 +52,8 @@ protocol TravisCIViewPresenterProtocol {
     func route(from: UIViewController, event: TravisCIScene.Transition.Event)
 }
 
-class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
-    private(set) var state: TravisCIScene.State = .initial {
+public class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
+    public private(set) var state: TravisCIScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -69,22 +63,22 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
 
     private var closure: ((TravisCIScene.State) -> Void)?
 
-    private let dependency: TravisCIScene.Dependency
+    private let dependency: TravisCI.Dependency
 
-    init(dependency: TravisCIScene.Dependency) {
+    public init(dependency: TravisCI.Dependency) {
         self.dependency = dependency
     }
 
-    func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void) {
+    public func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
 
-    func unsubscribe() {
+    public func unsubscribe() {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCIScene.Message) {
+    public func dispatch(_ message: TravisCIScene.Message) {
         switch message {
         case .load:
             dependency.store.value(.travisCIToken, { [weak self] (value) in
@@ -132,22 +126,23 @@ class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
         }
     }
 
-    func route(from: UIViewController, event: TravisCIScene.Transition.Event) {
+    public func route(from: UIViewController, event: TravisCIScene.Transition.Event) {
         switch event {
         case .detail(let buildId):
-            let presenter = TravisCIDetailViewPresenter(
-                .init(buildId: buildId),
-                dependency: .init(
-                    interactor: TravisCIDetailInteractor(
-                        fetchBuildTravisCI: FetchBuildFromTravisCI(network: dependency.network),
-                        fetchJobsTravisCI: FetchJobsFromTravisCI(network: dependency.network)),
-                    store: dependency.store,
-                    network: dependency.network))
-            let controller = Scenes.travisCIDetail.execute(
-                .init(
-                    network: dependency.network,
-                    store: dependency.store,
-                    presenter: presenter))
+            let controller = dependency.sceneFactory.travisCIDetail(context: .init(buildId: buildId), with: .init(interactor: TravisCIDetailInteractor(fetchBuildTravisCI: FetchBuildFromTravisCI(network: dependency.network), fetchJobsTravisCI: FetchJobsFromTravisCI(network: dependency.network)), store: dependency.store, network: dependency.network))
+//            let presenter = TravisCIDetailViewPresenter(
+//                .init(buildId: buildId),
+//                dependency: .init(
+//                    interactor: TravisCIDetailInteractor(
+//                        fetchBuildTravisCI: FetchBuildFromTravisCI(network: dependency.network),
+//                        fetchJobsTravisCI: FetchJobsFromTravisCI(network: dependency.network)),
+//                    store: dependency.store,
+//                    network: dependency.network))
+//            let controller = Scenes.travisCIDetail.execute(
+//                .init(
+//                    network: dependency.network,
+//                    store: dependency.store,
+//                    presenter: presenter))
             from.navigationController?.pushViewController(controller, animated: true)
         }
     }

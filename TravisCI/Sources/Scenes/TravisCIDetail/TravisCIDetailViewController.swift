@@ -14,11 +14,20 @@ import Domain
 import Core
 
 // sourcery: scene
-class TravisCIDetailViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        let network: NetworkServiceProtocol
-        let store: StoreProtocol
-        let presenter: TravisCIDetailViewPresenterProtocol
+public class TravisCIDetailViewController: UIViewController, Instantiatable {
+    public struct Dependency {
+        public let network: NetworkServiceProtocol
+        public let store: StoreProtocol
+        public let presenter: TravisCIDetailViewPresenterProtocol
+
+        public init(
+            network: NetworkServiceProtocol,
+            store: StoreProtocol,
+            presenter: TravisCIDetailViewPresenterProtocol) {
+            self.network = network
+            self.store = store
+            self.presenter = presenter
+        }
     }
 
     enum SectionKind: Int {
@@ -70,11 +79,11 @@ class TravisCIDetailViewController: UIViewController, Instantiatable {
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         dependency.presenter.dispatch(.fetch)
@@ -82,13 +91,13 @@ class TravisCIDetailViewController: UIViewController, Instantiatable {
         dependency.presenter.subscribe(configure(_:))
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         dependency.presenter.unsubscribe()
     }
 
-    func inject(dependency: TravisCIDetailViewController.Dependency) {
+    public func inject(dependency: TravisCIDetailViewController.Dependency) {
         self.dependency = dependency
     }
 
@@ -113,7 +122,7 @@ class TravisCIDetailViewController: UIViewController, Instantiatable {
 }
 
 extension TravisCIDetailViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

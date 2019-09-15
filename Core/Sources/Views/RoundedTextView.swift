@@ -1,17 +1,17 @@
 //
-//  RoundedImageView.swift
+//  RoundedTextView.swift
 //  App
 //
-//  Created by Yu Tawata on 2019/07/25.
+//  Created by Yu Tawata on 2019/08/11.
 //
 
 import Foundation
 import UIKit
 
 @IBDesignable
-class RoundedImageView: UIImageView {
+open class RoundedTextView: UITextView {
     @IBInspectable
-    var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -22,7 +22,7 @@ class RoundedImageView: UIImageView {
     }
 
     @IBInspectable
-    var borderColor: UIColor? {
+    public var borderColor: UIColor? {
         get {
             return layer.borderColor.flatMap(UIColor.init)
         }
@@ -33,7 +33,7 @@ class RoundedImageView: UIImageView {
     }
 
     @IBInspectable
-    var borderWidth: CGFloat {
+    public var borderWidth: CGFloat {
         get {
             return layer.borderWidth
         }

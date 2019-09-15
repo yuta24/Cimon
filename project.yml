@@ -71,15 +71,15 @@ targets:
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
         script: "swiftgen config run --config Core/swiftgen.yml"
-  Bitrise:
+  TravisCI:
     type: framework
     platform: iOS
     sources:
-      - path: Bitrise
+      - path: TravisCI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
     dependencies:
-      - target: BitriseAPI
+      - target: TravisCIAPI
       - target: Shared
       - target: Domain
       - target: Core
@@ -92,6 +92,18 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
     dependencies:
       - target: CircleCIAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
+  Bitrise:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Bitrise
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+    dependencies:
+      - target: BitriseAPI
       - target: Shared
       - target: Domain
       - target: Core
@@ -109,8 +121,9 @@ targets:
       - target: Shared
       - target: Core
       - target: Domain
-      - target: Bitrise
+      - target: TravisCI
       - target: CircleCI
+      - target: Bitrise
       - carthage: APIKit
       - carthage: Nuke
       - carthage: Pipeline
@@ -156,8 +169,9 @@ targets:
       - target: Shared
       - target: Domain
       - target: Core
-      - target: Bitrise
+      - target: TravisCI
       - target: CircleCI
+      - target: Bitrise
       - target: App
       - carthage: APIKit
       - carthage: Nuke

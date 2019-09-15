@@ -14,9 +14,13 @@ import Domain
 import Core
 
 // sourcery: scene
-class TravisCIViewController: UIViewController, Instantiatable {
-    struct Dependency {
-        var presenter: TravisCIViewPresenterProtocol
+public class TravisCIViewController: UIViewController, Instantiatable {
+    public struct Dependency {
+        public let presenter: TravisCIViewPresenterProtocol
+
+        public init(presenter: TravisCIViewPresenterProtocol) {
+            self.presenter = presenter
+        }
     }
 
     enum SectionKind: Int {
@@ -76,7 +80,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
     private var dependency: Dependency!
     private var observations = [NSKeyValueObservation]()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         apply(refreshControl) { (control) in
@@ -100,7 +104,7 @@ class TravisCIViewController: UIViewController, Instantiatable {
         })
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         dependency.presenter.dispatch(.load)
@@ -109,13 +113,13 @@ class TravisCIViewController: UIViewController, Instantiatable {
         dependency.presenter.subscribe(configure(_:))
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         dependency.presenter.unsubscribe()
     }
 
-    func inject(dependency: TravisCIViewController.Dependency) {
+    public func inject(dependency: TravisCIViewController.Dependency) {
         self.dependency = dependency
     }
 
@@ -152,10 +156,10 @@ class TravisCIViewController: UIViewController, Instantiatable {
 }
 
 extension TravisCIViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         defer {
             collectionView.deselectItem(at: indexPath, animated: true)
         }

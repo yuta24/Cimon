@@ -22,14 +22,9 @@ public class App {
             |> { Scenes.main.execute($0) }
 
         let pages: [(CI, UIViewController)] = {
-            let travisCIController = Scenes.travisCI.execute(
-                .init(presenter:
-                    TravisCIViewPresenter(
-                        dependency: .init(
-                            fetchUseCase: FetchBuildsFromTravisCI(
-                                network: networks[.travisci]!),
-                            store: store,
-                            network: networks[.travisci]!))))
+            let travisCIController = sceneFactory.travisCI(
+                context: .none,
+                with: .init(fetchUseCase: FetchBuildsFromTravisCI(network: networks[.travisci]!), store: store, network: networks[.travisci]!, sceneFactory: sceneFactory))
 
             let circleCIController = sceneFactory.circleCI(
                 context: .none,

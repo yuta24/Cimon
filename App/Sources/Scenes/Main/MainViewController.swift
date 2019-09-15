@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 import Shared
 import Domain
-import Bitrise
+import TravisCI
 import CircleCI
+import Bitrise
 import Core
 
 // sourcery: scene

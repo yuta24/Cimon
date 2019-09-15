@@ -12,8 +12,8 @@ import Shared
 import Domain
 import Core
 
-enum TravisCIDetailScene {
-    struct State {
+public enum TravisCIDetailScene {
+    public struct State {
         static var initial: State {
             return .init(isLoading: false, token: .none, detail: .none)
         }
@@ -27,23 +27,17 @@ enum TravisCIDetailScene {
         }
     }
 
-    enum Message {
+    public enum Message {
         case fetch
     }
 
-    struct Dependency {
-        var interactor: TravisCIDetailInteractorProtocol
-        var store: StoreProtocol
-        var network: NetworkServiceProtocol
-    }
-
-    enum Transition {
-        enum Event {
+    public enum Transition {
+        public enum Event {
         }
     }
 }
 
-protocol TravisCIDetailViewPresenterProtocol {
+public protocol TravisCIDetailViewPresenterProtocol {
     var state: TravisCIDetailScene.State { get }
 
     func subscribe(_ closure: @escaping (TravisCIDetailScene.State) -> Void)
@@ -53,12 +47,16 @@ protocol TravisCIDetailViewPresenterProtocol {
     func route(from: UIViewController, event: TravisCIDetailScene.Transition.Event)
 }
 
-class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
-    struct Context {
-        var buildId: Int
+public class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
+    public struct Context {
+        public var buildId: Int
+
+        public init(buildId: Int) {
+            self.buildId = buildId
+        }
     }
 
-    private(set) var state: TravisCIDetailScene.State = .initial {
+    public private(set) var state: TravisCIDetailScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
                 self.closure?(self.state)
@@ -69,23 +67,23 @@ class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
     private var closure: ((TravisCIDetailScene.State) -> Void)?
 
     private let context: Context
-    private let dependency: TravisCIDetailScene.Dependency
+    private let dependency: TravisCIDetail.Dependency
 
-    init(_ context: Context, dependency: TravisCIDetailScene.Dependency) {
+    public init(_ context: Context, dependency: TravisCIDetail.Dependency) {
         self.context = context
         self.dependency = dependency
     }
 
-    func subscribe(_ closure: @escaping (TravisCIDetailScene.State) -> Void) {
+    public func subscribe(_ closure: @escaping (TravisCIDetailScene.State) -> Void) {
         self.closure = closure
         closure(state)
     }
 
-    func unsubscribe() {
+    public func unsubscribe() {
         self.closure = nil
     }
 
-    func dispatch(_ message: TravisCIDetailScene.Message) {
+    public func dispatch(_ message: TravisCIDetailScene.Message) {
         switch message {
         case .fetch:
             guard !state.isLoading else {
@@ -105,6 +103,6 @@ class TravisCIDetailViewPresenter: TravisCIDetailViewPresenterProtocol {
         }
     }
 
-    func route(from: UIViewController, event: TravisCIDetailScene.Transition.Event) {
+    public func route(from: UIViewController, event: TravisCIDetailScene.Transition.Event) {
     }
 }

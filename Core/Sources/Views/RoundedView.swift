@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 open class RoundedView: UIView {
     @IBInspectable
-    var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -22,7 +22,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var borderColor: UIColor? {
+    public var borderColor: UIColor? {
         get {
             return layer.borderColor.flatMap(UIColor.init)
         }
@@ -33,7 +33,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var borderWidth: CGFloat {
+    public var borderWidth: CGFloat {
         get {
             return layer.borderWidth
         }
@@ -44,7 +44,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var shadowColor: UIColor? {
+    public var shadowColor: UIColor? {
         get {
             return layer.shadowColor.flatMap(UIColor.init)
         }
@@ -54,7 +54,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var shadowOpacity: Float {
+    public var shadowOpacity: Float {
         get {
             return layer.shadowOpacity
         }
@@ -64,7 +64,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var shadowOffset: CGSize {
+    public var shadowOffset: CGSize {
         get {
             return layer.shadowOffset
         }
@@ -74,7 +74,7 @@ open class RoundedView: UIView {
     }
 
     @IBInspectable
-    var shadowRadius: CGFloat {
+    public var shadowRadius: CGFloat {
         get {
             return layer.shadowRadius
         }

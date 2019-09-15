@@ -1,17 +1,17 @@
 //
-//  RoundedButton.swift
+//  RoundedImageView.swift
 //  App
 //
-//  Created by Yu Tawata on 2019/05/04.
+//  Created by Yu Tawata on 2019/07/25.
 //
 
 import Foundation
 import UIKit
 
 @IBDesignable
-class RoundedButton: UIButton {
+open class RoundedImageView: UIImageView {
     @IBInspectable
-    var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -22,7 +22,7 @@ class RoundedButton: UIButton {
     }
 
     @IBInspectable
-    var borderColor: UIColor? {
+    public var borderColor: UIColor? {
         get {
             return layer.borderColor.flatMap(UIColor.init)
         }
@@ -33,7 +33,7 @@ class RoundedButton: UIButton {
     }
 
     @IBInspectable
-    var borderWidth: CGFloat {
+    public var borderWidth: CGFloat {
         get {
             return layer.borderWidth
         }

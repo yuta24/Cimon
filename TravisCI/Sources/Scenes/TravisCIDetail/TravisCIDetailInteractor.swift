@@ -11,10 +11,7 @@ import ReactiveSwift
 import TravisCIAPI
 import Shared
 import Domain
-
-protocol TravisCIDetailInteractorProtocol {
-    func fetchDetail(buildId: Int) -> SignalProducer<(Standard.Build, [Standard.Job]), SessionTaskError>
-}
+import Core
 
 class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
     private let fetchBuildTravisCI: FetchBuildFromTravisCIProtocol
