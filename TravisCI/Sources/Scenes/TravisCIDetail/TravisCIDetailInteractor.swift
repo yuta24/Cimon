@@ -13,6 +13,10 @@ import Shared
 import Domain
 import Core
 
+public protocol TravisCIDetailInteractorProtocol {
+    func fetchDetail(buildId: Int) -> SignalProducer<(Standard.Build, [Standard.Job]), SessionTaskError>
+}
+
 public class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
     private let fetchBuildTravisCI: FetchBuildFromTravisCIProtocol
     private let fetchJobsTravisCI: FetchJobsFromTravisCIProtocol

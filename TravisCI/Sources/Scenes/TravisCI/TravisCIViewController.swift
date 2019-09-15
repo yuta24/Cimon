@@ -16,9 +16,13 @@ import Core
 public class TravisCIViewController: UIViewController, Instantiatable {
     public struct Dependency {
         public let presenter: TravisCIViewPresenterProtocol
+        public let route: (UIViewController, TravisCI.Transition.Event) -> Void
 
-        public init(presenter: TravisCIViewPresenterProtocol) {
+        public init(
+            presenter: TravisCIViewPresenterProtocol,
+            route: @escaping (UIViewController, TravisCI.Transition.Event) -> Void) {
             self.presenter = presenter
+            self.route = route
         }
     }
 
@@ -164,7 +168,7 @@ extension TravisCIViewController: UICollectionViewDelegate {
         }
 
         if let item = dataSource.itemIdentifier(for: indexPath) {
-            dependency.presenter.route(from: self, event: .detail(buildId: item.id))
+            dependency.route(self, .detail(buildId: item.id))
         }
     }
 }

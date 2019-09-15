@@ -30,15 +30,12 @@ public enum CircleCIScene {
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromCircleCIProtocol
         public var store: StoreProtocol
-        public var route: (UIViewController, CircleCI.Transition.Event) -> Void
 
         public init(
             fetchUseCase: FetchBuildsFromCircleCIProtocol,
-            store: StoreProtocol,
-            route: @escaping (UIViewController, CircleCI.Transition.Event) -> Void) {
+            store: StoreProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
-            self.route = route
         }
     }
 
@@ -56,8 +53,6 @@ public protocol CircleCIViewPresenterProtocol {
     func subscribe(_ closure: @escaping (CircleCIScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: CircleCIScene.Message)
-
-    func route(from: UIViewController, event: CircleCI.Transition.Event)
 }
 
 public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
@@ -132,9 +127,5 @@ public class CircleCIViewPresenter: CircleCIViewPresenterProtocol {
             dependency.store.set(token, for: .circleCIToken)
             state.token = token
         }
-    }
-
-    public func route(from: UIViewController, event: CircleCI.Transition.Event) {
-        dependency.route(from, event)
     }
 }

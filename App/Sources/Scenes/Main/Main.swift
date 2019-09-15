@@ -42,9 +42,6 @@ enum MainScene {
     }
 
     struct Dependency {
-        var store: StoreProtocol
-        var networks: [CI: NetworkServiceProtocol]
-        var route: (UIViewController, Main.Transition.Event) -> Void
     }
 }
 
@@ -54,8 +51,6 @@ protocol MainViewPresenterProtocol {
     func subscribe(_ closure: @escaping (MainScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: MainScene.Message)
-
-    func route(from: UIViewController, event: Main.Transition.Event)
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
@@ -92,9 +87,5 @@ class MainViewPresenter: MainViewPresenterProtocol {
         case .update(let ci):
             state.selected = ci
         }
-    }
-
-    func route(from: UIViewController, event: Main.Transition.Event) {
-        dependency.route(from, event)
     }
 }

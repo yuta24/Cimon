@@ -24,19 +24,20 @@ final class SceneFactory: SceneFactoryProtocol {
     func main(context: Main.Context) -> UIViewController {
         let presenter = MainViewPresenter(
             .init(selected: context.selected),
-            dependency: .init(
-                store: environment().store,
-                networks: environment().networks,
-                route: { [unowned self] from, event in
-                    switch event {
-                    case .settings:
-                        let controller = self.settings(context: .none)
-                        let navigation = UINavigationController(rootViewController: controller, hasClose: true)
-                        from.present(navigation, animated: true, completion: .none)
-                    }
-            }))
+            dependency: .init())
 
-        let controller = Storyboard<MainViewController>(name: "Main").instantiate(dependency: .init(presenter: presenter))
+        let controller = Storyboard<MainViewController>(name: "Main")
+            .instantiate(
+                dependency: .init(
+                    presenter: presenter,
+                    route: { [unowned self] from, event in
+                        switch event {
+                        case .settings:
+                            let controller = self.settings(context: .none)
+                            let navigation = UINavigationController(rootViewController: controller, hasClose: true)
+                            from.present(navigation, animated: true, completion: .none)
+                    }
+                }))
         controller.pages = context.pages
 
         return controller
@@ -46,17 +47,19 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = TravisCIViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromTravisCI(network: environment().networks[.travisci]!),
-                store: environment().store,
-                network: environment().networks[.travisci]!,
-                route: { [unowned self] from, event in
+                store: environment().store))
+
+        let controller = Storyboard<TravisCIViewController>(name: "TravisCI")
+            .instantiate(
+                dependency: .init(
+                    presenter: presenter,
+                    route: { [unowned self] from, event in
                     switch event {
                     case .detail(let buildId):
                         let controller = self.travisCIDetail(context: .init(buildId: buildId))
                         from.navigationController?.pushViewController(controller, animated: true)
                     }
                 }))
-
-        let controller = Storyboard<TravisCIViewController>(name: "TravisCI").instantiate(dependency: .init(presenter: presenter))
 
         return controller
     }
@@ -67,9 +70,7 @@ final class SceneFactory: SceneFactoryProtocol {
             dependency: .init(
                 interactor: TravisCIDetailInteractor(
                     fetchBuildTravisCI: FetchBuildFromTravisCI(network: environment().networks[.travisci]!),
-                    fetchJobsTravisCI: FetchJobsFromTravisCI(network: environment().networks[.travisci]!)),
-                store: environment().store,
-                network: environment().networks[.travisci]!))
+                    fetchJobsTravisCI: FetchJobsFromTravisCI(network: environment().networks[.travisci]!))))
 
         let controller = Storyboard<TravisCIDetailViewController>(name: "TravisCIDetail").instantiate(dependency: .init(presenter: presenter))
 
@@ -80,10 +81,13 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = CircleCIViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromCircleCI(network: environment().networks[.circleci]!),
-                store: environment().store,
-                route: { _, _ in }))
+                store: environment().store))
 
-        let controller = Storyboard<CircleCIViewController>(name: "CircleCI").instantiate(dependency: .init(presenter: presenter))
+        let controller = Storyboard<CircleCIViewController>(name: "CircleCI")
+            .instantiate(
+                dependency: .init(
+                    presenter: presenter,
+                    route: { _, _ in }))
 
         return controller
     }
@@ -92,17 +96,19 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = BitriseViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromBitrise(network: environment().networks[.bitrise]!),
-                store: environment().store,
-                network: environment().networks[.bitrise]!,
-                route: { [unowned self] from, event in
-                    switch event {
-                    case .detail(let repository, let build):
-                        let controller = self.bitriseDetail(context: .init(appSlug: repository, buildSlug: build))
-                        from.navigationController?.pushViewController(controller, animated: true)
-                    }
-                }))
+                store: environment().store))
 
-        let controller = Storyboard<BitriseViewController>(name: "Bitrise").instantiate(dependency: .init(presenter: presenter))
+        let controller = Storyboard<BitriseViewController>(name: "Bitrise")
+            .instantiate(
+                dependency: .init(
+                    presenter: presenter,
+                    route: { [unowned self] from, event in
+                        switch event {
+                        case .detail(let repository, let build):
+                            let controller = self.bitriseDetail(context: .init(appSlug: repository, buildSlug: build))
+                            from.navigationController?.pushViewController(controller, animated: true)
+                        }
+                }))
 
         return controller
     }
@@ -121,15 +127,19 @@ final class SceneFactory: SceneFactoryProtocol {
 
     func settings(context: Settings.Context) -> UIViewController {
         let presenter = SettingsViewPresenter(
-            dependency: .init(store: environment().store, networks: environment().networks, route: { [unowned self] from, event in
-                switch event {
-                case .detail(let ci):
-                    let controller = self.ciSetting(context: .init(ci: ci))
-                    from.navigationController?.pushViewController(controller, animated: true)
-                }
-            }))
+            dependency: .init(store: environment().store, networks: environment().networks))
 
-        let controller = Storyboard<SettingsViewController>(name: "Settings").instantiate(dependency: .init(presenter: presenter))
+        let controller = Storyboard<SettingsViewController>(name: "Settings")
+            .instantiate(
+                dependency: .init(
+                    presenter: presenter,
+                    route: { [unowned self] from, event in
+                        switch event {
+                        case .detail(let ci):
+                            let controller = self.ciSetting(context: .init(ci: ci))
+                            from.navigationController?.pushViewController(controller, animated: true)
+                        }
+                }))
 
         return controller
     }

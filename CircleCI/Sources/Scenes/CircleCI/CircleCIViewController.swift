@@ -16,9 +16,13 @@ import Core
 public class CircleCIViewController: UIViewController, Instantiatable {
     public struct Dependency {
         public let presenter: CircleCIViewPresenterProtocol
+        public let route: (UIViewController, CircleCI.Transition.Event) -> Void
 
-        public init(presenter: CircleCIViewPresenterProtocol) {
+        public init(
+            presenter: CircleCIViewPresenterProtocol,
+            route: @escaping (UIViewController, CircleCI.Transition.Event) -> Void) {
             self.presenter = presenter
+            self.route = route
         }
     }
 

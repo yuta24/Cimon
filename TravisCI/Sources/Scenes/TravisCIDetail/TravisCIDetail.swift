@@ -29,16 +29,9 @@ public enum TravisCIDetailScene {
 
     public struct Dependency {
         public var interactor: TravisCIDetailInteractorProtocol
-        public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
 
-        public init(
-            interactor: TravisCIDetailInteractorProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol) {
+        public init(interactor: TravisCIDetailInteractorProtocol) {
             self.interactor = interactor
-            self.store = store
-            self.network = network
         }
     }
 

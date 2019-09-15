@@ -33,7 +33,6 @@ enum SettingsScene {
     struct Dependency {
         var store: StoreProtocol
         var networks: [CI: NetworkServiceProtocol]
-        var route: (UIViewController, Settings.Transition.Event) -> Void
     }
 }
 
@@ -43,8 +42,6 @@ protocol SettingsViewPresenterProtocol {
     func subscribe(_ closure: @escaping (SettingsScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: SettingsScene.Message)
-
-    func route(from: UIViewController, event: Settings.Transition.Event)
 }
 
 class SettingsViewPresenter: SettingsViewPresenterProtocol {
@@ -80,9 +77,5 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
             state.circleCIToken = dependency.store.value(.circleCIToken)
             state.bitriseToken = dependency.store.value(.bitriseToken)
         }
-    }
-
-    func route(from: UIViewController, event: Settings.Transition.Event) {
-        dependency.route(from, event)
     }
 }

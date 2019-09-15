@@ -31,18 +31,12 @@ public enum BitriseScene {
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromBitriseProtocol
         public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
-        public var route: (UIViewController, Bitrise.Transition.Event) -> Void
 
         public init(
             fetchUseCase: FetchBuildsFromBitriseProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol,
-            route: @escaping (UIViewController, Bitrise.Transition.Event) -> Void) {
+            store: StoreProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
-            self.network = network
-            self.route = route
         }
     }
 
@@ -60,8 +54,6 @@ public protocol BitriseViewPresenterProtocol {
     func subscribe(_ closure: @escaping (BitriseScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: BitriseScene.Message)
-
-    func route(from: UIViewController, event: Bitrise.Transition.Event)
 }
 
 public class BitriseViewPresenter: BitriseViewPresenterProtocol {
@@ -140,9 +132,5 @@ public class BitriseViewPresenter: BitriseViewPresenterProtocol {
             dependency.store.set(token, for: .bitriseToken)
             state.token = token
         }
-    }
-
-    public func route(from: UIViewController, event: Bitrise.Transition.Event) {
-        dependency.route(from, event)
     }
 }

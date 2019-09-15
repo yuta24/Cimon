@@ -31,18 +31,12 @@ public enum TravisCIScene {
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromTravisCIProtocol
         public var store: StoreProtocol
-        public var network: NetworkServiceProtocol
-        public var route: (UIViewController, TravisCI.Transition.Event) -> Void
 
         public init(
             fetchUseCase: FetchBuildsFromTravisCIProtocol,
-            store: StoreProtocol,
-            network: NetworkServiceProtocol,
-            route: @escaping (UIViewController, TravisCI.Transition.Event) -> Void) {
+            store: StoreProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
-            self.network = network
-            self.route = route
         }
     }
 
@@ -60,8 +54,6 @@ public protocol TravisCIViewPresenterProtocol {
     func subscribe(_ closure: @escaping (TravisCIScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: TravisCIScene.Message)
-
-    func route(from: UIViewController, event: TravisCI.Transition.Event)
 }
 
 public class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
@@ -136,9 +128,5 @@ public class TravisCIViewPresenter: TravisCIViewPresenterProtocol {
             dependency.store.set(token, for: .travisCIToken)
             state.token = token
         }
-    }
-
-    public func route(from: UIViewController, event: TravisCI.Transition.Event) {
-        dependency.route(from, event)
     }
 }

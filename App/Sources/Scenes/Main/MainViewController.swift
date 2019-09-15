@@ -37,7 +37,8 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        var presenter: MainViewPresenterProtocol
+        let presenter: MainViewPresenterProtocol
+        let route: (UIViewController, Main.Transition.Event) -> Void
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -135,7 +136,7 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        dependency.presenter.route(from: self, event: .settings)
+        dependency.route(self, .settings)
     }
 }
 

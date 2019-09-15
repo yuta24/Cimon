@@ -16,9 +16,13 @@ import Core
 public class BitriseViewController: UIViewController, Instantiatable {
     public struct Dependency {
         public let presenter: BitriseViewPresenterProtocol
+        public let route: (UIViewController, Bitrise.Transition.Event) -> Void
 
-        public init(presenter: BitriseViewPresenterProtocol) {
+        public init(
+            presenter: BitriseViewPresenterProtocol,
+            route: @escaping (UIViewController, Bitrise.Transition.Event) -> Void) {
             self.presenter = presenter
+            self.route = route
         }
     }
 
@@ -163,7 +167,7 @@ extension BitriseViewController: UICollectionViewDelegate {
         }
 
         if let item = dataSource.itemIdentifier(for: indexPath), let repository = item.repository?.slug, let build = item.slug {
-            dependency.presenter.route(from: self, event: .detail(repository: repository, build: build))
+            dependency.route(self, .detail(repository: repository, build: build))
         }
     }
 }
