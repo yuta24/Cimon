@@ -45,10 +45,10 @@ extension BitriseBuildView: Configurable {
         statusLabel.text = context.statusText
         buildNumberLabel.text = context.buildNumber
             .flatMap(String.init)
-            .flatMap({
-                "# \($0)"
-            })
-        slugLabel.text = context.slug
+            .flatMap({ "# \($0)" })
+        zip(context.repository?.repoOwner, context.repository?.repoSlug, {
+            slugLabel.text = "\($0)/\($1)"
+        })
         branchLabel.text = context.branch
         descriptionLabel.text = context.commitMessage
         timestampLabel.text = context.triggeredAt
