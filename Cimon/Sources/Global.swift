@@ -8,9 +8,12 @@
 import Foundation
 import UIKit
 import Shared
+import Core
 import App
 
 func configure() {
+    analytics.configure([FirebaseAnalyticsServiceProvider()])
+
     UIButton.appearance().isExclusiveTouch = true
 
     UINavigationBar.appearance().tintColor = .white

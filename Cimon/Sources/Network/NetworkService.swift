@@ -10,6 +10,7 @@ import App
 import APIKit
 import ReactiveSwift
 import Domain
+import Core
 
 public class NetworkService: NetworkServiceProtocol {
     let session: Session
@@ -22,7 +23,7 @@ public class NetworkService: NetworkServiceProtocol {
 
     public func response<R>(_ request: R) -> SignalProducer<R.Response, SessionTaskError> where R: Request, R.Response: Decodable {
         let wrap = NetworkServiceRequest(request, plugins: plugins)
-        return SignalProducer<R.Response, SessionTaskError>.init({ (observer, lifetime) in
+        return SignalProducer<R.Response, SessionTaskError>({ (observer, lifetime) in
             let task = self.session.send(wrap, callbackQueue: .dispatchQueue(.global(qos: .background)), handler: { (result) in
                 switch result {
                 case .success(let response):

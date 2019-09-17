@@ -9,3 +9,4 @@ import Foundation
 import Shared
 
 public let logger = LightLogger.self
+public let analytics = Analytics<AnalyticsEvent>()
