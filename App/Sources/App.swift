@@ -13,16 +13,19 @@ import Domain
 import Core
 
 public class App {
-    public let window: UIWindow
+    public private(set) var window: UIWindow!
     public let sceneFactory: SceneFactoryProtocol
 
-    public init(window: UIWindow, environment: Environment) {
+    public init(environment: Environment) {
         let sceneFactory = SceneFactory(environment: { () -> Environment in
             return environment
         })
 
-        self.window = window
         self.sceneFactory = sceneFactory
+    }
+
+    public func configure(window: UIWindow) {
+        self.window = window
 
         let mainViewController = sceneFactory.main(
             context: .init(
@@ -44,22 +47,21 @@ public class App {
         })
     }
 
-    public func didFinishLaunching(withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        return true
+    public func willConnect(to session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     }
 
-    public func willResignActive() {
-    }
-
-    public func didEnterBackground() {
-    }
-
-    public func willEnterForeground() {
+    public func didDisconnect() {
     }
 
     public func didBecomeActive() {
     }
 
-    public func willTerminate() {
+    public func willResignActive() {
+    }
+
+    public func willEnterForeground() {
+    }
+
+    public func didEnterBackground() {
     }
 }

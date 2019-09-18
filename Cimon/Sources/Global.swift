@@ -33,9 +33,7 @@ let environment = Environment(
     reporter: reporter)
 
 let app = process(
-    App(
-        window: UIWindow(frame: UIScreen.main.bounds),
-        environment: environment),
+    App(environment: environment),
     pre: {
         configure()
     })
