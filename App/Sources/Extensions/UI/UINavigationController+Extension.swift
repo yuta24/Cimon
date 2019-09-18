@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Core
 
 extension UINavigationController {
     convenience init(rootViewController: UIViewController, hasClose: Bool) {

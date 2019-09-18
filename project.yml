@@ -56,13 +56,62 @@ targets:
     dependencies:
       - target: Domain
       - target: Cimon
+  Core:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Core
+      - path: Core/Sources/Generated/Assets.swift
+        optional: true
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.core"
+    dependencies:
+      - target: Shared
+      - target: Domain
+    preBuildScripts:
+      - name: "[SwiftGen] Run Script"
+        script: "swiftgen config run --config Core/swiftgen.yml"
+  TravisCI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: TravisCI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
+    dependencies:
+      - target: TravisCIAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
+  CircleCI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: CircleCI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
+    dependencies:
+      - target: CircleCIAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
+  Bitrise:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Bitrise
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+    dependencies:
+      - target: BitriseAPI
+      - target: Shared
+      - target: Domain
+      - target: Core
   App:
     type: framework
     platform: iOS
     sources:
       - path: App
-      - path: App/Sources/Generated/Assets.swift
-        optional: true
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.app"
     dependencies:
@@ -70,15 +119,16 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Shared
+      - target: Core
       - target: Domain
+      - target: TravisCI
+      - target: CircleCI
+      - target: Bitrise
       - carthage: APIKit
       - carthage: Nuke
       - carthage: Pipeline
       - carthage: ReactiveSwift
       - carthage: Reachability
-    preBuildScripts:
-      - name: "[SwiftGen] Run Script"
-        script: "swiftgen config run --config App/swiftgen.yml"
     scheme:
       testTargets:
         - AppTests
@@ -118,6 +168,10 @@ targets:
       - target: BitriseAPI
       - target: Shared
       - target: Domain
+      - target: Core
+      - target: TravisCI
+      - target: CircleCI
+      - target: Bitrise
       - target: App
       - carthage: APIKit
       - carthage: Nuke
@@ -153,7 +207,7 @@ targets:
     sources:
       - path: TravisCIAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
     dependencies:
       - carthage: APIKit
   CircleCIAPI:
@@ -162,7 +216,7 @@ targets:
     sources:
       - path: CircleCIAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
     dependencies:
       - carthage: APIKit
   BitriseAPI:
@@ -171,6 +225,6 @@ targets:
     sources:
       - path: BitriseAPI
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
     dependencies:
       - carthage: APIKit

@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Shared
+import Core
 
 class TabBar: UIView {
     @IBOutlet weak var collectionView: UICollectionView! {

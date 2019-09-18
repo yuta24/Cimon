@@ -11,11 +11,12 @@ import Pipeline
 import BitriseAPI
 import Shared
 import Domain
+import Core
 
-// sourcery: scene
 class SettingsViewController: UIViewController, Instantiatable {
     struct Dependency {
-        var presenter: SettingsViewPresenterProtocol
+        let presenter: SettingsViewPresenterProtocol
+        let route: (UIViewController, Settings.Transition.Event) -> Void
     }
 
     enum SectionKind: Int {
@@ -130,7 +131,7 @@ extension SettingsViewController: UITableViewDelegate {
                     fatalError()
                 }
             }()
-            dependency.presenter.route(from: self, event: .detail(ci))
+            dependency.route(self, .detail(ci))
         case .app:
             break
         }

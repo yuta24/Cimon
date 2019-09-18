@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BitriseBuildView" customModule="Bitrise" customModuleProvider="target">
+            <connections>
+                <outlet property="branchLabel" destination="DNU-jz-RzB" id="whY-RE-1VO"/>
+                <outlet property="buildNumberLabel" destination="EeP-ym-7WQ" id="XEz-Dh-k1L"/>
+                <outlet property="descriptionLabel" destination="ofu-tk-yIO" id="lvX-hF-U8M"/>
+                <outlet property="durationLabel" destination="X06-2W-sd4" id="iDi-D3-1wH"/>
+                <outlet property="slugLabel" destination="3Xn-M4-mJd" id="T8o-7R-Rrb"/>
+                <outlet property="statusColorView" destination="rXx-zh-sXj" id="WDg-pj-8kB"/>
+                <outlet property="statusLabel" destination="Bq6-TZ-ZOD" id="Az2-HJ-1Gt"/>
+                <outlet property="timestampLabel" destination="ClN-qN-XUh" id="eTb-RX-PUe"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="a6t-Zt-XWj">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="240"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rXx-zh-sXj">
+                    <rect key="frame" x="0.0" y="0.0" width="8" height="240"/>
+                    <color key="backgroundColor" name="bitrise_status_progress"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="8" id="nOD-Uf-DNa"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4ro-uz-GZ8">
+                    <rect key="frame" x="16" y="8" width="390" height="224"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="oDZ-tc-4HE">
+                            <rect key="frame" x="0.0" y="0.0" width="390" height="224"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="hDH-UJ-0YY">
+                                    <rect key="frame" x="0.0" y="0.0" width="390" height="22"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bq6-TZ-ZOD">
+                                            <rect key="frame" x="0.0" y="0.0" width="345.5" height="22"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="# 24" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EeP-ym-7WQ">
+                                            <rect key="frame" x="353.5" y="0.0" width="36.5" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="5dG-HL-ZfY"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yuta24/Pipeline" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Xn-M4-mJd">
+                                    <rect key="frame" x="0.0" y="30" width="390" height="19.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="feature/test &gt; master" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DNU-jz-RzB">
+                                    <rect key="frame" x="0.0" y="57.5" width="390" height="19.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Update README" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ofu-tk-yIO">
+                                    <rect key="frame" x="0.0" y="85" width="390" height="109"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="rkA-Wy-aph">
+                                    <rect key="frame" x="0.0" y="202" width="390" height="22"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2019/07/06 00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClN-qN-XUh">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="22"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="24 min" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X06-2W-sd4">
+                                            <rect key="frame" x="351" y="0.0" width="39" height="22"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="22" id="nFK-Ib-TL0"/>
+                                    </constraints>
+                                </stackView>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="oDZ-tc-4HE" secondAttribute="bottom" id="3Px-4m-x3k"/>
+                        <constraint firstItem="oDZ-tc-4HE" firstAttribute="top" secondItem="4ro-uz-GZ8" secondAttribute="top" id="RZy-M7-HQA"/>
+                        <constraint firstAttribute="trailing" secondItem="oDZ-tc-4HE" secondAttribute="trailing" id="TWU-wa-6RJ"/>
+                        <constraint firstItem="oDZ-tc-4HE" firstAttribute="leading" secondItem="4ro-uz-GZ8" secondAttribute="leading" id="gHX-6y-uga"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="rXx-zh-sXj" secondAttribute="bottom" id="09E-I3-eGE"/>
+                <constraint firstItem="4ro-uz-GZ8" firstAttribute="top" secondItem="a6t-Zt-XWj" secondAttribute="top" constant="8" id="4aO-s6-sr2"/>
+                <constraint firstItem="4ro-uz-GZ8" firstAttribute="leading" secondItem="rXx-zh-sXj" secondAttribute="trailing" constant="8" id="7FD-NI-ZhP"/>
+                <constraint firstItem="rXx-zh-sXj" firstAttribute="top" secondItem="a6t-Zt-XWj" secondAttribute="top" id="F0d-WU-Xw9"/>
+                <constraint firstAttribute="bottom" secondItem="4ro-uz-GZ8" secondAttribute="bottom" constant="8" id="JBg-LY-fR2"/>
+                <constraint firstItem="rXx-zh-sXj" firstAttribute="leading" secondItem="a6t-Zt-XWj" secondAttribute="leading" id="KcZ-qC-EW5"/>
+                <constraint firstAttribute="trailing" secondItem="4ro-uz-GZ8" secondAttribute="trailing" constant="8" id="hlx-3r-GGg"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="140.57971014492756" y="-34.151785714285715"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="bitrise_status_progress">
+            <color red="0.40784313725490196" green="0.23921568627450981" blue="0.52941176470588236" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

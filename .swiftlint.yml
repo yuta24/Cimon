@@ -1,5 +1,6 @@
 included:
   - Cimon
+  - Core
   - App
   - Domain
   - Shared

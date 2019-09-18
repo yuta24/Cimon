@@ -8,9 +8,12 @@
 import Foundation
 import UIKit
 import Shared
+import Core
 import App
 
 func configure() {
+    analytics.configure([FirebaseAnalyticsServiceProvider()])
+
     UIButton.appearance().isExclusiveTouch = true
 
     UINavigationBar.appearance().tintColor = .white
@@ -18,19 +21,21 @@ func configure() {
     UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
 }
 
-let logger = LightLogger.self
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
+
+let environment = Environment(
+    store: store,
+    networks: [
+        .travisci: travisCIService,
+        .circleci: circleCIService,
+        .bitrise: bitriseService],
+    reporter: reporter)
 
 let app = process(
     App(
         window: UIWindow(frame: UIScreen.main.bounds),
-        store: store,
-        reporter: reporter,
-        networks: [
-            .travisci: travisCIService,
-            .circleci: circleCIService,
-            .bitrise: bitriseService]),
+        environment: environment),
     pre: {
         configure()
     })

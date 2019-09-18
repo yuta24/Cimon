@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Domain
+import Core
 
 enum SettingsScene {
     struct State {
@@ -33,12 +34,6 @@ enum SettingsScene {
         var store: StoreProtocol
         var networks: [CI: NetworkServiceProtocol]
     }
-
-    enum Transition {
-        enum Event {
-            case detail(CI)
-        }
-    }
 }
 
 protocol SettingsViewPresenterProtocol {
@@ -47,8 +42,6 @@ protocol SettingsViewPresenterProtocol {
     func subscribe(_ closure: @escaping (SettingsScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: SettingsScene.Message)
-
-    func route(from: UIViewController, event: SettingsScene.Transition.Event)
 }
 
 class SettingsViewPresenter: SettingsViewPresenterProtocol {
@@ -83,19 +76,6 @@ class SettingsViewPresenter: SettingsViewPresenterProtocol {
             state.travisCIToken = dependency.store.value(.travisCIToken)
             state.circleCIToken = dependency.store.value(.circleCIToken)
             state.bitriseToken = dependency.store.value(.bitriseToken)
-        }
-    }
-
-    func route(from: UIViewController, event: SettingsScene.Transition.Event) {
-        switch event {
-        case .detail(let ci):
-            let interactor = CISettingInteractor(
-                store: self.dependency.store,
-                fetchMeTravisCI: FetchMeFromTravisCI(network: self.dependency.networks[.travisci]!),
-                fetchMeCircleCI: FetchMeFromCircleCI(network: self.dependency.networks[.circleci]!),
-                fetchMeBitrise: FetchMeFromBitrise(network: self.dependency.networks[.bitrise]!))
-            let controller = Scenes.ciSetting.execute(.init(presenter: CISettingViewPresenter(ci: ci, dependency: .init(interactor: interactor))))
-            from.navigationController?.pushViewController(controller, animated: true)
         }
     }
 }

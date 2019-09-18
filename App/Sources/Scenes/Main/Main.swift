@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Domain
+import Core
 
 enum MainScene {
     struct State {
@@ -41,14 +42,6 @@ enum MainScene {
     }
 
     struct Dependency {
-        var store: StoreProtocol
-        var networks: [CI: NetworkServiceProtocol]
-    }
-
-    enum Transition {
-        enum Event {
-            case settings
-        }
     }
 }
 
@@ -58,11 +51,13 @@ protocol MainViewPresenterProtocol {
     func subscribe(_ closure: @escaping (MainScene.State) -> Void)
     func unsubscribe()
     func dispatch(_ message: MainScene.Message)
-
-    func route(from: UIViewController, event: MainScene.Transition.Event)
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
+    struct Context {
+        var selected: CI
+    }
+
     private(set) var state: MainScene.State {
         didSet {
             closure?(state)
@@ -73,8 +68,8 @@ class MainViewPresenter: MainViewPresenterProtocol {
 
     private let dependency: MainScene.Dependency
 
-    init(ci: CI, dependency: MainScene.Dependency) {
-        self.state = .init(selected: ci)
+    init(_ context: Context, dependency: MainScene.Dependency) {
+        self.state = .init(selected: context.selected)
         self.dependency = dependency
     }
 
@@ -91,15 +86,6 @@ class MainViewPresenter: MainViewPresenterProtocol {
         switch message {
         case .update(let ci):
             state.selected = ci
-        }
-    }
-
-    func route(from: UIViewController, event: MainScene.Transition.Event) {
-        switch event {
-        case .settings:
-            let controller = Scenes.settings.execute(.init(presenter: SettingsViewPresenter(dependency: .init(store: self.dependency.store, networks: self.dependency.networks))))
-            let navigation = UINavigationController(rootViewController: controller, hasClose: true)
-            from.present(navigation, animated: true, completion: .none)
         }
     }
 }

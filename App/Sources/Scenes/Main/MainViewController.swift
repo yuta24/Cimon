@@ -9,15 +9,14 @@ import Foundation
 import UIKit
 import Shared
 import Domain
+import TravisCI
+import CircleCI
+import Bitrise
+import Core
 
-protocol MainPageDelegate: class {
-    func onScrollChanged(_ contentOffset: CGPoint)
-}
-
-// sourcery: scene
 class MainViewController: UIViewController, Instantiatable {
-    enum Translator {
-        static func convert(viewController: UIViewController) -> CI? {
+    enum Transformer {
+        static func transform(viewController: UIViewController) -> CI? {
             switch viewController {
             case is TravisCIViewController:
                 return .travisci
@@ -30,7 +29,7 @@ class MainViewController: UIViewController, Instantiatable {
             }
         }
 
-        static func convert(ci: CI) -> Reader<MainViewController, UIViewController?> {
+        static func transform(ci: CI) -> Reader<MainViewController, UIViewController?> {
             return .init({ (controller) -> UIViewController? in
                 return controller.pages.first(where: { (_ci, _) in _ci == ci })?.1
             })
@@ -38,9 +37,8 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     struct Dependency {
-        var store: StoreProtocol
-        var networks: [CI: NetworkServiceProtocol]
-        var presenter: MainViewPresenterProtocol
+        let presenter: MainViewPresenterProtocol
+        let route: (UIViewController, Main.Transition.Event) -> Void
     }
 
     @IBOutlet weak var contentView: UIView!
@@ -60,41 +58,7 @@ class MainViewController: UIViewController, Instantiatable {
         navigationOrientation: .horizontal,
         options: .none)
 
-    private lazy var pages: [(CI, UIViewController)] = {
-        let travisCIController = Scenes.travisCI.execute(
-            .init(presenter:
-                TravisCIViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromTravisCI(
-                            network: self.dependency.networks[.travisci]!),
-                        store: self.dependency.store,
-                        network: self.dependency.networks[.travisci]!))))
-        travisCIController.delegate = self
-
-        let circleCIController = Scenes.circleCI.execute(
-            .init(presenter:
-                CircleCIViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromCircleCI(
-                            network: self.dependency.networks[.circleci]!),
-                        store: self.dependency.store))))
-        circleCIController.delegate = self
-
-        let bitriseController = Scenes.bitrise.execute(
-            .init(presenter:
-                BitriseViewPresenter(
-                    dependency: .init(
-                        fetchUseCase: FetchBuildsFromBitrise(
-                            network: self.dependency.networks[.bitrise]!),
-                        store: self.dependency.store,
-                        network: self.dependency.networks[.bitrise]!))))
-        bitriseController.delegate = self
-
-        return [
-            (.travisci, travisCIController),
-            (.circleci, circleCIController),
-            (.bitrise, bitriseController)]
-    }()
+    var pages = [(CI, UIViewController)]()
 
     private var dependency: Dependency!
 
@@ -172,25 +136,20 @@ class MainViewController: UIViewController, Instantiatable {
     }
 
     @objc private func onLeftTapped(_ sender: UIBarButtonItem) {
-        dependency.presenter.route(from: self, event: .settings)
-    }
-}
-
-extension MainViewController: MainPageDelegate {
-    func onScrollChanged(_ contentOffset: CGPoint) {
+        dependency.route(self, .settings)
     }
 }
 
 extension MainViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.before
-            .flatMap(Translator.convert)?
+            .flatMap(Transformer.transform)?
             .execute(self)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.after
-            .flatMap(Translator.convert)?
+            .flatMap(Transformer.transform)?
             .execute(self)
     }
 }
@@ -206,7 +165,8 @@ extension MainViewController: UIPageViewControllerDelegate {
         }
 
         pageViewController.viewControllers?.first
-            .flatMap { Translator.convert(viewController: $0) }
-            .flatMap { dependency.presenter.dispatch(.update($0)) }
+            .flatMap(Transformer.transform(viewController:))
+            .flatMap(MainScene.Message.update)
+            .flatMap(dependency.presenter.dispatch)
     }
 }

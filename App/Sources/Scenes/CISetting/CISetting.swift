@@ -8,6 +8,7 @@
 import Foundation
 import Shared
 import Domain
+import Core
 
 enum CISettingScene {
     struct State {
@@ -58,6 +59,10 @@ protocol CISettingViewPresenterProtocol {
 }
 
 class CISettingViewPresenter: CISettingViewPresenterProtocol {
+    struct Context {
+        var ci: CI
+    }
+
     private(set) var state: CISettingScene.State = .initial {
         didSet {
             DispatchQueue.main.async {
@@ -70,8 +75,8 @@ class CISettingViewPresenter: CISettingViewPresenterProtocol {
 
     private let dependency: CISettingScene.Dependency
 
-    init(ci: CI, dependency: CISettingScene.Dependency) {
-        self.state = .init(isLoading: false, ci: ci)
+    init(_ context: Context, dependency: CISettingScene.Dependency) {
+        self.state = .init(isLoading: false, ci: context.ci)
         self.dependency = dependency
     }
 
