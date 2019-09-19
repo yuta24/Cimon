@@ -7,20 +7,24 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 import Pipeline
 import Shared
 import Domain
 import Core
 
 public class App {
+    @ObservedObject public var store: Store<AppState, AppAction>
     public private(set) var window: UIWindow!
-    public let sceneFactory: SceneFactoryProtocol
 
-    public init(environment: Environment) {
+    let sceneFactory: SceneFactoryProtocol
+
+    public init(store: Store<AppState, AppAction>, environment: Environment) {
         let sceneFactory = SceneFactory(environment: { () -> Environment in
             return environment
         })
 
+        self.store = store
         self.sceneFactory = sceneFactory
     }
 

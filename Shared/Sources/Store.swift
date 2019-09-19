@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
-public class Store<Value, Action> {
-    public private(set) var value: Value
+public class Store<Value, Action>: ObservableObject {
+    @Published public private(set) var value: Value
 
     private let reducer: (inout Value, Action) -> Void
 

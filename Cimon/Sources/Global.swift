@@ -33,7 +33,14 @@ let environment = Environment(
     reporter: reporter)
 
 let app = process(
-    App(environment: environment),
+    App(
+        store: Store<AppState, AppAction>(
+            initial: AppState(
+                travisCIToken: nil,
+                circleCIToken: nil,
+                bitriseToken: nil),
+            reducer: appReducer),
+        environment: environment),
     pre: {
         configure()
     })
