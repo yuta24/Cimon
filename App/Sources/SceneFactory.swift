@@ -47,7 +47,7 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = TravisCIViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromTravisCI(network: environment().networks[.travisci]!),
-                store: environment().store))
+                store: environment().persistent))
 
         let controller = Storyboard<TravisCIViewController>(name: "TravisCI")
             .instantiate(
@@ -81,7 +81,7 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = CircleCIViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromCircleCI(network: environment().networks[.circleci]!),
-                store: environment().store))
+                store: environment().persistent))
 
         let controller = Storyboard<CircleCIViewController>(name: "CircleCI")
             .instantiate(
@@ -96,7 +96,7 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = BitriseViewPresenter(
             dependency: .init(
                 fetchUseCase: FetchBuildsFromBitrise(network: environment().networks[.bitrise]!),
-                store: environment().store))
+                store: environment().persistent))
 
         let controller = Storyboard<BitriseViewController>(name: "Bitrise")
             .instantiate(
@@ -117,7 +117,7 @@ final class SceneFactory: SceneFactoryProtocol {
         let presenter = BitriseDetailViewPresenter(
             .init(appSlug: context.appSlug, buildSlug: context.buildSlug),
             dependency: .init(
-                store: environment().store,
+                store: environment().persistent,
                 network: environment().networks[.bitrise]!))
 
         let controller = Storyboard<BitriseDetailViewController>(name: "BitriseDetail").instantiate(dependency: .init(presenter: presenter))
@@ -127,7 +127,9 @@ final class SceneFactory: SceneFactoryProtocol {
 
     func settings(context: Settings.Context) -> UIViewController {
         let presenter = SettingsViewPresenter(
-            dependency: .init(store: environment().store, networks: environment().networks))
+            dependency: .init(
+                store: environment().persistent,
+                networks: environment().networks))
 
         let controller = Storyboard<SettingsViewController>(name: "Settings")
             .instantiate(
@@ -149,7 +151,7 @@ final class SceneFactory: SceneFactoryProtocol {
             .init(ci: context.ci),
             dependency: .init(
                 interactor: CISettingInteractor(
-                    store: environment().store,
+                    store: environment().persistent,
                     fetchMeTravisCI: FetchMeFromTravisCI(network: environment().networks[.travisci]!),
                     fetchMeCircleCI: FetchMeFromCircleCI(network: environment().networks[.circleci]!),
                     fetchMeBitrise: FetchMeFromBitrise(network: environment().networks[.bitrise]!))))

@@ -26,7 +26,7 @@ enum BuildLogScene {
     }
 
     struct Dependency {
-        var store: StoreProtocol
+        var store: PersistentProtocol
         var network: NetworkServiceProtocol
     }
 

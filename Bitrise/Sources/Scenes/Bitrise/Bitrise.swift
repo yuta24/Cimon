@@ -30,11 +30,11 @@ public enum BitriseScene {
 
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromBitriseProtocol
-        public var store: StoreProtocol
+        public var store: PersistentProtocol
 
         public init(
             fetchUseCase: FetchBuildsFromBitriseProtocol,
-            store: StoreProtocol) {
+            store: PersistentProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
         }

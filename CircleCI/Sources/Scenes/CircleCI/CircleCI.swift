@@ -29,11 +29,11 @@ public enum CircleCIScene {
 
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromCircleCIProtocol
-        public var store: StoreProtocol
+        public var store: PersistentProtocol
 
         public init(
             fetchUseCase: FetchBuildsFromCircleCIProtocol,
-            store: StoreProtocol) {
+            store: PersistentProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
         }

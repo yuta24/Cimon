@@ -28,11 +28,11 @@ public enum BitriseDetailScene {
     }
 
     public struct Dependency {
-        public var store: StoreProtocol
+        public var store: PersistentProtocol
         public var network: NetworkServiceProtocol
 
         public init(
-            store: StoreProtocol,
+            store: PersistentProtocol,
             network: NetworkServiceProtocol) {
             self.store = store
             self.network = network

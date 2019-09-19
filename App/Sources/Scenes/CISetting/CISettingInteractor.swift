@@ -19,13 +19,13 @@ protocol CISettingInteractorProtocol {
 }
 
 class CISettingInteractor: CISettingInteractorProtocol {
-    private let store: StoreProtocol
+    private let store: PersistentProtocol
     private let fetchMeTravisCI: FetchMeFromTravisCIProtocol
     private let fetchMeCircleCI: FetchMeFromCircleCIProtocol
     private let fetchMeBitrise: FetchMeFromBitriseProtocol
 
     init(
-        store: StoreProtocol,
+        store: PersistentProtocol,
 
         fetchMeTravisCI: FetchMeFromTravisCIProtocol,
         fetchMeCircleCI: FetchMeFromCircleCIProtocol,

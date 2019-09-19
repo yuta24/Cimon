@@ -31,7 +31,7 @@ enum SettingsScene {
     }
 
     struct Dependency {
-        var store: StoreProtocol
+        var store: PersistentProtocol
         var networks: [CI: NetworkServiceProtocol]
     }
 }

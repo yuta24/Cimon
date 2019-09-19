@@ -12,17 +12,17 @@ import Core
 import App
 
 private let travisCIKindProvider: () -> AuthorizationPlugin.Kind? = {
-    return store.value(.travisCIToken)
+    return storage.value(.travisCIToken)
         .flatMap({ .customize(prefix: "token", token: $0.value) })
 }
 
 private let circleCIKindProvider: () -> AuthorizationPlugin.Kind? = {
-    return store.value(.circleCIToken)
+    return storage.value(.circleCIToken)
         .flatMap({ .basic(userName: $0.value, password: "")  })
 }
 
 private let bitriseKindProvider: () -> AuthorizationPlugin.Kind? = {
-    return store.value(.bitriseToken)
+    return storage.value(.bitriseToken)
         .flatMap({ .customize(prefix: .none, token: $0.value) })
 }
 

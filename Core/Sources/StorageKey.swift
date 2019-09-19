@@ -9,14 +9,14 @@ import Foundation
 import Shared
 import Domain
 
-public extension StoreKey {
-    static var travisCIToken: StoreKey<TravisCIToken> {
-        return StoreKey<TravisCIToken>(rawValue: "travis_ci:token")
+public extension PersistentKey {
+    static var travisCIToken: PersistentKey<TravisCIToken> {
+        return PersistentKey<TravisCIToken>(rawValue: "travis_ci:token")
     }
-    static var circleCIToken: StoreKey<CircleCIToken> {
-        return StoreKey<CircleCIToken>(rawValue: "circle_ci:token")
+    static var circleCIToken: PersistentKey<CircleCIToken> {
+        return PersistentKey<CircleCIToken>(rawValue: "circle_ci:token")
     }
-    static var bitriseToken: StoreKey<BitriseToken> {
-        return StoreKey<BitriseToken>(rawValue: "bitrise:token")
+    static var bitriseToken: PersistentKey<BitriseToken> {
+        return PersistentKey<BitriseToken>(rawValue: "bitrise:token")
     }
 }

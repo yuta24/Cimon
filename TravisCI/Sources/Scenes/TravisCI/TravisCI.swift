@@ -30,11 +30,11 @@ public enum TravisCIScene {
 
     public struct Dependency {
         public var fetchUseCase: FetchBuildsFromTravisCIProtocol
-        public var store: StoreProtocol
+        public var store: PersistentProtocol
 
         public init(
             fetchUseCase: FetchBuildsFromTravisCIProtocol,
-            store: StoreProtocol) {
+            store: PersistentProtocol) {
             self.fetchUseCase = fetchUseCase
             self.store = store
         }
