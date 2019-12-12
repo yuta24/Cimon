@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
+import Mocha
 import Shared
 import CircleCIAPI
 
@@ -18,7 +19,7 @@ public class FetchBuildsFromCircleCI: FetchBuildsFromCircleCIProtocol {
         self.network = network
     }
 
-    public func run(limit: Int, offset: Int, shallow: Bool) -> SignalProducer<[Build], SessionTaskError> {
+    public func run(limit: Int, offset: Int, shallow: Bool) -> AnyPublisher<[Build], SessionTaskError> {
         return network.response(Endpoint.RecentBuildsRequest(limit: limit, offset: offset, shallow: shallow))
     }
 }

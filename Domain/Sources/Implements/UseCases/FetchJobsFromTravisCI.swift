@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
+import Mocha
 import Shared
 import TravisCIAPI
 
@@ -18,7 +19,7 @@ public class FetchJobsFromTravisCI: FetchJobsFromTravisCIProtocol {
         self.network = network
     }
 
-    public func run(buildId: Int) -> SignalProducer<Endpoint.JobsRequest.Response, SessionTaskError> {
+    public func run(buildId: Int) -> AnyPublisher<Endpoint.JobsRequest.Response, SessionTaskError> {
         return network.response(Endpoint.JobsRequest(buildId: buildId))
     }
 }

@@ -1,10 +1,3 @@
-//
-//  LoggerPlugin.swift
-//  App
-//
-//  Created by Yu Tawata on 2019/05/06.
-//
-
 import Foundation
 
 extension URLRequest {
@@ -81,7 +74,7 @@ extension URLRequest {
     }
 }
 
-public struct LoggerPlugin: NetworkServicePlugin {
+public struct LoggerPlugin: ClientPlugin {
     let outputProvider: (String) -> Void
 
     public init(outputProvider: @escaping (String) -> Void) {

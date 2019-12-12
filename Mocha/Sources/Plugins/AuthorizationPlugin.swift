@@ -1,13 +1,6 @@
-//
-//  AuthorizationPlugin.swift
-//  App
-//
-//  Created by Yu Tawata on 2019/05/06.
-//
-
 import Foundation
 
-public struct AuthorizationPlugin: NetworkServicePlugin {
+public struct AuthorizationPlugin: ClientPlugin {
     public enum Kind {
         case basic(userName: String, password: String)
         case bearer(token: String)

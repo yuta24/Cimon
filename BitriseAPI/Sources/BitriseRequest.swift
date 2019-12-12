@@ -6,9 +6,9 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public protocol BitriseRequest: APIKit.Request {
+public protocol BitriseRequest: Request {
 }
 
 public struct DecodableDataParser: DataParser {

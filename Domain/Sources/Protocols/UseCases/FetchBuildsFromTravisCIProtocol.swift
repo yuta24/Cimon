@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Combine
 import APIKit
 import ReactiveSwift
 import Shared
 import TravisCIAPI
 
 public protocol FetchBuildsFromTravisCIProtocol {
-    func run(limit: Int, offset: Int) -> SignalProducer<Endpoint.BuildsRequest.Response, SessionTaskError>
+    func run(limit: Int, offset: Int) -> AnyPublisher<Endpoint.BuildsRequest.Response, SessionTaskError>
 }

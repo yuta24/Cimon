@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
+import Mocha
 import Shared
 import BitriseAPI
 
@@ -18,7 +19,7 @@ public class FetchMeFromBitrise: FetchMeFromBitriseProtocol {
         self.network = network
     }
 
-    public func run() -> SignalProducer<Endpoint.MeRequest.Response, SessionTaskError> {
+    public func run() -> AnyPublisher<Endpoint.MeRequest.Response, SessionTaskError> {
         return network.response(Endpoint.MeRequest())
     }
 }

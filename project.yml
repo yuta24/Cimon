@@ -4,6 +4,8 @@ options:
   bundleIdPrefix: "com.bivre"
   deploymentTarget:
     iOS: "13.0"
+  indentWidth: 2
+  tabWidth: 2
 configs:
   Debug: debug
   Staging: release
@@ -13,6 +15,13 @@ settings:
   DEVELOPMENT_TEAM: "PS98BD6732"
   CODE_SIGN_STYLE: "Automatic"
 targets:
+  Mocha:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Mocha
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.mocha"
   Shared:
     type: framework
     platform: iOS
@@ -28,11 +37,11 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
     dependencies:
+      - target: Mocha
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Shared
-      - package: APIKit
       - carthage: ReactiveSwift
     scheme:
       testTargets:
@@ -113,7 +122,6 @@ targets:
       - target: TravisCI
       - target: CircleCI
       - target: Bitrise
-      - package: APIKit
       - package: Nuke
       - package: Pipeline
       - carthage: ReactiveSwift
@@ -155,6 +163,7 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
+      - target: Mocha
       - target: Shared
       - target: Domain
       - target: Core
@@ -162,7 +171,7 @@ targets:
       - target: CircleCI
       - target: Bitrise
       - target: App
-      - package: APIKit
+      - package: Alamofire
       - package: Nuke
       - package: Pipeline
       - carthage: ReactiveSwift
@@ -197,7 +206,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
     dependencies:
-      - package: APIKit
+      - target: Mocha
   CircleCIAPI:
     type: framework
     platform: iOS
@@ -206,7 +215,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
     dependencies:
-      - package: APIKit
+      - target: Mocha
   BitriseAPI:
     type: framework
     platform: iOS
@@ -215,11 +224,11 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
     dependencies:
-      - package: APIKit
+      - target: Mocha
 packages:
-  APIKit:
-    url: https://github.com/ishkawa/APIKit
-    from: 5.0.0
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire
+    from: 4.9.1
   Nuke:
     url: https://github.com/kean/Nuke
     from: 8.4.0

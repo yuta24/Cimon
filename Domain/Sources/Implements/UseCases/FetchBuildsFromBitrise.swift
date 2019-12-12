@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
+import Mocha
 import Shared
 import BitriseAPI
 
@@ -18,7 +19,7 @@ public class FetchBuildsFromBitrise: FetchBuildsFromBitriseProtocol {
         self.network = network
     }
 
-    public func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError> {
+    public func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> AnyPublisher<BuildListAllResponseModel, SessionTaskError> {
         return network.response(Endpoint.BuildsRequest.init(ownerSlug: ownerSlug, isOnHold: isOnHold, status: status, next: next, limit: limit))
     }
 }

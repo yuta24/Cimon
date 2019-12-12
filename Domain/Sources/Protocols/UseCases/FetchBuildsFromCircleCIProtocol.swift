@@ -6,11 +6,11 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
 import Shared
 import CircleCIAPI
 
 public protocol FetchBuildsFromCircleCIProtocol {
-    func run(limit: Int, offset: Int, shallow: Bool) -> SignalProducer<[Build], SessionTaskError>
+    func run(limit: Int, offset: Int, shallow: Bool) -> AnyPublisher<[Build], SessionTaskError>
 }

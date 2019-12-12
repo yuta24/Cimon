@@ -6,11 +6,11 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
 import Shared
 import BitriseAPI
 
 public protocol FetchMeFromBitriseProtocol {
-    func run() -> SignalProducer<Endpoint.MeRequest.Response, SessionTaskError>
+    func run() -> AnyPublisher<Endpoint.MeRequest.Response, SessionTaskError>
 }

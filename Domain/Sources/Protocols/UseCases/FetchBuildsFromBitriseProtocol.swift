@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import Combine
 import APIKit
-import ReactiveSwift
+
 import Shared
 import BitriseAPI
 
 public protocol FetchBuildsFromBitriseProtocol {
-    func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> SignalProducer<BuildListAllResponseModel, SessionTaskError>
+    func run(ownerSlug: String?, isOnHold: Bool?, status: Endpoint.BuildsRequest.Status?, next: String?, limit: Int) -> AnyPublisher<BuildListAllResponseModel, SessionTaskError>
 }
