@@ -53,9 +53,4 @@ target 'Shared' do
 
   # Pods for Shared
 
-  target 'SharedTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end
