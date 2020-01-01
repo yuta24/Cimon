@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Shared
 
 extension UINavigationBar {
     func setBackgroundColor(_ color: UIColor) {

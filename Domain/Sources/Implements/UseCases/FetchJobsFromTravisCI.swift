@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 import Mocha
-import Shared
 import TravisCIAPI
 
 public class FetchJobsFromTravisCI: FetchJobsFromTravisCIProtocol {

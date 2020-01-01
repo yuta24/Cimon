@@ -5,11 +5,8 @@
 //  Created by Yu Tawata on 2019/08/11.
 //
 
-import Foundation
 import Combine
-import ReactiveSwift
 import TravisCIAPI
-import Shared
 import Domain
 import Core
 

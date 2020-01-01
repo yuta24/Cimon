@@ -5,10 +5,9 @@
 //  Created by Yu Tawata on 2019/07/06.
 //
 
-import Foundation
 import UIKit
+import Common
 import TravisCIAPI
-import Shared
 import Core
 
 @IBDesignable

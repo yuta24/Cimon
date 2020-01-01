@@ -5,11 +5,9 @@
 //  Created by Yu Tawata on 2019/05/04.
 //
 
-import Foundation
-import Combine
 import UIKit
+import Combine
 import BitriseAPI
-import Shared
 import Domain
 import Core
 

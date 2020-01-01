@@ -8,7 +8,6 @@
 import Foundation
 import Combine
 import CircleCIAPI
-import Shared
 import Domain
 import Core
 

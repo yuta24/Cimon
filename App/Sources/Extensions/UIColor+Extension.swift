@@ -5,10 +5,9 @@
 //  Created by Yu Tawata on 2019/07/12.
 //
 
-import Foundation
 import UIKit
+import Common
 import SwiftUI
-import Shared
 
 extension UIColor: ExtendProvider {
 }

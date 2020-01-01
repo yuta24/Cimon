@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/07/07.
 //
 
-import Foundation
+import Common
 import CircleCIAPI
-import Shared
 import Core
 
 extension CircleCIAPI.Build: Hashable {

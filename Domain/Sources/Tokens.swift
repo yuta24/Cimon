@@ -5,8 +5,7 @@
 //  Created by Yu Tawata on 2019/05/04.
 //
 
-import Foundation
-import Shared
+import Common
 
 public struct TravisCIToken: Codable {
     let token: Tagged<TravisCIToken, String>

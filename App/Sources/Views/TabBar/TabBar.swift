@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/08/10.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 import Core
 
 class TabBar: UIView {

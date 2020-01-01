@@ -5,8 +5,7 @@
 //  Created by tawata-yu on 2019/09/17.
 //
 
-import Foundation
-import Shared
+import Common
 
 public enum AnalyticsEvent: AnalyticsEventProtocol {
     case tap(screenName: String, custom: [String: Any] = [:])

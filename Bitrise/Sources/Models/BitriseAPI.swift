@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import Common
 import BitriseAPI
-import Shared
 import Core
 
 extension BitriseAPI.BuildListAllResponseItemModel: Hashable {

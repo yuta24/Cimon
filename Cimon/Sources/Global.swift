@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/06/23.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 import Core
 import App
 

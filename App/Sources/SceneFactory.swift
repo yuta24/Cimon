@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import Shared
+import Common
 import Domain
 import TravisCI
 import CircleCI

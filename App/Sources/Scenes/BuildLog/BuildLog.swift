@@ -6,10 +6,8 @@
 //
 
 import Foundation
-import ReactiveSwift
 import Mocha
 import TravisCIAPI
-import Shared
 import Domain
 
 enum BuildLogScene {

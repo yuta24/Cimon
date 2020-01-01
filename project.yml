@@ -62,7 +62,6 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Common
-      - carthage: ReactiveSwift
     scheme:
       testTargets:
         - DomainTests
@@ -144,7 +143,6 @@ targets:
       - target: Bitrise
       - package: Nuke
       - package: Pipeline
-      - carthage: ReactiveSwift
       - carthage: Reachability
     scheme:
       testTargets:
@@ -193,7 +191,6 @@ targets:
       - package: Nuke
       - package: Mocha
       - package: Pipeline
-      - carthage: ReactiveSwift
       - carthage: Reachability
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
@@ -226,4 +223,4 @@ packages:
     branch: master
   Mocha:
     url: https://github.com/yuta24/Mocha
-    branch: master
+    revision: 942f97df4cd023f46d5e8201365c4c8425bd67f6

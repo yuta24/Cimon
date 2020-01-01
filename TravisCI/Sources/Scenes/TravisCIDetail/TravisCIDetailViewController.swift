@@ -5,11 +5,10 @@
 //  Created by Yu Tawata on 2019/08/11.
 //
 
-import Foundation
 import UIKit
 import Pipeline
+import Common
 import TravisCIAPI
-import Shared
 import Domain
 import Core
 
