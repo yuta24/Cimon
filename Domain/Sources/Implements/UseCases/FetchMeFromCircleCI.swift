@@ -5,21 +5,18 @@
 //  Created by Yu Tawata on 2019/07/24.
 //
 
-import Foundation
 import Combine
-import APIKit
 import Mocha
-import Shared
 import CircleCIAPI
 
 public class FetchMeFromCircleCI: FetchMeFromCircleCIProtocol {
-    let network: NetworkServiceProtocol
+  let client: Client
 
-    public init(network: NetworkServiceProtocol) {
-        self.network = network
-    }
+  public init(client: Client) {
+    self.client = client
+  }
 
-    public func run() -> AnyPublisher<Endpoint.MeRequest.Response, SessionTaskError> {
-        return network.response(Endpoint.MeRequest())
-    }
+  public func run() -> AnyPublisher<Endpoint.MeRequest.Response, Client.Failure> {
+    client.publisher(for: Endpoint.MeRequest())
+  }
 }

@@ -5,21 +5,18 @@
 //  Created by Yu Tawata on 2019/07/24.
 //
 
-import Foundation
 import Combine
-import APIKit
 import Mocha
-import Shared
 import TravisCIAPI
 
 public class FetchMeFromTravisCI: FetchMeFromTravisCIProtocol {
-    let network: NetworkServiceProtocol
+  let client: Client
 
-    public init(network: NetworkServiceProtocol) {
-        self.network = network
-    }
+  public init(client: Client) {
+    self.client = client
+  }
 
-    public func run() -> AnyPublisher<Endpoint.UserRequest.Response, SessionTaskError> {
-        return network.response(Endpoint.UserRequest())
-    }
+  public func run() -> AnyPublisher<Endpoint.UserRequest.Response, Client.Failure> {
+    client.publisher(for: Endpoint.UserRequest())
+  }
 }

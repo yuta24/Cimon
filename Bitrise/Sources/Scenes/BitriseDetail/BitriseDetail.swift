@@ -7,10 +7,8 @@
 
 import Foundation
 import Combine
-import ReactiveSwift
 import BitriseAPI
 import Mocha
-import Shared
 import Domain
 import Core
 
@@ -31,13 +29,14 @@ public enum BitriseDetailScene {
 
   public struct Dependency {
     public var store: StoreProtocol
-    public var network: NetworkServiceProtocol
+    public var client: Client
 
     public init(
       store: StoreProtocol,
-      network: NetworkServiceProtocol) {
-        self.store = store
-        self.network = network
+      client: Client
+    ) {
+      self.store = store
+      self.client = client
     }
   }
 
@@ -103,8 +102,9 @@ public class BitriseDetailViewPresenter: BitriseDetailViewPresenterProtocol {
       guard !state.isLoading else {
         return
       }
+
       state.isLoading = true
-      dependency.network.response(Endpoint.BuildLogRequest(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
+      dependency.client.publisher(for: Endpoint.BuildLogRequest(appSlug: self.context.appSlug, buildSlug: self.context.buildSlug))
         .sink(receiveCompletion: { [weak self] completion in
           self?.state.isLoading = false
           switch completion {

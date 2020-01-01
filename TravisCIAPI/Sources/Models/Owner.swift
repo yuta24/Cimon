@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import APIKit
 
 extension Minimal {
     // sourcery: public-initializer

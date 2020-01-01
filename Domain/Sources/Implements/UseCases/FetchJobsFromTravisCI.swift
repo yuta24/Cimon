@@ -7,19 +7,18 @@
 
 import Foundation
 import Combine
-import APIKit
 import Mocha
 import Shared
 import TravisCIAPI
 
 public class FetchJobsFromTravisCI: FetchJobsFromTravisCIProtocol {
-    let network: NetworkServiceProtocol
+  let client: Client
 
-    public init(network: NetworkServiceProtocol) {
-        self.network = network
-    }
+  public init(client: Client) {
+    self.client = client
+  }
 
-    public func run(buildId: Int) -> AnyPublisher<Endpoint.JobsRequest.Response, SessionTaskError> {
-        return network.response(Endpoint.JobsRequest(buildId: buildId))
-    }
+  public func run(buildId: Int) -> AnyPublisher<Endpoint.JobsRequest.Response, Client.Failure> {
+    client.publisher(for: Endpoint.JobsRequest(buildId: buildId))
+  }
 }

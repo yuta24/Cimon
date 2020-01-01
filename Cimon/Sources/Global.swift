@@ -26,10 +26,11 @@ let reporter = CrashlyticsReporter()
 
 let environment = Environment(
     store: store,
-    networks: [
-        .travisci: travisCIService,
-        .circleci: circleCIService,
-        .bitrise: bitriseService],
+    clients: [
+        .travisci: travisCIClient,
+        .circleci: circleCIClient,
+        .bitrise: bitriseClient
+    ],
     reporter: reporter)
 
 let app = process(

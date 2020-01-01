@@ -6,38 +6,35 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct RecentBuildsRequest: CircleCIRequest {
-        public typealias Response = [Build]
+extension Endpoint {
+  public struct RecentBuildsRequest: CircleCIRequest {
+    public typealias Response = [Build]
 
-        public var path: String {
-            return "/recent-builds"
-        }
+    public var path: String { "/recent-builds" }
+    public var method: HTTPMethod { .get }
 
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public var queryParameters: [String: Any]? {
-            return [
-                "limit": limit,
-                "offset": offset,
-                "shallow": shallow]
-        }
-
-        public var limit: Int
-        public var offset: Int
-        public var shallow: Bool
-
-        public init(
-            limit: Int = 30,
-            offset: Int = 0,
-            shallow: Bool = true) {
-            self.limit = limit
-            self.offset = offset
-            self.shallow = shallow
-        }
+    public var queryPrameters: [String: Any?] {
+      [
+        "limit": limit,
+        "offset": offset,
+        "shallow": shallow
+      ]
     }
+
+    public let limit: Int
+    public let offset: Int
+    public let shallow: Bool
+
+    public init(
+      limit: Int = 30,
+      offset: Int = 0,
+      shallow: Bool = true
+    ) {
+      self.limit = limit
+      self.offset = offset
+      self.shallow = shallow
+    }
+  }
 }

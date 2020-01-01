@@ -6,24 +6,19 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct BuildRequest: TravisCIRequest {
-        public typealias Response = Standard.Build
+extension Endpoint {
+  public struct BuildRequest: TravisCIRequest {
+    public typealias Response = Standard.Build
 
-        public var path: String {
-            return "/build/\(buildId)"
-        }
+    public var path: String { "/build/\(buildId)" }
+    public var method: HTTPMethod { .get }
 
-        public var method: HTTPMethod {
-            return .get
-        }
+    public let buildId: Int
 
-        public var buildId: Int
-
-        public init(buildId: Int) {
-            self.buildId = buildId
-        }
+    public init(buildId: Int) {
+      self.buildId = buildId
     }
+  }
 }

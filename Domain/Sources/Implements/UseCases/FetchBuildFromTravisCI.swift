@@ -5,21 +5,18 @@
 //  Created by Yu Tawata on 2019/08/11.
 //
 
-import Foundation
 import Combine
-import APIKit
 import Mocha
-import Shared
 import TravisCIAPI
 
 public class FetchBuildFromTravisCI: FetchBuildFromTravisCIProtocol {
-    let network: NetworkServiceProtocol
+  let client: Client
 
-    public init(network: NetworkServiceProtocol) {
-        self.network = network
-    }
+  public init(client: Client) {
+    self.client = client
+  }
 
-    public func run(buildId: Int) -> AnyPublisher<Endpoint.BuildRequest.Response, SessionTaskError> {
-        return network.response(Endpoint.BuildRequest(buildId: buildId))
-    }
+  public func run(buildId: Int) -> AnyPublisher<Endpoint.BuildRequest.Response, Client.Failure> {
+    client.publisher(for: Endpoint.BuildRequest(buildId: buildId))
+  }
 }

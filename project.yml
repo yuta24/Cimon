@@ -15,13 +15,6 @@ settings:
   DEVELOPMENT_TEAM: "PS98BD6732"
   CODE_SIGN_STYLE: "Automatic"
 targets:
-  Mocha:
-    type: framework
-    platform: iOS
-    sources:
-      - path: Mocha
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.mocha"
   Common:
     type: framework
     platform: iOS
@@ -29,6 +22,33 @@ targets:
       - path: Common
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.common"
+  TravisCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: TravisCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
+    dependencies:
+      - package: Mocha
+  CircleCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: CircleCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
+    dependencies:
+      - package: Mocha
+  BitriseAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: BitriseAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
+    dependencies:
+      - package: Mocha
   Domain:
     type: framework
     platform: iOS
@@ -37,7 +57,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
     dependencies:
-      - target: Mocha
+      - package: Mocha
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
@@ -163,7 +183,6 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Mocha
       - target: Common
       - target: Domain
       - target: Core
@@ -171,8 +190,8 @@ targets:
       - target: CircleCI
       - target: Bitrise
       - target: App
-      - package: Alamofire
       - package: Nuke
+      - package: Mocha
       - package: Pipeline
       - carthage: ReactiveSwift
       - carthage: Reachability
@@ -198,40 +217,13 @@ targets:
       - path: CimonTests
     dependencies:
       - target: Cimon
-  TravisCIAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: TravisCIAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
-    dependencies:
-      - target: Mocha
-  CircleCIAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: CircleCIAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
-    dependencies:
-      - target: Mocha
-  BitriseAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: BitriseAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
-    dependencies:
-      - target: Mocha
 packages:
-  Alamofire:
-    url: https://github.com/Alamofire/Alamofire
-    from: 4.9.1
   Nuke:
     url: https://github.com/kean/Nuke
     from: 8.4.0
   Pipeline:
     url: https://github.com/yuta24/Pipeline
+    branch: master
+  Mocha:
+    url: https://github.com/yuta24/Mocha
     branch: master

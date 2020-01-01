@@ -6,36 +6,32 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct BuildLogRequest: BitriseRequest {
-        public typealias Response = BuildLogInfoResponseModel
+extension Endpoint {
+  public struct BuildLogRequest: BitriseRequest {
+    public typealias Response = BuildLogInfoResponseModel
 
-        public enum Status: Int {
-            case notFinished = 0
-            case successful
-            case failed
-            case abortedWithFailure
-            case abortedWithSuccess
-        }
-
-        public var path: String {
-            return "/apps/\(appSlug)/builds/\(buildSlug)/log"
-        }
-
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public var appSlug: String
-        public var buildSlug: String
-
-        public init(
-            appSlug: String,
-            buildSlug: String) {
-            self.appSlug = appSlug
-            self.buildSlug = buildSlug
-        }
+    public enum Status: Int {
+      case notFinished = 0
+      case successful
+      case failed
+      case abortedWithFailure
+      case abortedWithSuccess
     }
+
+    public var path: String { "/apps/\(appSlug)/builds/\(buildSlug)/log" }
+    public var method: HTTPMethod { .get }
+
+    public let appSlug: String
+    public let buildSlug: String
+
+    public init(
+      appSlug: String,
+      buildSlug: String
+    ) {
+      self.appSlug = appSlug
+      self.buildSlug = buildSlug
+    }
+  }
 }

@@ -7,7 +7,6 @@
 
 import Foundation
 import Mocha
-import Shared
 import Domain
 import Core
 
@@ -33,7 +32,7 @@ enum SettingsScene {
 
     struct Dependency {
         var store: StoreProtocol
-        var networks: [CI: NetworkServiceProtocol]
+        var clients: [CI: Client]
     }
 }
 

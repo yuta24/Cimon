@@ -5,12 +5,10 @@
 //  Created by Yu Tawata on 2019/07/22.
 //
 
-import Foundation
 import Combine
-import APIKit
-import Shared
+import Mocha
 import BitriseAPI
 
 public protocol FetchMeFromBitriseProtocol {
-    func run() -> AnyPublisher<Endpoint.MeRequest.Response, SessionTaskError>
+  func run() -> AnyPublisher<Endpoint.MeRequest.Response, Client.Failure>
 }

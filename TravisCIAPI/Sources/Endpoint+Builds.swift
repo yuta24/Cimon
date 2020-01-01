@@ -6,32 +6,27 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct BuildsRequest: TravisCIRequest {
-        public typealias Response = Builds
+extension Endpoint {
+  public struct BuildsRequest: TravisCIRequest {
+    public typealias Response = Builds
 
-        public var path: String {
-            return "/builds"
-        }
-
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public var queryParameters: [String: Any]? {
-            return [
-                "limit": limit,
-                "offset": offset]
-        }
-
-        public var limit: Int
-        public var offset: Int
-
-        public init(limit: Int, offset: Int) {
-            self.limit = limit
-            self.offset = offset
-        }
+    public var path: String { "/builds" }
+    public var method: HTTPMethod { .get }
+    public var queryPrameters: [String: Any?] {
+      [
+        "limit": limit,
+        "offset": offset
+      ]
     }
+
+    public let limit: Int
+    public let offset: Int
+
+    public init(limit: Int, offset: Int) {
+      self.limit = limit
+      self.offset = offset
+    }
+  }
 }

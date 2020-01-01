@@ -7,13 +7,13 @@
 
 import Foundation
 import Combine
-import Shared
+import Mocha
 import Domain
 
 protocol CISettingInteractorProtocol {
   func fetchToken(_ ci: CI) -> String?
-  func fetchMe(_ ci: CI) -> AnyPublisher<(name: String?, avatarUrl: URL?), SessionTaskError>
-  func authorize(_ ci: CI, token: String) -> AnyPublisher<(name: String?, avatarUrl: URL?), SessionTaskError>
+  func fetchMe(_ ci: CI) -> AnyPublisher<(name: String?, avatarUrl: URL?), Client.Failure>
+  func authorize(_ ci: CI, token: String) -> AnyPublisher<(name: String?, avatarUrl: URL?), Client.Failure>
   func deauthorize(_ ci: CI) -> AnyPublisher<Void, Never>
 }
 
@@ -47,7 +47,7 @@ class CISettingInteractor: CISettingInteractorProtocol {
     }
   }
 
-  func fetchMe(_ ci: CI) -> AnyPublisher<(name: String?, avatarUrl: URL?), SessionTaskError> {
+  func fetchMe(_ ci: CI) -> AnyPublisher<(name: String?, avatarUrl: URL?), Client.Failure> {
     switch ci {
     case .travisci:
       return fetchMeTravisCI.run()
@@ -70,8 +70,8 @@ class CISettingInteractor: CISettingInteractorProtocol {
     }
   }
 
-  func authorize(_ ci: CI, token: String) -> AnyPublisher<(name: String?, avatarUrl: URL?), SessionTaskError> {
-    return Deferred { [weak self] () -> Empty<Void, SessionTaskError> in
+  func authorize(_ ci: CI, token: String) -> AnyPublisher<(name: String?, avatarUrl: URL?), Client.Failure> {
+    return Deferred { [weak self] () -> Empty<Void, Client.Failure> in
       switch ci {
       case .travisci:
             self?.store.set(TravisCIToken(token: token), for: .travisCIToken)
@@ -81,7 +81,7 @@ class CISettingInteractor: CISettingInteractorProtocol {
             self?.store.set(BitriseToken(token: token), for: .bitriseToken)
       }
 
-      return Empty<Void, SessionTaskError>()
+      return Empty<Void, Client.Failure>()
     }
     .flatMap { [unowned self] _ in
       self.fetchMe(ci)

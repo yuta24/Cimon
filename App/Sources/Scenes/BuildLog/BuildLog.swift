@@ -28,7 +28,7 @@ enum BuildLogScene {
 
     struct Dependency {
         var store: StoreProtocol
-        var network: NetworkServiceProtocol
+        var client: Client
     }
 
     enum Transition {

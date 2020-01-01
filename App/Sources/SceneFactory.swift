@@ -46,7 +46,7 @@ final class SceneFactory: SceneFactoryProtocol {
     func travisCI(context: TravisCI.Context) -> UIViewController {
         let presenter = TravisCIViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromTravisCI(network: environment().networks[.travisci]!),
+                fetchUseCase: FetchBuildsFromTravisCI(client: environment().clients[.travisci]!),
                 store: environment().store))
 
         let controller = Storyboard<TravisCIViewController>(name: "TravisCI")
@@ -69,8 +69,8 @@ final class SceneFactory: SceneFactoryProtocol {
             .init(buildId: context.buildId),
             dependency: .init(
                 interactor: TravisCIDetailInteractor(
-                    fetchBuildTravisCI: FetchBuildFromTravisCI(network: environment().networks[.travisci]!),
-                    fetchJobsTravisCI: FetchJobsFromTravisCI(network: environment().networks[.travisci]!))))
+                    fetchBuildTravisCI: FetchBuildFromTravisCI(client: environment().clients[.travisci]!),
+                    fetchJobsTravisCI: FetchJobsFromTravisCI(client: environment().clients[.travisci]!))))
 
         let controller = Storyboard<TravisCIDetailViewController>(name: "TravisCIDetail").instantiate(dependency: .init(presenter: presenter))
 
@@ -80,7 +80,7 @@ final class SceneFactory: SceneFactoryProtocol {
     func circleCI(context: CircleCI.Context) -> UIViewController {
         let presenter = CircleCIViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromCircleCI(network: environment().networks[.circleci]!),
+                fetchUseCase: FetchBuildsFromCircleCI(client: environment().clients[.circleci]!),
                 store: environment().store))
 
         let controller = Storyboard<CircleCIViewController>(name: "CircleCI")
@@ -95,7 +95,7 @@ final class SceneFactory: SceneFactoryProtocol {
     func bitrise(context: Bitrise.Context) -> UIViewController {
         let presenter = BitriseViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromBitrise(network: environment().networks[.bitrise]!),
+                fetchUseCase: FetchBuildsFromBitrise(client: environment().clients[.bitrise]!),
                 store: environment().store))
 
         let controller = Storyboard<BitriseViewController>(name: "Bitrise")
@@ -118,7 +118,7 @@ final class SceneFactory: SceneFactoryProtocol {
             .init(appSlug: context.appSlug, buildSlug: context.buildSlug),
             dependency: .init(
                 store: environment().store,
-                network: environment().networks[.bitrise]!))
+                client: environment().clients[.bitrise]!))
 
         let controller = Storyboard<BitriseDetailViewController>(name: "BitriseDetail").instantiate(dependency: .init(presenter: presenter))
 
@@ -127,7 +127,7 @@ final class SceneFactory: SceneFactoryProtocol {
 
     func settings(context: Settings.Context) -> UIViewController {
         let presenter = SettingsViewPresenter(
-            dependency: .init(store: environment().store, networks: environment().networks))
+            dependency: .init(store: environment().store, clients: environment().clients))
 
         let controller = Storyboard<SettingsViewController>(name: "Settings")
             .instantiate(
@@ -150,9 +150,9 @@ final class SceneFactory: SceneFactoryProtocol {
             dependency: .init(
                 interactor: CISettingInteractor(
                     store: environment().store,
-                    fetchMeTravisCI: FetchMeFromTravisCI(network: environment().networks[.travisci]!),
-                    fetchMeCircleCI: FetchMeFromCircleCI(network: environment().networks[.circleci]!),
-                    fetchMeBitrise: FetchMeFromBitrise(network: environment().networks[.bitrise]!))))
+                    fetchMeTravisCI: FetchMeFromTravisCI(client: environment().clients[.travisci]!),
+                    fetchMeCircleCI: FetchMeFromCircleCI(client: environment().clients[.circleci]!),
+                    fetchMeBitrise: FetchMeFromBitrise(client: environment().clients[.bitrise]!))))
 
         let controller = Storyboard<CISettingViewController>(name: "CISetting").instantiate(dependency: .init(presenter: presenter))
 

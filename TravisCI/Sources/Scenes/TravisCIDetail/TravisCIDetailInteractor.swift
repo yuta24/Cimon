@@ -7,14 +7,13 @@
 
 import Foundation
 import Combine
-import APIKit
+import Mocha
 import TravisCIAPI
-import Shared
 import Domain
 import Core
 
 public protocol TravisCIDetailInteractorProtocol {
-  func fetchDetail(buildId: Int) -> AnyPublisher<(Standard.Build, [Standard.Job]), SessionTaskError>
+  func fetchDetail(buildId: Int) -> AnyPublisher<(Standard.Build, [Standard.Job]), Client.Failure>
 }
 
 public class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
@@ -29,18 +28,18 @@ public class TravisCIDetailInteractor: TravisCIDetailInteractorProtocol {
     self.fetchJobsTravisCI = fetchJobsTravisCI
   }
 
-  public func fetchDetail(buildId: Int) -> AnyPublisher<(Standard.Build, [Standard.Job]), SessionTaskError> {
+  public func fetchDetail(buildId: Int) -> AnyPublisher<(Standard.Build, [Standard.Job]), Client.Failure> {
     fetchBuildTravisCI.run(buildId: buildId)
       .combineLatest(fetchJobsTravisCI.run(buildId: buildId))
       .map { ($0.0, $0.1.jobs) }
       .eraseToAnyPublisher()
   }
 
-  public func fetchBuild(buildId: Int) -> AnyPublisher<Standard.Build, SessionTaskError> {
+  public func fetchBuild(buildId: Int) -> AnyPublisher<Standard.Build, Client.Failure> {
     fetchBuildTravisCI.run(buildId: buildId)
   }
 
-  public func fetchJobs(buildId: Int) -> AnyPublisher<[Standard.Job], SessionTaskError> {
+  public func fetchJobs(buildId: Int) -> AnyPublisher<[Standard.Job], Client.Failure> {
     fetchJobsTravisCI.run(buildId: buildId)
       .map(\.jobs)
       .eraseToAnyPublisher()

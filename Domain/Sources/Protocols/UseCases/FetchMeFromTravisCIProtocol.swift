@@ -5,12 +5,10 @@
 //  Created by Yu Tawata on 2019/07/24.
 //
 
-import Foundation
 import Combine
-import APIKit
-import Shared
+import Mocha
 import TravisCIAPI
 
 public protocol FetchMeFromTravisCIProtocol {
-    func run() -> AnyPublisher<Endpoint.UserRequest.Response, SessionTaskError>
+  func run() -> AnyPublisher<Endpoint.UserRequest.Response, Client.Failure>
 }
