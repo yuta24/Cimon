@@ -5,7 +5,7 @@
 //  Created by Yu Tawata on 2019/05/09.
 //
 
-import Foundation
+import UIKit
 
 public class StringAttributer {
     let string: String

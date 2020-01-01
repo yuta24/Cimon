@@ -22,13 +22,13 @@ targets:
       - path: Mocha
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.mocha"
-  Shared:
+  Common:
     type: framework
     platform: iOS
     sources:
-      - path: Shared
+      - path: Common
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.shared"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.common"
   Domain:
     type: framework
     platform: iOS
@@ -41,7 +41,7 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - carthage: ReactiveSwift
     scheme:
       testTargets:
@@ -64,7 +64,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.core"
     dependencies:
-      - target: Shared
+      - target: Common
       - target: Domain
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
@@ -78,7 +78,7 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
     dependencies:
       - target: TravisCIAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
   CircleCI:
@@ -90,7 +90,7 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
     dependencies:
       - target: CircleCIAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
   Bitrise:
@@ -102,7 +102,7 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
     dependencies:
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
   App:
@@ -116,7 +116,7 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - target: Core
       - target: Domain
       - target: TravisCI
@@ -164,7 +164,7 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Mocha
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
       - target: TravisCI
