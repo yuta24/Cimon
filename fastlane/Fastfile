@@ -33,6 +33,6 @@ platform :ios do
 
   desc "自動テストの実行"
   lane :run_auto_tests do
-    run_tests(workspace: "Cimon.xcworkspace", scheme: "Cimon", devices: ["iPhone Xs"])
+    run_tests(workspace: "Cimon.xcworkspace", scheme: "Cimon", devices: ["iPhone 11 Pro"])
   end
 end
