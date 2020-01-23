@@ -33,7 +33,11 @@ platform :ios do
 
   desc "自動テストの実行"
   lane :run_auto_tests do
-    run_tests(workspace: "Cimon.xcworkspace", scheme: "Cimon", devices: ["iPhone 11 Pro"])
+    run_tests(
+      workspace: "Cimon.xcworkspace",
+      scheme: "Cimon",
+      devices: ["iPhone 11 Pro"],
+      formatter: `xcpretty-json-formatter`)
   end
 
   desc "利用ツールの更新"

@@ -45,4 +45,5 @@ else
   echo "  + Sourcery found."
 fi
 
-bundle install --path vendor/bundle
+bundle config set path vendor/bundle
+bundle install

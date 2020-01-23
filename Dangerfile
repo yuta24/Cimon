@@ -18,6 +18,12 @@ end
 
 warn("1000行以上のコードが変更されています。PRを分割しましょう。") if check_diff_size(git.diff, 1000)
 
+# Report
+xcode_summary.ignores_warnings = true
+xcode_summary.ignored_files = 'Pods/**'
+xcode_summary.inline_mode = true
+xcode_summary.report "./build/reports/errors.json"
+
 build_report_file = "build_results.json"
 xcode_summary.ignored_files = 'Pods/**'
 xcode_summary.ignores_warnings = true
