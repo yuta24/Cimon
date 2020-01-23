@@ -30,7 +30,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
     dependencies:
-      - package: Mocha
+      - carthage: Mocha
   CircleCIAPI:
     type: framework
     platform: iOS
@@ -39,7 +39,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
     dependencies:
-      - package: Mocha
+      - carthage: Mocha
   BitriseAPI:
     type: framework
     platform: iOS
@@ -48,7 +48,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
     dependencies:
-      - package: Mocha
+      - carthage: Mocha
   Domain:
     type: framework
     platform: iOS
@@ -57,11 +57,11 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.domain"
     dependencies:
-      - package: Mocha
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Common
+      - carthage: Mocha
     scheme:
       testTargets:
         - DomainTests
@@ -100,6 +100,7 @@ targets:
       - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   CircleCI:
     type: framework
     platform: iOS
@@ -112,6 +113,7 @@ targets:
       - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   Bitrise:
     type: framework
     platform: iOS
@@ -124,6 +126,7 @@ targets:
       - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   App:
     type: framework
     platform: iOS
@@ -143,6 +146,7 @@ targets:
       - target: Bitrise
       - package: Nuke
       - package: Pipeline
+      - carthage: Mocha
       - carthage: Reachability
     scheme:
       testTargets:
@@ -189,8 +193,8 @@ targets:
       - target: Bitrise
       - target: App
       - package: Nuke
-      - package: Mocha
       - package: Pipeline
+      - carthage: Mocha
       - carthage: Reachability
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
@@ -221,6 +225,3 @@ packages:
   Pipeline:
     url: https://github.com/yuta24/Pipeline
     branch: master
-  Mocha:
-    url: https://github.com/yuta24/Mocha
-    revision: 942f97df4cd023f46d5e8201365c4c8425bd67f6
