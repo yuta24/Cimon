@@ -1,17 +1,10 @@
-//
-//  App.swift
-//  App
-//
-//  Created by Yu Tawata on 2019/05/04.
-//
-
 import UIKit
 import Pipeline
 import Common
 import Domain
 import Core
 
-public class App {
+public class Scene {
     public private(set) var window: UIWindow!
     public let sceneFactory: SceneFactoryProtocol
 

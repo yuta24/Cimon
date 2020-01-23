@@ -33,7 +33,7 @@ let environment = Environment(
     reporter: reporter)
 
 let app = process(
-    App(environment: environment),
+    Scene(environment: environment),
     pre: {
         configure()
     })
