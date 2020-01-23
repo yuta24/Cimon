@@ -5,12 +5,10 @@
 //  Created by tawata-yu on 2019/07/22.
 //
 
-import Foundation
-import APIKit
-import ReactiveSwift
-import Shared
+import Combine
+import Mocha
 import CircleCIAPI
 
 public protocol FetchBuildsFromCircleCIProtocol {
-    func run(limit: Int, offset: Int, shallow: Bool) -> SignalProducer<[Build], SessionTaskError>
+  func run(limit: Int, offset: Int, shallow: Bool) -> AnyPublisher<[Build], Client.Failure>
 }

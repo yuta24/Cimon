@@ -6,21 +6,16 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct MeRequest: BitriseRequest {
-        public typealias Response = UserProfileRespModel
+extension Endpoint {
+  public struct MeRequest: BitriseRequest {
+    public typealias Response = UserProfileRespModel
 
-        public var path: String {
-            return "/me"
-        }
+    public var path: String { "/me" }
+    public var method: HTTPMethod { .get }
 
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public init() {
-        }
+    public init() {
     }
+  }
 }

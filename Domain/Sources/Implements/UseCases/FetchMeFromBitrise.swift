@@ -5,20 +5,18 @@
 //  Created by Yu Tawata on 2019/07/22.
 //
 
-import Foundation
-import APIKit
-import ReactiveSwift
-import Shared
+import Combine
+import Mocha
 import BitriseAPI
 
 public class FetchMeFromBitrise: FetchMeFromBitriseProtocol {
-    let network: NetworkServiceProtocol
+  let client: Client
 
-    public init(network: NetworkServiceProtocol) {
-        self.network = network
-    }
+  public init(client: Client) {
+    self.client = client
+  }
 
-    public func run() -> SignalProducer<Endpoint.MeRequest.Response, SessionTaskError> {
-        return network.response(Endpoint.MeRequest())
-    }
+  public func run() -> AnyPublisher<Endpoint.MeRequest.Response, Client.Failure> {
+    client.publisher(for: Endpoint.MeRequest())
+  }
 }

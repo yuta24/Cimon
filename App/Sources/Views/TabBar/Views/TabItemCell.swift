@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/08/08.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 
 class TabItemCell: UICollectionViewCell, CellRegisterable {
     @IBOutlet weak var titleLabel: UILabel! {

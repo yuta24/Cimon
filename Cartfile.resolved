@@ -1,5 +1,2 @@
-github "ReactiveCocoa/ReactiveSwift" "6.1.0"
-github "ashleymills/Reachability.swift" "v4.3.1"
-github "ishkawa/APIKit" "5.0.0"
-github "kean/Nuke" "7.6.3"
-github "yuta24/Pipeline" "b9a2ab741e4b69a2a8cab9977ea5f75f75f0261e"
+github "ashleymills/Reachability.swift" "v5.0.0"
+github "yuta24/Mocha" "f06648597e1173bc46e66b71c3c6d90d95e12af9"

@@ -6,18 +6,18 @@
 //
 
 import Foundation
-import Shared
+import Mocha
 import Domain
 import Core
 
 public class Environment {
     let store: StoreProtocol
-    let networks: [CI: NetworkServiceProtocol]
+    let clients: [CI: Client]
     let reporter: ReporterProtocol
 
-    public init(store: StoreProtocol, networks: [CI: NetworkServiceProtocol], reporter: ReporterProtocol) {
+    public init(store: StoreProtocol, clients: [CI: Client], reporter: ReporterProtocol) {
         self.store = store
-        self.networks = networks
+        self.clients = clients
         self.reporter = reporter
     }
 }

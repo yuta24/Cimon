@@ -5,10 +5,9 @@
 //  Created by Yu Tawata on 2019/05/08.
 //
 
-import Foundation
 import UIKit
+import Common
 import BitriseAPI
-import Shared
 import Core
 
 @IBDesignable

@@ -5,7 +5,7 @@
 //  Created by Yu Tawata on 2019/07/09.
 //
 
-import Foundation
+import UIKit
 
 extension UIDevice {
     public static var model: String {

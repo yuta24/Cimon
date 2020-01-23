@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import Common
 import TravisCIAPI
-import Shared
 import Core
 
 extension TravisCIAPI.Standard.Build: Hashable {

@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import Shared
-import App
 import FirebaseCore
+import Common
+import App
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

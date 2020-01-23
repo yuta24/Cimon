@@ -4,6 +4,8 @@ options:
   bundleIdPrefix: "com.bivre"
   deploymentTarget:
     iOS: "13.0"
+  indentWidth: 2
+  tabWidth: 2
 configs:
   Debug: debug
   Staging: release
@@ -13,13 +15,40 @@ settings:
   DEVELOPMENT_TEAM: "PS98BD6732"
   CODE_SIGN_STYLE: "Automatic"
 targets:
-  Shared:
+  Common:
     type: framework
     platform: iOS
     sources:
-      - path: Shared
+      - path: Common
     settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.shared"
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.common"
+  TravisCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: TravisCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
+    dependencies:
+      - carthage: Mocha
+  CircleCIAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: CircleCIAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
+    dependencies:
+      - carthage: Mocha
+  BitriseAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: BitriseAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
+    dependencies:
+      - carthage: Mocha
   Domain:
     type: framework
     platform: iOS
@@ -31,9 +60,8 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Shared
-      - package: APIKit
-      - carthage: ReactiveSwift
+      - target: Common
+      - carthage: Mocha
     scheme:
       testTargets:
         - DomainTests
@@ -55,7 +83,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.core"
     dependencies:
-      - target: Shared
+      - target: Common
       - target: Domain
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
@@ -69,9 +97,10 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
     dependencies:
       - target: TravisCIAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   CircleCI:
     type: framework
     platform: iOS
@@ -81,9 +110,10 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
     dependencies:
       - target: CircleCIAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   Bitrise:
     type: framework
     platform: iOS
@@ -93,9 +123,10 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
     dependencies:
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
+      - carthage: Mocha
   App:
     type: framework
     platform: iOS
@@ -107,16 +138,15 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - target: Core
       - target: Domain
       - target: TravisCI
       - target: CircleCI
       - target: Bitrise
-      - package: APIKit
       - package: Nuke
       - package: Pipeline
-      - carthage: ReactiveSwift
+      - carthage: Mocha
       - carthage: Reachability
     scheme:
       testTargets:
@@ -155,17 +185,16 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
-      - target: Shared
+      - target: Common
       - target: Domain
       - target: Core
       - target: TravisCI
       - target: CircleCI
       - target: Bitrise
       - target: App
-      - package: APIKit
       - package: Nuke
       - package: Pipeline
-      - carthage: ReactiveSwift
+      - carthage: Mocha
       - carthage: Reachability
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
@@ -189,37 +218,7 @@ targets:
       - path: CimonTests
     dependencies:
       - target: Cimon
-  TravisCIAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: TravisCIAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
-    dependencies:
-      - package: APIKit
-  CircleCIAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: CircleCIAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
-    dependencies:
-      - package: APIKit
-  BitriseAPI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: BitriseAPI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
-    dependencies:
-      - package: APIKit
 packages:
-  APIKit:
-    url: https://github.com/ishkawa/APIKit
-    from: 5.0.0
   Nuke:
     url: https://github.com/kean/Nuke
     from: 8.4.0

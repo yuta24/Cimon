@@ -2,8 +2,6 @@
 
 set -eu
 
-ln -sf ../../scripts/hooks/pre-push .git/hooks/pre-push
-
 if [ ! $(which xcodegen) ]; then
   echo "  + Installing XcodeGen..."
   brew install xcodegen
@@ -47,4 +45,5 @@ else
   echo "  + Sourcery found."
 fi
 
-bundle install --path vendor/bundle
+bundle config set path vendor/bundle
+bundle install

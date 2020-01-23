@@ -5,10 +5,9 @@
 //  Created by Yu Tawata on 2019/07/07.
 //
 
-import Foundation
 import UIKit
+import Common
 import CircleCIAPI
-import Shared
 import Core
 
 @IBDesignable

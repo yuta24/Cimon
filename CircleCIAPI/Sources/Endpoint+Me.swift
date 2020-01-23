@@ -6,21 +6,16 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct MeRequest: CircleCIRequest {
-        public typealias Response = Me
+extension Endpoint {
+  public struct MeRequest: CircleCIRequest {
+    public typealias Response = Me
 
-        public var path: String {
-            return "/me"
-        }
+    public var path: String { "/me" }
+    public var method: HTTPMethod { .get }
 
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public init() {
-        }
+    public init() {
     }
+ }
 }

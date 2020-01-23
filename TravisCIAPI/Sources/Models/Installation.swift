@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import APIKit
 
 // sourcery: public-initializer
 public struct Installation: Codable {

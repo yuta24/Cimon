@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/05/11.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 
 class BitriseBuildStatusCell: UICollectionViewCell, CellRegisterable {
     @IBOutlet weak var buildView: BitriseBuildView!

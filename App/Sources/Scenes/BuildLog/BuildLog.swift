@@ -6,9 +6,8 @@
 //
 
 import Foundation
-import ReactiveSwift
+import Mocha
 import TravisCIAPI
-import Shared
 import Domain
 
 enum BuildLogScene {
@@ -27,7 +26,7 @@ enum BuildLogScene {
 
     struct Dependency {
         var store: StoreProtocol
-        var network: NetworkServiceProtocol
+        var client: Client
     }
 
     enum Transition {

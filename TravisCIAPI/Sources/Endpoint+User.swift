@@ -6,21 +6,16 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public extension Endpoint {
-    struct UserRequest: TravisCIRequest {
-        public typealias Response = User
+extension Endpoint {
+  public struct UserRequest: TravisCIRequest {
+    public typealias Response = User
 
-        public var path: String {
-            return "/user"
-        }
+    public var path: String { "/user" }
+    public var method: HTTPMethod { .get }
 
-        public var method: HTTPMethod {
-            return .get
-        }
-
-        public init() {
-        }
+    public init() {
     }
+  }
 }

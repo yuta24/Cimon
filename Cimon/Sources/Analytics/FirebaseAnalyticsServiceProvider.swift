@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import Shared
 import FirebaseAnalytics
+import Common
 
 class FirebaseAnalyticsServiceProvider: AnalyticsServiceProviderProtocol {
     func log(_ name: String, parameter: [String: Any]?) {

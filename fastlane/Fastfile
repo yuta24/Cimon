@@ -33,6 +33,69 @@ platform :ios do
 
   desc "自動テストの実行"
   lane :run_auto_tests do
-    run_tests(workspace: "Cimon.xcworkspace", scheme: "Cimon", devices: ["iPhone Xs"])
+    run_tests(
+      workspace: "Cimon.xcworkspace",
+      scheme: "Cimon",
+      devices: ["iPhone 11 Pro"],
+      formatter: `xcpretty-json-formatter`)
+  end
+
+  desc "利用ツールの更新"
+  lane :update_tools do
+    Dir.chdir("#{ENV['PWD']}") do
+      sh 'bundle update'
+
+      unless system('git diff --quiet --exit-code')
+        sh 'git add Gemfile.lock'
+        commit_push_create_pr(
+          branch_name: "ci/update-tools-#{Time.now.to_i}",
+          title: "Update developer tools",
+          desc: "利用ツールの自動更新")
+      end
+    end
+  end
+
+  desc "依存ライブラリの更新"
+  lane :update_dependencies do
+    Dir.chdir("#{ENV['PWD']}") do
+      sh "bundle exec pod update"
+
+      unless system("git diff --quiet --exit-code")
+        system("git add Podfile.lock")
+        commit_push_create_pr(
+          branch_name: "ci/update-dependencies-#{Time.now.to_i}",
+          title: "Update dependencies managed by CocoaPods",
+          desc: "依存ライブラリの自動更新")
+      end
+    end
+  end
+
+  desc "bitrise.ymlの同期"
+  lane :sync_bitrise_yml do
+    Dir.chdir("#{ENV['PWD']}") do
+      sh "curl -O -H 'Authorization: token #{ENV['BITRISE_ACCESS_TOKEN']}' 'https://api.bitrise.io/v0.1/apps/#{ENV['BITRISE_APP_SLUG']}/bitrise.yml'"
+
+      unless system("git diff --quiet --exit-code")
+        sh "git add bitrise.yml"
+        commit_push_create_pr(
+          branch_name: "ci/sync-bitrise_yml-#{Time.now.to_i}",
+          title: "Sync bitrise.yml",
+          desc: "bitrise.ymlの同期")
+      end
+    end
+  end
+
+  def commit_push_create_pr(branch_name: "", title: "", desc: "")
+    github_token = ENV['GITHUB_API_TOKEN']
+    sh "git checkout -b #{branch_name}"
+    sh "git commit -m '#{title}'"
+    sh "git push origin HEAD"
+    create_pull_request(
+      api_token: github_token,
+      repo: ENV["REPOSITORY_NAME"],
+      title: title,
+      body: desc,
+      head: branch_name,
+      base: "develop")
   end
 end

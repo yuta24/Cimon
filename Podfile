@@ -47,10 +47,10 @@ target 'Domain' do
 
 end
 
-target 'Shared' do
+target 'Common' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Shared
+  # Pods for Common
 
 end

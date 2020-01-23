@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/06/23.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 import Core
 import App
 
@@ -26,10 +25,11 @@ let reporter = CrashlyticsReporter()
 
 let environment = Environment(
     store: store,
-    networks: [
-        .travisci: travisCIService,
-        .circleci: circleCIService,
-        .bitrise: bitriseService],
+    clients: [
+        .travisci: travisCIClient,
+        .circleci: circleCIClient,
+        .bitrise: bitriseClient
+    ],
     reporter: reporter)
 
 let app = process(

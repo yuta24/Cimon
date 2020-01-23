@@ -5,10 +5,9 @@
 //  Created by Yu Tawata on 2019/08/11.
 //
 
-import Foundation
 import UIKit
+import Common
 import Pipeline
-import Shared
 import Domain
 import Core
 

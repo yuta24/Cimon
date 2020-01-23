@@ -5,9 +5,7 @@
 //  Created by tawata-yu on 2019/09/13.
 //
 
-import Foundation
 import UIKit
-import Shared
 import Domain
 
 public enum Main {

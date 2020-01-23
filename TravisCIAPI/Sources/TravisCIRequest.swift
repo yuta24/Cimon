@@ -6,43 +6,23 @@
 //
 
 import Foundation
-import APIKit
+import Mocha
 
-public protocol TravisCIRequest: APIKit.Request {
+public protocol TravisCIRequest: Request {
 }
 
-public struct DecodableDataParser: DataParser {
-    public var contentType: String? {
-        return "application/json"
-    }
+extension TravisCIRequest where Response: Decodable {
+  public var headers: [String: String] {
+    [
+      "Travis-API-Version": "3"
+    ]
+  }
+  public var queryPrameters: [String: Any?] { [:] }
+  public var bodyParameters: [String: Any] { [:] }
 
-    public func parse(data: Data) throws -> Any {
-        return data
-    }
-
-}
-
-public extension TravisCIRequest where Response: Decodable {
-    var baseURL: URL {
-        return URL(string: "https://api.travis-ci.org")!
-    }
-
-    var headerFields: [String: String] {
-        return [
-            "Travis-API-Version": "3"
-        ]
-    }
-
-    var dataParser: DataParser {
-        return DecodableDataParser()
-    }
-
-    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
-        guard let data = object as? Data else {
-            throw ResponseError.unexpectedObject(object)
-        }
+  public func parse(_ data: Data) throws -> Response {
         return try JSONDecoder().decode(Response.self, from: data)
-    }
+  }
 }
 
 public enum Endpoint {

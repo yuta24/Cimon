@@ -5,9 +5,8 @@
 //  Created by Yu Tawata on 2019/07/06.
 //
 
-import Foundation
 import UIKit
-import Shared
+import Common
 
 class TravisCIBuildStatusCell: UICollectionViewCell, CellRegisterable {
     @IBOutlet weak var buildView: TravisCIBuildView!
