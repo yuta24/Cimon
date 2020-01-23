@@ -2,8 +2,6 @@
 
 set -eu
 
-ln -sf ../../scripts/hooks/pre-push .git/hooks/pre-push
-
 if [ ! $(which xcodegen) ]; then
   echo "  + Installing XcodeGen..."
   brew install xcodegen
