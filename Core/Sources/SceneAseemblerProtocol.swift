@@ -115,7 +115,7 @@ public enum CISetting {
   }
 }
 
-public protocol SceneFactoryProtocol: class {
+public protocol SceneAseemblerProtocol: class {
   func main(context: Main.Context) -> UIViewController
   func travisCI(context: TravisCI.Context) -> UIViewController
   func travisCIDetail(context: TravisCIDetail.Context) -> UIViewController

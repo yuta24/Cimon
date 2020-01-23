@@ -6,26 +6,24 @@ import Core
 
 public class App {
   public private(set) var window: UIWindow!
-  public let sceneFactory: SceneFactoryProtocol
+  public let sceneAseembler: SceneAseemblerProtocol
 
-  public init(environment: Dependency) {
-    let sceneFactory = SceneFactory(dependency: { () -> Dependency in
-      return environment
+  public init(dependency: Dependency) {
+    self.sceneAseembler = SceneAseembler(dependency: { () -> Dependency in
+      return dependency
     })
-
-    self.sceneFactory = sceneFactory
   }
 
   public func configure(window: UIWindow) {
     self.window = window
 
-    let mainViewController = sceneFactory.main(
+    let mainViewController = sceneAseembler.main(
       context: .init(
         selected: .travisci,
         pages: { () -> [(CI, UIViewController)] in
-          let travisCIController = sceneFactory.travisCI(context: .none)
-          let circleCIController = sceneFactory.circleCI(context: .none)
-          let bitriseController = sceneFactory.bitrise(context: .none)
+          let travisCIController = sceneAseembler.travisCI(context: .none)
+          let circleCIController = sceneAseembler.circleCI(context: .none)
+          let bitriseController = sceneAseembler.bitrise(context: .none)
 
           return [
             (.travisci, travisCIController),

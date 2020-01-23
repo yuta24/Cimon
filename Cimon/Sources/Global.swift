@@ -22,7 +22,7 @@ func configure() {
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
 
-let environment = Dependency(
+let dependency = Dependency(
     store: store,
     clients: [
         .travisci: travisCIClient,
@@ -32,7 +32,7 @@ let environment = Dependency(
     reporter: reporter)
 
 let app = process(
-    App(environment: environment),
+    App(dependency: dependency),
     pre: {
         configure()
     })

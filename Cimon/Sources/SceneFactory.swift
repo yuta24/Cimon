@@ -14,7 +14,7 @@ import CircleCI
 import Bitrise
 import Core
 
-final class SceneFactory: SceneFactoryProtocol {
+final class SceneAseembler: SceneAseemblerProtocol {
     let dependency: () -> Dependency
 
     init(dependency: @escaping () -> Dependency) {
