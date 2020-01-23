@@ -18,7 +18,26 @@
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
+  internal static let accent = ColorAsset(name: "accent")
+  internal static let base00 = ColorAsset(name: "base00")
+  internal static let base01 = ColorAsset(name: "base01")
+  internal static let base02 = ColorAsset(name: "base02")
+  internal static let base03 = ColorAsset(name: "base03")
+  internal static let bitriseStatusAborted = ColorAsset(name: "bitrise_status_aborted")
+  internal static let bitriseStatusFailed = ColorAsset(name: "bitrise_status_failed")
+  internal static let bitriseStatusProgress = ColorAsset(name: "bitrise_status_progress")
+  internal static let bitriseStatusSuccess = ColorAsset(name: "bitrise_status_success")
+  internal static let circleciStatusAborted = ColorAsset(name: "circleci_status_aborted")
+  internal static let circleciStatusFailed = ColorAsset(name: "circleci_status_failed")
+  internal static let circleciStatusProgress = ColorAsset(name: "circleci_status_progress")
+  internal static let circleciStatusSuccess = ColorAsset(name: "circleci_status_success")
+  internal static let deleteFilled = ImageAsset(name: "delete-filled")
   internal static let primary = ColorAsset(name: "primary")
+  internal static let settings = ImageAsset(name: "settings")
+  internal static let travisciStatusAborted = ColorAsset(name: "travisci_status_aborted")
+  internal static let travisciStatusFailed = ColorAsset(name: "travisci_status_failed")
+  internal static let travisciStatusProgress = ColorAsset(name: "travisci_status_progress")
+  internal static let travisciStatusSuccess = ColorAsset(name: "travisci_status_success")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

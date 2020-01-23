@@ -10,7 +10,6 @@ import Mocha
 import Common
 import Domain
 import Core
-import App
 
 struct AuthorizationInterceptor: Interceptor {
   public enum Kind {

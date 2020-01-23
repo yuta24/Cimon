@@ -4,19 +4,6 @@ platform :ios, '13.0'
 plugin 'cocoapods-binary'
 enable_bitcode_for_prebuilt_frameworks!
 
-target 'App' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for App
-
-  target 'AppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
-
 target 'Cimon' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!

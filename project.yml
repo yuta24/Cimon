@@ -127,38 +127,6 @@ targets:
       - target: Domain
       - target: Core
       - carthage: Mocha
-  App:
-    type: framework
-    platform: iOS
-    sources:
-      - path: App
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.app"
-    dependencies:
-      - target: TravisCIAPI
-      - target: CircleCIAPI
-      - target: BitriseAPI
-      - target: Common
-      - target: Core
-      - target: Domain
-      - target: TravisCI
-      - target: CircleCI
-      - target: Bitrise
-      - package: Nuke
-      - package: Pipeline
-      - carthage: Mocha
-      - carthage: Reachability
-    scheme:
-      testTargets:
-        - AppTests
-  AppTests:
-    type: bundle.unit-test
-    platform: iOS
-    sources:
-      - path: AppTests
-    dependencies:
-      - target: App
-      - target: Cimon
   Cimon:
     type: application
     platform: iOS
@@ -191,7 +159,6 @@ targets:
       - target: TravisCI
       - target: CircleCI
       - target: Bitrise
-      - target: App
       - package: Nuke
       - package: Pipeline
       - carthage: Mocha
@@ -209,7 +176,6 @@ targets:
     scheme:
       testTargets:
         - DomainTests
-        - AppTests
         - CimonTests
   CimonTests:
     type: bundle.unit-test

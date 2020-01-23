@@ -8,7 +8,6 @@
 import UIKit
 import Common
 import Core
-import App
 
 func configure() {
     analytics.configure([FirebaseAnalyticsServiceProvider()])
@@ -23,7 +22,7 @@ func configure() {
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
 
-let environment = Environment(
+let environment = Dependency(
     store: store,
     clients: [
         .travisci: travisCIClient,
@@ -33,7 +32,7 @@ let environment = Environment(
     reporter: reporter)
 
 let app = process(
-    Scene(environment: environment),
+    App(environment: environment),
     pre: {
         configure()
     })
