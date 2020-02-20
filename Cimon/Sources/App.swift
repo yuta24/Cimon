@@ -7,10 +7,8 @@ public class App {
   public private(set) var window: UIWindow!
   public let sceneAseembler: SceneAseemblerProtocol
 
-  public init(dependency: Dependency) {
-    self.sceneAseembler = SceneAseembler(dependency: { () -> Dependency in
-      return dependency
-    })
+  public init(env: Env) {
+    self.sceneAseembler = SceneAseembler { env }
   }
 
   public func configure(window: UIWindow) {

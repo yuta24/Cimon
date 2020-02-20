@@ -2,7 +2,7 @@ import Foundation
 import Mocha
 import Domain
 
-public class Dependency {
+public class Env {
   public let store: StoreProtocol
   public let clients: [CI: Client]
   public let reporter: ReporterProtocol

@@ -15,10 +15,10 @@ import Bitrise
 import Core
 
 final class SceneAseembler: SceneAseemblerProtocol {
-    let dependency: () -> Dependency
+    let envClosure: () -> Env
 
-    init(dependency: @escaping () -> Dependency) {
-        self.dependency = dependency
+    init(envClosure: @escaping () -> Env) {
+        self.envClosure = envClosure
     }
 
     func main(context: Main.Context) -> UIViewController {
@@ -46,8 +46,8 @@ final class SceneAseembler: SceneAseemblerProtocol {
     func travisCI(context: TravisCI.Context) -> UIViewController {
         let presenter = TravisCIViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromTravisCI(client: dependency().clients[.travisci]!),
-                store: dependency().store))
+                fetchUseCase: FetchBuildsFromTravisCI(client: envClosure().clients[.travisci]!),
+                store: envClosure().store))
 
         let controller = Storyboard<TravisCIViewController>(name: "TravisCI")
             .instantiate(
@@ -69,8 +69,8 @@ final class SceneAseembler: SceneAseemblerProtocol {
             .init(buildId: context.buildId),
             dependency: .init(
                 interactor: TravisCIDetailInteractor(
-                    fetchBuildTravisCI: FetchBuildFromTravisCI(client: dependency().clients[.travisci]!),
-                    fetchJobsTravisCI: FetchJobsFromTravisCI(client: dependency().clients[.travisci]!))))
+                    fetchBuildTravisCI: FetchBuildFromTravisCI(client: envClosure().clients[.travisci]!),
+                    fetchJobsTravisCI: FetchJobsFromTravisCI(client: envClosure().clients[.travisci]!))))
 
         let controller = Storyboard<TravisCIDetailViewController>(name: "TravisCIDetail").instantiate(dependency: .init(presenter: presenter))
 
@@ -80,8 +80,8 @@ final class SceneAseembler: SceneAseemblerProtocol {
     func circleCI(context: CircleCI.Context) -> UIViewController {
         let presenter = CircleCIViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromCircleCI(client: dependency().clients[.circleci]!),
-                store: dependency().store))
+                fetchUseCase: FetchBuildsFromCircleCI(client: envClosure().clients[.circleci]!),
+                store: envClosure().store))
 
         let controller = Storyboard<CircleCIViewController>(name: "CircleCI")
             .instantiate(
@@ -95,8 +95,8 @@ final class SceneAseembler: SceneAseemblerProtocol {
     func bitrise(context: Bitrise.Context) -> UIViewController {
         let presenter = BitriseViewPresenter(
             dependency: .init(
-                fetchUseCase: FetchBuildsFromBitrise(client: dependency().clients[.bitrise]!),
-                store: dependency().store))
+                fetchUseCase: FetchBuildsFromBitrise(client: envClosure().clients[.bitrise]!),
+                store: envClosure().store))
 
         let controller = Storyboard<BitriseViewController>(name: "Bitrise")
             .instantiate(
@@ -117,8 +117,8 @@ final class SceneAseembler: SceneAseemblerProtocol {
         let presenter = BitriseDetailViewPresenter(
             .init(appSlug: context.appSlug, buildSlug: context.buildSlug),
             dependency: .init(
-                store: dependency().store,
-                client: dependency().clients[.bitrise]!))
+                store: envClosure().store,
+                client: envClosure().clients[.bitrise]!))
 
         let controller = Storyboard<BitriseDetailViewController>(name: "BitriseDetail").instantiate(dependency: .init(presenter: presenter))
 
@@ -127,7 +127,7 @@ final class SceneAseembler: SceneAseemblerProtocol {
 
     func settings(context: Settings.Context) -> UIViewController {
         let presenter = SettingsViewPresenter(
-            dependency: .init(store: dependency().store, clients: dependency().clients))
+            dependency: .init(store: envClosure().store, clients: envClosure().clients))
 
         let controller = Storyboard<SettingsViewController>(name: "Settings")
             .instantiate(
@@ -149,10 +149,10 @@ final class SceneAseembler: SceneAseemblerProtocol {
             .init(ci: context.ci),
             dependency: .init(
                 interactor: CISettingInteractor(
-                    store: dependency().store,
-                    fetchMeTravisCI: FetchMeFromTravisCI(client: dependency().clients[.travisci]!),
-                    fetchMeCircleCI: FetchMeFromCircleCI(client: dependency().clients[.circleci]!),
-                    fetchMeBitrise: FetchMeFromBitrise(client: dependency().clients[.bitrise]!))))
+                    store: envClosure().store,
+                    fetchMeTravisCI: FetchMeFromTravisCI(client: envClosure().clients[.travisci]!),
+                    fetchMeCircleCI: FetchMeFromCircleCI(client: envClosure().clients[.circleci]!),
+                    fetchMeBitrise: FetchMeFromBitrise(client: envClosure().clients[.bitrise]!))))
 
         let controller = Storyboard<CISettingViewController>(name: "CISetting").instantiate(dependency: .init(presenter: presenter))
 
