@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Overture
 import Common
 import Domain
 import TravisCI
@@ -28,7 +29,7 @@ class MainViewController: UIViewController, Instantiatable {
             }
         }
 
-        static func transform(ci: CI) -> Reader<MainViewController, UIViewController?> {
+        static func transform(ci: CI) -> ReaderM<MainViewController, UIViewController?> {
             return .init({ (controller) -> UIViewController? in
                 return controller.pages.first(where: { (_ci, _) in _ci == ci })?.1
             })
@@ -143,13 +144,13 @@ extension MainViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.before
             .flatMap(Transformer.transform)?
-            .execute(self)
+            .run(self)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         return dependency.presenter.state.after
             .flatMap(Transformer.transform)?
-            .execute(self)
+            .run(self)
     }
 }
 

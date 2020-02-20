@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Pipeline
 import Common
 import CircleCIAPI
 import Domain

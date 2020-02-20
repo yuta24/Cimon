@@ -6,6 +6,7 @@
 //
 
 import Common
+import Overture
 
 public struct TravisCIToken: Codable {
     let token: Tagged<TravisCIToken, String>

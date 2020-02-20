@@ -7,7 +7,6 @@
 
 import UIKit
 import Nuke
-import Pipeline
 import Common
 import BitriseAPI
 import Domain

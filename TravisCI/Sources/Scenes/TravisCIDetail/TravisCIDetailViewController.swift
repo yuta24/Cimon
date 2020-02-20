@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Pipeline
 import Common
 import TravisCIAPI
 import Domain

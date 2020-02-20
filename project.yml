@@ -63,6 +63,7 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Common
+      - carthage: Overture
       - carthage: Mocha
     scheme:
       testTargets:
@@ -161,8 +162,8 @@ targets:
       - target: TravisCI
       - target: CircleCI
       - target: Bitrise
-      - package: Nuke
-      - package: Pipeline
+      - carthage: Nuke
+      - carthage: Overture
       - carthage: Mocha
       - carthage: Reachability
     preBuildScripts:
@@ -186,10 +187,3 @@ targets:
       - path: CimonTests
     dependencies:
       - target: Cimon
-packages:
-  Nuke:
-    url: https://github.com/kean/Nuke
-    from: 8.4.0
-  Pipeline:
-    url: https://github.com/yuta24/Pipeline
-    branch: master

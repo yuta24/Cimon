@@ -20,24 +20,3 @@ target 'Cimon' do
   end
 
 end
-
-target 'Domain' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for Domain
-
-  target 'DomainTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
-
-target 'Common' do
-  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
-  use_frameworks!
-
-  # Pods for Common
-
-end
