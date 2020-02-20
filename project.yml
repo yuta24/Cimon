@@ -1,11 +1,11 @@
 name: Cimon
 options:
-  minimumXcodeGenVersion: "2.6.0"
+  minimumXcodeGenVersion: "2.13.0"
   bundleIdPrefix: "com.bivre"
   deploymentTarget:
     iOS: "13.0"
-  indentWidth: 2
-  tabWidth: 2
+  indentWidth: 4
+  tabWidth: 4
 configs:
   Debug: debug
   Staging: release
@@ -14,6 +14,8 @@ settings:
   SWIFT_VERSION: "5.1"
   DEVELOPMENT_TEAM: "PS98BD6732"
   CODE_SIGN_STYLE: "Automatic"
+  TARGETED_DEVICE_FAMILY: "1,2"
+  SUPPORTS_MACCATALYST: true
 targets:
   Common:
     type: framework
