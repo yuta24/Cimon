@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Domain
+import Core
 import Crashlytics
 
 class CrashlyticsReporter: ReporterProtocol {
