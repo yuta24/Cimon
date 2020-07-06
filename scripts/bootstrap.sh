@@ -10,7 +10,7 @@ PROJECT_NAME=Cimon
 
 echo "  + Generate xcodeproje by XcodeGen."
 xcodegen
-carthage bootstrap --platform iOS --no-use-binaries --cache-builds
+carthage bootstrap --platform iOS --no-use-binaries --cache-builds --use-ssh
 bundle exec pod install
 
 echo ""
