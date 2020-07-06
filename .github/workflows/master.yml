@@ -16,6 +16,12 @@ jobs:
         xcode: ["12_beta"]
 
     steps:
+    - uses: webfactory/ssh-agent@v0.2.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: (WORKAROUND) Use private swift package manager
+      run: |
+        for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
     - uses: actions/checkout@v2
     - name: Setup Xcode
       run: |
@@ -27,3 +33,7 @@ jobs:
       run: ./scripts/decrypt.sh
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+    - name: Setup
+      run: ./scripts/setup.sh
+    - name: Bootstarp
+      run: ./scripts/bootstrap.sh
