@@ -1,7 +1,7 @@
 # Cimon
 
-![Xcode](https://img.shields.io/badge/Xcode-11.0-blue.svg)
-![iOS](https://img.shields.io/badge/iOS-13.0-orange.svg)
+![Xcode](https://img.shields.io/badge/Xcode-12.0-blue.svg)
+![iOS](https://img.shields.io/badge/iOS-14.0-orange.svg)
 [![Build Status](https://app.bitrise.io/app/67552a4c6bfebb21/status.svg?token=a4mFS2OynWeE0ukVUrw3Ww&branch=master)](https://app.bitrise.io/app/67552a4c6bfebb21)
 
 ## Setup
