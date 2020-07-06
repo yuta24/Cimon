@@ -27,3 +27,7 @@ jobs:
       run: ./scripts/decrypt.sh
       env:
         SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
+    - name: Setup
+      run: ./scripts/setup.sh
+    - name: Bootstarp
+      run: ./scripts/bootstrap.sh
