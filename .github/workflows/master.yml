@@ -1,0 +1,29 @@
+name: Swift
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+    name: Xcode ${{ matrix.xcode }}
+    strategy:
+      matrix:
+        xcode: ["12_beta"]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Xcode
+      run: |
+        echo "Available Xcode versions:"
+        ls /Applications | grep Xcode
+        echo "Choosing Xcode_${{ matrix.xcode }}.app"
+        sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app
+    - name: Decrypt
+      run: ./scripts/decrypt.sh
+      env:
+        SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
