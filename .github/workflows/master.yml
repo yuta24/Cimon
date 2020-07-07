@@ -55,3 +55,5 @@ jobs:
       run: ./scripts/setup.sh
     - name: Bootstarp
       run: ./scripts/bootstrap.sh
+    - name: Run automation tests
+      run: bundle exec fastlane ios run_auto_tests
