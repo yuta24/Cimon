@@ -1,4 +1,4 @@
-name: Swift
+name: GitHub
 
 on:
   push:
