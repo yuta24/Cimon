@@ -14,21 +14,17 @@ import Core
 
 enum MainSheet: Identifiable, Equatable {
     case account
-    case build
 
     var id: Self { self }
 }
 
 struct MainState: Equatable {
     var buildsState: BuildsState
-    var buildState: BuildState?
     var accountState: AccountState?
 
     var sheet: MainSheet? {
         if accountState != .none {
             return .account
-        } else if buildState != .none {
-            return .build
         } else {
             return .none
         }
@@ -37,7 +33,6 @@ struct MainState: Equatable {
 
 enum MainAction: Equatable {
     case builds(BuildsAction)
-    case build(BuildAction)
     case account(AccountAction)
 
     case sheetDismissed
@@ -65,12 +60,7 @@ let mainReducer: Reducer<MainState, MainAction, MainEnvironment> = Reducer.combi
     buildsReducer.pullback(
         state: \.buildsState,
         action: /MainAction.builds,
-        environment: { BuildsEnvironment(client: $0.client) }
-    ),
-    buildReducer.optional.pullback(
-        state: \.buildState,
-        action: /MainAction.build,
-        environment: { BuildEnvironment(session: $0.session, client: $0.client) }
+        environment: { BuildsEnvironment(session: $0.session, client: $0.client) }
     ),
     Reducer { state, action, _ in
 
@@ -81,16 +71,7 @@ let mainReducer: Reducer<MainState, MainAction, MainEnvironment> = Reducer.combi
 
             return .none
 
-        case .builds(.buildSelected(let model)):
-            state.buildState = .init(model: model, alert: .none)
-
-            return .none
-
         case .builds:
-
-            return .none
-
-        case .build:
 
             return .none
 
@@ -99,7 +80,6 @@ let mainReducer: Reducer<MainState, MainAction, MainEnvironment> = Reducer.combi
             return .none
 
         case .sheetDismissed:
-            state.buildState = .none
             state.accountState = .none
 
             return .none
@@ -122,11 +102,6 @@ struct MainView: View {
                         IfLetStore(
                             store.scope(state: \.accountState, action: MainAction.account),
                             then: AccountView.init(store:)
-                        )
-                    case .build:
-                        IfLetStore(
-                            store.scope(state: \.buildState, action: MainAction.build),
-                            then: BuildView.init(store:)
                         )
                     }
                 }
