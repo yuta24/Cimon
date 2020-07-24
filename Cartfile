@@ -1,4 +1,0 @@
-github "ashleymills/Reachability.swift"
-github "yuta24/Mocha" "master"
-github "yuta24/Overture" "master"
-github "kean/Nuke" ~> 8.0

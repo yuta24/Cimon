@@ -6,7 +6,7 @@
 //
 
 import Common
-import Overture
+import Tagged
 
 public struct TravisCIToken: Codable {
     let token: Tagged<TravisCIToken, String>
@@ -36,7 +36,7 @@ public extension CircleCIToken {
     }
 }
 
-public struct BitriseToken: Codable {
+public struct BitriseToken: Equatable, Codable {
     let token: Tagged<BitriseToken, String>
 
     public var value: String {

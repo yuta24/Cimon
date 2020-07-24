@@ -1,9 +1,9 @@
 name: Cimon
 options:
-  minimumXcodeGenVersion: "2.13.0"
+  minimumXcodeGenVersion: "2.16.0"
   bundleIdPrefix: "com.bivre"
   deploymentTarget:
-    iOS: "13.0"
+    iOS: "14.0"
   indentWidth: 4
   tabWidth: 4
 configs:
@@ -11,11 +11,26 @@ configs:
   Staging: release
   Release: release
 settings:
-  SWIFT_VERSION: "5.1"
+  SWIFT_VERSION: "5.3"
   DEVELOPMENT_TEAM: "PS98BD6732"
   CODE_SIGN_STYLE: "Automatic"
   TARGETED_DEVICE_FAMILY: "1,2"
-  SUPPORTS_MACCATALYST: true
+packages:
+  ComposableArchitecture:
+    url: https://github.com/pointfreeco/swift-composable-architecture
+    from: 0.6.0
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess
+    from: 4.0.0
+  FetchImage:
+    url: https://github.com/kean/FetchImage
+    from: 0.2.0
+  Mocha:
+    url: https://github.com/yuta24/Mocha.git
+    branch: "master"
+  Tagged:
+    url: https://github.com/pointfreeco/swift-tagged.git
+    from: 0.5.0
 targets:
   Common:
     type: framework
@@ -24,6 +39,15 @@ targets:
       - path: Common
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.common"
+  APICore:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Common
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.api-core"
+    dependencies:
+      - package: Mocha
   TravisCIAPI:
     type: framework
     platform: iOS
@@ -32,7 +56,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci-api"
     dependencies:
-      - carthage: Mocha
+      - target: APICore
   CircleCIAPI:
     type: framework
     platform: iOS
@@ -41,7 +65,7 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci-api"
     dependencies:
-      - carthage: Mocha
+      - target: APICore
   BitriseAPI:
     type: framework
     platform: iOS
@@ -50,7 +74,16 @@ targets:
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise-api"
     dependencies:
-      - carthage: Mocha
+      - target: APICore
+  GitHubAPI:
+    type: framework
+    platform: iOS
+    sources:
+      - path: GitHubAPI
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.github-api"
+    dependencies:
+      - target: APICore
   Domain:
     type: framework
     platform: iOS
@@ -63,8 +96,7 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Common
-      - carthage: Overture
-      - carthage: Mocha
+      - package: Tagged
     scheme:
       testTargets:
         - DomainTests
@@ -88,48 +120,11 @@ targets:
     dependencies:
       - target: Common
       - target: Domain
+      - package: ComposableArchitecture
+      - package: KeychainAccess
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
         script: "swiftgen config run --config Core/swiftgen.yml"
-  TravisCI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: TravisCI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.travisci"
-    dependencies:
-      - target: TravisCIAPI
-      - target: Common
-      - target: Domain
-      - target: Core
-      - carthage: Mocha
-  CircleCI:
-    type: framework
-    platform: iOS
-    sources:
-      - path: CircleCI
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.circleci"
-    dependencies:
-      - target: CircleCIAPI
-      - target: Common
-      - target: Domain
-      - target: Core
-      - carthage: Mocha
-  Bitrise:
-    type: framework
-    platform: iOS
-    sources:
-      - path: Bitrise
-    settings:
-      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.bitrise"
-    dependencies:
-      - target: BitriseAPI
-      - target: Common
-      - target: Domain
-      - target: Core
-      - carthage: Mocha
   Cimon:
     type: application
     platform: iOS
@@ -157,15 +152,10 @@ targets:
       - target: CircleCIAPI
       - target: BitriseAPI
       - target: Common
+      - target: APICore
       - target: Domain
       - target: Core
-      - target: TravisCI
-      - target: CircleCI
-      - target: Bitrise
-      - carthage: Nuke
-      - carthage: Overture
-      - carthage: Mocha
-      - carthage: Reachability
+      - package: FetchImage
     preBuildScripts:
       - name: "[SwiftGen] Run Script"
         script: "swiftgen config run --config Cimon/swiftgen.yml"

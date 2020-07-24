@@ -21,18 +21,3 @@ func configure() {
 
 let store = LocalStore(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
-
-let env = Env(
-    store: store,
-    clients: [
-        .travisci: travisCIClient,
-        .circleci: circleCIClient,
-        .bitrise: bitriseClient
-    ],
-    reporter: reporter)
-
-let app = process(
-    App(env: env),
-    pre: {
-        configure()
-    })

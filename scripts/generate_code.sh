@@ -4,7 +4,6 @@
 
 sourcery --config TravisCIAPI/.sourcery.yml
 sourcery --config CircleCIAPI/.sourcery.yml
-sourcery --config BitriseAPI/.sourcery.yml
 sourcery --config Cimon/.sourcery.yml
 
 echo ""

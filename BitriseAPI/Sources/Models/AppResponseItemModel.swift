@@ -7,24 +7,8 @@
 
 import Foundation
 
-// sourcery: public-initializer
-public struct AppResponseItemModel: Codable {
-    enum CodingKeys: String, CodingKey {
-        case avatarUrlString = "avatar_url"
-        case isDisabled = "is_disabled"
-        case isPublic = "is_public"
-        case owner
-        case projectType = "project_type"
-        case provider
-        case repoOwner = "repo_owner"
-        case repoSlug = "repo_slug"
-        case repoUrlString = "repo_url"
-        case slug
-        case status
-        case title
-    }
-
-    public var avatarUrlString: String?
+public struct AppResponseItemModel: Equatable, Codable {
+    public var avatarUrl: String?
     public var isDisabled: Bool?
     public var isPublic: Bool?
     public var owner: OwnerAccountResponseModel?
@@ -32,15 +16,26 @@ public struct AppResponseItemModel: Codable {
     public var provider: String?
     public var repoOwner: String?
     public var repoSlug: String?
-    public var repoUrlString: String?
+    public var repoUrl: String?
     public var slug: String?
     public var status: Int?
     public var title: String?
 
-    // sourcery:inline:AppResponseItemModel.Init
-    // swiftlint:disable line_length
-    public init(avatarUrlString: String?, isDisabled: Bool?, isPublic: Bool?, owner: OwnerAccountResponseModel?, projectType: String?, provider: String?, repoOwner: String?, repoSlug: String?, repoUrlString: String?, slug: String?, status: Int?, title: String?) {
-        self.avatarUrlString = avatarUrlString
+    public init(
+        avatarUrl: String?,
+        isDisabled: Bool?,
+        isPublic: Bool?,
+        owner: OwnerAccountResponseModel?,
+        projectType: String?,
+        provider: String?,
+        repoOwner: String?,
+        repoSlug: String?,
+        repoUrl: String?,
+        slug: String?,
+        status: Int?,
+        title: String?
+    ) {
+        self.avatarUrl = avatarUrl
         self.isDisabled = isDisabled
         self.isPublic = isPublic
         self.owner = owner
@@ -48,12 +43,9 @@ public struct AppResponseItemModel: Codable {
         self.provider = provider
         self.repoOwner = repoOwner
         self.repoSlug = repoSlug
-        self.repoUrlString = repoUrlString
+        self.repoUrl = repoUrl
         self.slug = slug
         self.status = status
         self.title = title
-
     }
-    // swiftlint:enabled line_length
-    // sourcery:end
 }

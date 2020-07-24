@@ -7,17 +7,17 @@
 
 import Foundation
 
-class HandlerHolder {
+public class HandlerHolder {
     let closure: () -> Void
 
-    init(closure: @escaping () -> Void) {
+    public init(closure: @escaping () -> Void) {
         self.closure = {
             closure()
         }
     }
 
     @objc
-    func handler() {
+    public func handler() {
         closure()
     }
 }

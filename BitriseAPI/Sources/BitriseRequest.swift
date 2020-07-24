@@ -8,6 +8,12 @@
 import Foundation
 import Mocha
 
+private let decoder: JSONDecoder = {
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    return decoder
+}()
+
 public protocol BitriseRequest: Request {
 }
 
@@ -17,7 +23,7 @@ extension BitriseRequest where Response: Decodable {
   public var bodyParameters: [String: Any] { [:] }
 
   public func parse(_ data: Data) throws -> Response {
-        return try JSONDecoder().decode(Response.self, from: data)
+        return try decoder.decode(Response.self, from: data)
   }
 }
 
