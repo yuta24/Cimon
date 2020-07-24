@@ -1,5 +1,5 @@
 //
-//  CI.swift
+//  ContinuousIntegration.swift
 //  Domain
 //
 //  Created by Yu Tawata on 2019/05/04.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-public enum CI: CaseIterable {
+public enum ContinuousIntegration: CaseIterable {
     case travisci
     case circleci
     case bitrise
 }
 
-extension CI: CustomStringConvertible {
+extension ContinuousIntegration: CustomStringConvertible {
     public var description: String {
         switch self {
         case .travisci:
