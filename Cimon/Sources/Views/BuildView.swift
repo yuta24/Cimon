@@ -16,20 +16,25 @@ import Core
 struct BuildState: Equatable {
     var model: BuildListAllResponseItemModel
     var buildLogState: BuildLogState?
+    var buildArtifactsState: BuildArtifactsState?
 
     var alert: AlertState<BuildAction>?
-    var isNavigationActive = false
+    var isToBuildLogNavigationActive = false
+    var isToBuildArtifactNavigationActive = false
 }
 
 enum BuildAction: Equatable {
     case buildLog(BuildLogAction)
+    case buildArtifacts(BuildArtifactsAction)
 
     case rebuildTapped
     case rebuild
     case rebuildResponse(Result<BuildRequestUpdateResponseModel, Client.Failure>)
 
-    case setNavigation(isActive: Bool)
-    case setNavigationIsActiveDelayCompleted
+    case setToBuildLogNavigation(isActive: Bool)
+    case setToBuildArtifactNavigation(isActive: Bool)
+    case setToBuildLogNavigationIsActiveDelayCompleted
+    case setToBuildArtifactNavigationIsActiveDelayCompleted
     case alertDismissed
 }
 
@@ -52,11 +57,20 @@ let buildReducer: Reducer<BuildState, BuildAction, BuildEnvironment> = Reducer.c
         action: /BuildAction.buildLog,
         environment: { BuildLogEnvironment(session: $0.session, client: $0.client) }
     ),
+    buildArtifactsReducer.optional.pullback(
+        state: \.buildArtifactsState,
+        action: /BuildAction.buildArtifacts,
+        environment: { BuildArtifactsEnvironment(client: $0.client) }
+    ),
     Reducer { state, action, environment in
 
         switch action {
 
         case .buildLog:
+
+            return .none
+
+        case .buildArtifacts:
 
             return .none
 
@@ -87,20 +101,37 @@ let buildReducer: Reducer<BuildState, BuildAction, BuildEnvironment> = Reducer.c
 
             return .none
 
-        case .setNavigation(true):
-            state.isNavigationActive = true
-            return Effect(value: .setNavigationIsActiveDelayCompleted)
+        case .setToBuildLogNavigation(true):
+            state.isToBuildLogNavigationActive = true
+            return Effect(value: .setToBuildLogNavigationIsActiveDelayCompleted)
                 .delay(for: 1, scheduler: DispatchQueue.main)
                 .eraseToEffect()
 
-        case .setNavigation(false):
-            state.isNavigationActive = false
+        case .setToBuildLogNavigation(false):
+            state.isToBuildLogNavigationActive = false
             state.buildLogState = .none
 
             return .none
 
-        case .setNavigationIsActiveDelayCompleted:
+        case .setToBuildArtifactNavigation(true):
+            state.isToBuildArtifactNavigationActive = true
+            return Effect(value: .setToBuildArtifactNavigationIsActiveDelayCompleted)
+                .delay(for: 1, scheduler: DispatchQueue.main)
+                .eraseToEffect()
+
+        case .setToBuildArtifactNavigation(false):
+            state.isToBuildArtifactNavigationActive = false
+            state.buildArtifactsState = .none
+
+            return .none
+
+        case .setToBuildLogNavigationIsActiveDelayCompleted:
             state.buildLogState = .init(model: state.model, log: .none, alert: .none)
+
+            return .none
+
+        case .setToBuildArtifactNavigationIsActiveDelayCompleted:
+            state.buildArtifactsState = .init(model: state.model, models: [], alert: .none)
 
             return .none
 
@@ -202,6 +233,7 @@ struct BuildView: View {
     @State
     private var isRebuildPresented = false
 
+    @ViewBuilder
     var body: some View {
         WithViewStore(store) { viewStore in
             ScrollView {
@@ -210,12 +242,15 @@ struct BuildView: View {
                 VStack {
                     NavigationLink(
                         destination: IfLetStore(
-                            self.store.scope(state: { $0.buildLogState }, action: BuildAction.buildLog),
+                            self.store.scope(
+                                state: { $0.buildLogState },
+                                action: BuildAction.buildLog
+                            ),
                             then: BuildLogView.init(store:)
                         ),
                         isActive: viewStore.binding(
-                            get: { $0.isNavigationActive },
-                            send: BuildAction.setNavigation(isActive:)
+                            get: { $0.isToBuildLogNavigationActive },
+                            send: BuildAction.setToBuildLogNavigation(isActive:)
                         ),
                         label: {
                             HStack {
@@ -228,7 +263,17 @@ struct BuildView: View {
                     Divider()
 
                     NavigationLink(
-                        destination: Text("full lists"),
+                        destination: IfLetStore(
+                            self.store.scope(
+                                state: { $0.buildArtifactsState },
+                                action: BuildAction.buildArtifacts
+                            ),
+                            then: BuildArtifactsView.init(store:)
+                        ),
+                        isActive: viewStore.binding(
+                            get: { $0.isToBuildArtifactNavigationActive },
+                            send: BuildAction.setToBuildArtifactNavigation(isActive:)
+                        ),
                         label: {
                             HStack {
                                 Text("Apps & Artifacts")

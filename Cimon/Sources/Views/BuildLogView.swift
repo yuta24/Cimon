@@ -97,6 +97,7 @@ struct BuildLogView: View {
             }
             .navigationTitle("Logs")
         }
+        .alert(store.scope(state: \.alert), dismiss: .alertDismissed)
     }
 
 }

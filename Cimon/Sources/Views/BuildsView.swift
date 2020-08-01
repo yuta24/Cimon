@@ -124,7 +124,7 @@ let buildsReducer: Reducer<BuildsState, BuildsAction, BuildsEnvironment> = Reduc
             guard let index = state.selection?.id else {
                 return .none
             }
-            state.selection?.value = .init(model: state.models[index], buildLogState: .none, alert: .none, isNavigationActive: false)
+            state.selection?.value = .init(model: state.models[index], buildLogState: .none, buildArtifactsState: .none, alert: .none)
 
             return .none
 
