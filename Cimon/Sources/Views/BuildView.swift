@@ -205,6 +205,7 @@ struct BuildView: View {
                     model.duration.flatMap(Formatter.hhmmss.string(from:))
                         .flatMap(Text.init)
                         .font(.subheadline)
+                        .foregroundColor(Color(.secondaryLabel))
                 }
 
                 HStack {
@@ -219,6 +220,7 @@ struct BuildView: View {
                         .flatMap(Formatter.yMdHms.string(from:))
                         .flatMap(Text.init)
                         .font(.subheadline)
+                        .foregroundColor(Color(.secondaryLabel))
                 }
             }
             .padding()
