@@ -2,6 +2,13 @@
 
 set -eu
 
+if [ ! $(which mint) ]; then
+  echo "  + Installing Mint..."
+  brew install mint
+else
+  echo "  + Mint found."
+fi
+
 if [ ! $(which xcodegen) ]; then
   echo "  + Installing XcodeGen..."
   brew install xcodegen
