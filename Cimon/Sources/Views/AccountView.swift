@@ -48,13 +48,13 @@ class AccountEnvironment {
 }
 
 let accountReducer: Reducer<AccountState, AccountAction, AccountEnvironment> = Reducer.combine(
-    .init { state, action, environment in
+    Reducer { state, action, environment in
 
         switch action {
 
         case .load:
             return environment.client.publisher(for: Endpoint.MeRequest())
-                .zip(environment.client.publisher(for: Endpoint.AppsRequest(sortBy: .lastBuildAt, next: .none, limit: 10)))
+                .zip(environment.client.publisher(for: Endpoint.Application.GetListOfApps(sortBy: .lastBuildAt, next: .none, limit: 10)))
                 .map(AccountAction.Load.init)
                 .catchToEffect()
                 .map(AccountAction.loadResponse)
@@ -136,9 +136,6 @@ struct AccountView: View {
 
     @Environment(\.presentationMode)
     private var presentationMode: Binding<PresentationMode>
-
-    @State
-    private var isSheetPresented = false
 
     var body: some View {
         WithViewStore(store) { viewStore in
