@@ -30,14 +30,6 @@ else
   echo "  + SwiftLint found."
 fi
 
-if [ ! $(which periphery) ]; then
-  echo "  + Installing Periphery..."
-  brew tap peripheryapp/periphery
-  brew cask install periphery
-else
-  echo "  + Periphery found."
-fi
-
 if [ ! $(which sourcery) ]; then
   echo "  + Installing Sourcery..."
   brew install sourcery
