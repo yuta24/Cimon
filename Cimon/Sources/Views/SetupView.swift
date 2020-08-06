@@ -1,5 +1,5 @@
 //
-//  SignInView.swift
+//  SetupView.swift
 //  Cimon
 //
 //  Created by Yu Tawata on 2020/07/11.
@@ -11,22 +11,25 @@ import BitriseAPI
 import Domain
 import Core
 
-struct SignInState: Equatable {
-    var alert: AlertState<SignInAction>?
+struct SetupState: Equatable {
+    var ci: ContinuousIntegration = .bitrise
+
+    var alert: AlertState<SetupAction>?
 }
 
 enum TokenError: Error, Equatable {
     case empty
 }
 
-enum SignInAction: Equatable {
+enum SetupAction: Equatable {
     case save(String)
     case saveResponse(Result<String, TokenError>)
+    case picked(ContinuousIntegration)
 
     case alertDismissed
 }
 
-class SignInEnvironment {
+class SetupEnvironment {
     let bitriseTokenStore: BitriseTokenStore
 
     init(bitriseTokenStore: BitriseTokenStore) {
@@ -34,7 +37,7 @@ class SignInEnvironment {
     }
 }
 
-let signInReducer: Reducer<SignInState, SignInAction, SignInEnvironment> = Reducer.combine(
+let setupReducer: Reducer<SetupState, SetupAction, SetupEnvironment> = Reducer.combine(
     Reducer { state, action, _ in
 
         switch action {
@@ -59,6 +62,11 @@ let signInReducer: Reducer<SignInState, SignInAction, SignInEnvironment> = Reduc
 
             return .none
 
+        case .picked(let ci):
+            state.ci = ci
+
+            return .none
+
         case .alertDismissed:
             state.alert = .none
 
@@ -69,36 +77,38 @@ let signInReducer: Reducer<SignInState, SignInAction, SignInEnvironment> = Reduc
     }
 )
 
-struct SignInView: View {
-    let store: Store<SignInState, SignInAction>
+struct SetupView: View {
+    let store: Store<SetupState, SetupAction>
 
     @State
     private var token: String = ""
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack(alignment: .leading) {
-                Text("Bitrise")
-                    .font(.title)
-                    .bold()
+            NavigationView {
+                Form {
+                    Section {
+                        WithViewStore(self.store.scope(state: { $0.ci }, action: SetupAction.picked)) { viewStore in
+                            Picker("Service", selection: viewStore.binding(send: { $0 })) {
+                                ForEach(ContinuousIntegration.allCases, id: \.self) { service in
+                                    Text(service.description)
+                                }
+                            }
+                        }
 
-                TextField("Access token", text: $token)
-                    .padding()
-                    .background(Color(.secondarySystemBackground))
-                    .cornerRadius(8)
+                        TextField("Input Access token", text: $token)
+                    }
 
-                HStack {
-                    Spacer()
-
-                    Button(
-                        action: { viewStore.send(.save(token)) },
-                        label: { Text("Save") }
-                    )
+                    Section {
+                        Button(
+                            action: { viewStore.send(.save(token)) },
+                            label: { Text("Save") }
+                        )
+                    }
                 }
+                .navigationBarTitle("Setup")
             }
-            .offset(x: 0, y: -80)
             .alert(store.scope(state: \.alert), dismiss: .alertDismissed)
         }
-        .padding()
     }
 }

@@ -14,12 +14,12 @@ import BitriseAPI
 import Core
 
 struct SceneState: Equatable {
-    var signInState: SignInState?
+    var setupState: SetupState?
     var mainState: MainState?
 }
 
 enum SceneAction {
-    case signIn(SignInAction)
+    case setup(SetupAction)
     case main(MainAction)
 }
 
@@ -40,10 +40,10 @@ class SceneEnvironment {
 }
 
 let sceneReducer: Reducer<SceneState, SceneAction, SceneEnvironment> = Reducer.combine(
-    signInReducer.optional.pullback(
-        state: \.signInState,
-        action: /SceneAction.signIn,
-        environment: { SignInEnvironment(bitriseTokenStore: $0.bitriseTokenStore) }
+    setupReducer.optional.pullback(
+        state: \.setupState,
+        action: /SceneAction.setup,
+        environment: { SetupEnvironment(bitriseTokenStore: $0.bitriseTokenStore) }
     ),
     mainReducer.optional.pullback(
         state: \.mainState,
@@ -54,13 +54,13 @@ let sceneReducer: Reducer<SceneState, SceneAction, SceneEnvironment> = Reducer.c
 
         switch action {
 
-        case .signIn(.saveResponse(.success)):
-            state.signInState = .none
+        case .setup(.saveResponse(.success)):
+            state.setupState = .none
             state.mainState = .init(buildsState: .init(models: [], paging: .none, alert: .none))
 
             return .none
 
-        case .signIn:
+        case .setup:
 
             return .none
 
@@ -80,8 +80,8 @@ struct CimonScene: View {
     @ViewBuilder
     var body: some View {
         IfLetStore(
-            store.scope(state: { $0.signInState }, action: SceneAction.signIn),
-            then: SignInView.init(store:)
+            store.scope(state: { $0.setupState }, action: SceneAction.setup),
+            then: SetupView.init(store:)
         )
 
         IfLetStore(

@@ -76,13 +76,13 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
             }
 
             if !state.account.bitrise.isNil {
-                state.sceneState.signInState = .none
+                state.sceneState.setupState = .none
                 state.sceneState.mainState = .init(buildsState: .init(models: [], paging: .none, alert: .none))
             }
 
             return .none
 
-        case .scene(.signIn(.saveResponse(.success(let value)))):
+        case .scene(.setup(.saveResponse(.success(let value)))):
             let token = BitriseToken(token: value)
             state.account.bitrise = token
             environment.bitriseTokenStore.save(token)
@@ -91,7 +91,7 @@ let appReducer: Reducer<AppState, AppAction, AppEnvironment> = Reducer.combine(
 
         case .scene(.main(.account(.reset))):
             state.account.bitrise = .none
-            state.sceneState = .init(signInState: .init(), mainState: .none)
+            state.sceneState = .init(setupState: .init(), mainState: .none)
 
             environment.bitriseTokenStore.remove()
 
@@ -117,7 +117,7 @@ struct CimonApp: SwiftUI.App {
     let store = Store<AppState, AppAction>(
         initialState: .init(
             account: .init(),
-            sceneState: .init(signInState: .init(), mainState: .none)
+            sceneState: .init(setupState: .init(), mainState: .none)
         ),
         reducer: appReducer.debug(),
         environment: .init(

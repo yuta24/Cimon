@@ -7,21 +7,20 @@
 
 import Foundation
 
-public enum ContinuousIntegration: CaseIterable {
-    case travisci
-    case circleci
+public enum ContinuousIntegration: Identifiable, CaseIterable {
     case bitrise
+    case github
+
+    public var id: Self { self }
 }
 
 extension ContinuousIntegration: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .travisci:
-            return "Travis CI"
-        case .circleci:
-            return "Circle CI"
         case .bitrise:
             return "Bitrise"
+        case .github:
+            return "GitHub Actions"
         }
     }
 }
