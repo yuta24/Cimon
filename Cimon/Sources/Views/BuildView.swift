@@ -103,6 +103,7 @@ let buildReducer: Reducer<BuildState, BuildAction, BuildEnvironment> = Reducer.c
 
         case .setToBuildLogNavigation(true):
             state.isToBuildLogNavigationActive = true
+
             return Effect(value: .setToBuildLogNavigationIsActiveDelayCompleted)
                 .delay(for: 1, scheduler: DispatchQueue.main)
                 .eraseToEffect()
@@ -115,6 +116,7 @@ let buildReducer: Reducer<BuildState, BuildAction, BuildEnvironment> = Reducer.c
 
         case .setToBuildArtifactNavigation(true):
             state.isToBuildArtifactNavigationActive = true
+
             return Effect(value: .setToBuildArtifactNavigationIsActiveDelayCompleted)
                 .delay(for: 1, scheduler: DispatchQueue.main)
                 .eraseToEffect()

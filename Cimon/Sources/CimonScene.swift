@@ -43,7 +43,9 @@ let sceneReducer: Reducer<SceneState, SceneAction, SceneEnvironment> = Reducer.c
     setupReducer.optional.pullback(
         state: \.setupState,
         action: /SceneAction.setup,
-        environment: { SetupEnvironment(bitriseTokenStore: $0.bitriseTokenStore) }
+        environment: {
+            SetupEnvironment(bitriseTokenStore: $0.bitriseTokenStore, bitriseClient: $0.bitriseClient)
+        }
     ),
     mainReducer.optional.pullback(
         state: \.mainState,

@@ -43,7 +43,7 @@ targets:
     type: framework
     platform: iOS
     sources:
-      - path: Common
+      - path: APICore
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.api-core"
     dependencies:

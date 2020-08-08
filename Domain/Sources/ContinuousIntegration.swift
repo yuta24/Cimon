@@ -8,6 +8,8 @@
 import Foundation
 
 public enum ContinuousIntegration: Identifiable, CaseIterable {
+//    case travisci
+    case circleci
     case bitrise
     case github
 
@@ -17,6 +19,10 @@ public enum ContinuousIntegration: Identifiable, CaseIterable {
 extension ContinuousIntegration: CustomStringConvertible {
     public var description: String {
         switch self {
+//        case .travisci:
+//            return "TravisCI"
+        case .circleci:
+            return "CircleCI"
         case .bitrise:
             return "Bitrise"
         case .github:
