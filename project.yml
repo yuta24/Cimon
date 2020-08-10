@@ -35,6 +35,21 @@ packages:
     url: https://github.com/WeTransfer/Mocker.git
     from: 2.1.0
 targets:
+  Litey:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Litey
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.litey"
+  LiteyTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: LiteyTests
+    dependencies:
+      - target: Litey
+      - target: Cimon
   Common:
     type: framework
     platform: iOS
