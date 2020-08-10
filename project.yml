@@ -31,6 +31,9 @@ packages:
   Tagged:
     url: https://github.com/pointfreeco/swift-tagged.git
     from: 0.5.0
+  Mocker:
+    url: https://github.com/WeTransfer/Mocker.git
+    from: 2.1.0
 targets:
   Common:
     type: framework
@@ -48,6 +51,15 @@ targets:
       PRODUCT_BUNDLE_IDENTIFIER: "com.bivre.cimon.api-core"
     dependencies:
       - package: Mocha
+  APICoreTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: APICoreTests
+    dependencies:
+      - target: APICore
+      - target: Cimon
+      - package: Mocker
   TravisCIAPI:
     type: framework
     platform: iOS
@@ -168,6 +180,7 @@ targets:
           - "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
     scheme:
       testTargets:
+        - APICoreTests
         - DomainTests
         - CimonTests
   CimonTests:
