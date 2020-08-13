@@ -131,12 +131,30 @@ extension Statement: Sequence {
     }
 }
 
+public enum Location {
+    case memory
+    case temporary
+    case path(String)
+
+    var filename: String {
+        switch self {
+        case .memory:
+            return ":memory:"
+        case .temporary:
+            return ""
+        case .path(let raw):
+            return raw
+        }
+    }
+}
+
 public enum DatabaseError: Error {
-    case open(path: String)
+    case open(location: Location)
     case exec(code: Int32)
 }
 
 public class Database {
+
     private let queue = DispatchQueue(label: "litey.database")
 
     private let connection: RawConnection
@@ -149,17 +167,17 @@ public class Database {
         sqlite3_close_v2(connection)
     }
 
-    public static func connect(path: String) throws -> Database {
+    public static func connect(location: Location) throws -> Database {
         let (connection, code): (RawConnection?, Int32) = {
             var connection: RawConnection?
-            let code = sqlite3_open_v2(path, &connection, (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX), nil)
+            let code = sqlite3_open_v2(location.filename, &connection, (SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX), nil)
             return (connection, code)
         }()
 
         if code == SQLITE_OK, let connection = connection {
             return Database(connection: connection)
         } else {
-            throw DatabaseError.open(path: path)
+            throw DatabaseError.open(location: location)
         }
     }
 
