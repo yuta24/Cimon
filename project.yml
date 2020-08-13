@@ -178,6 +178,7 @@ targets:
       - target: TravisCIAPI
       - target: CircleCIAPI
       - target: BitriseAPI
+      - target: Litey
       - target: Common
       - target: APICore
       - target: Domain
@@ -195,6 +196,7 @@ targets:
           - "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
     scheme:
       testTargets:
+        - LiteyTests
         - APICoreTests
         - DomainTests
         - CimonTests
