@@ -10,12 +10,16 @@ import XCTest
 @testable import Litey
 
 class DatabaseTests: XCTestCase {
-    var database: Database!
+    private var database: Database!
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
-        self.database = try Database.connect(location: .memory)
+        var path = NSTemporaryDirectory()
+        path.append("db.sqlite")
+
+        self.database = try Database.connect(location: .path(path))
+        try database.execute("DROP TABLE IF EXISTS users ;")
     }
 
     override func tearDownWithError() throws {
@@ -23,49 +27,81 @@ class DatabaseTests: XCTestCase {
     }
 
     func testExecute() throws {
-        let exp = expectation(description: "\(#function):\(#line)")
-
-        database.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY NOT NULL,name TEXT NOT NULL,email TEXT NOT NULL ) ;") { result in
-            switch result {
-            case .success:
-                break
-            case .failure(.exec(let code)):
-                XCTFail("\(code)")
-            case .failure(.open(let path)):
-                XCTFail("\(path)")
-            }
-
-            exp.fulfill()
+        do {
+            try database.execute("""
+                CREATE TABLE
+                users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL ) ;
+                """
+            )
+        } catch {
+            XCTFail("\(error)")
         }
-
-        wait(for: [exp], timeout: 0.1)
     }
 
-    func testStatement() throws {
-        let exp = expectation(description: "\(#function):\(#line)")
+    func testPrepare() throws {
+        try database.execute("""
+            CREATE TABLE
+            users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL ) ;
+            """
+        )
 
-        database.execute("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY NOT NULL,name TEXT NOT NULL,email TEXT NOT NULL ) ;") { _ in
-        }
+        let expects: [(Row.Value?, Row.Value?, Row.Value?, Row.Value?, Row.Value?, Row.Value?)] = [
+            (.int64(0), .string("id"), .string("INTEGER"), .int64(1), nil, .int64(1)),
+            (.int64(1), .string("name"), .string("TEXT"), .int64(1), nil, .int64(0)),
+            (.int64(2), .string("email"), .string("TEXT"), .int64(1), nil, .int64(0)),
+        ]
 
-        database.execute("PRAGMA table_info(users)") { result in
+        do {
+            let statement = try database.prepare("PRAGMA table_info(users) ;")
 
-            switch result {
-            case .success(let statement):
-                for r in statement {
-                    for v in r {
-//                        r.get(Column<String>("abc")).get()
-                        print(v)
-                    }
-                }
-            case .failure(.exec(let code)):
-                XCTFail("\(code)")
-            case .failure(.open(let path)):
-                XCTFail("\(path)")
+            var flag = false
+            for (row, expect) in zip(statement, expects) {
+                flag = true
+                XCTAssertEqual(row[0], expect.0)
+                XCTAssertEqual(row[1], expect.1)
+                XCTAssertEqual(row[2], expect.2)
+                XCTAssertEqual(row[3], expect.3)
+                XCTAssertEqual(row[4], expect.4)
+                XCTAssertEqual(row[5], expect.5)
             }
 
-            exp.fulfill()
+            XCTAssertTrue(flag)
+        } catch {
+            XCTFail("\(error)")
         }
+    }
 
-        wait(for: [exp], timeout: 0.1)
+    func testSupportDataType() throws {
+        try database.execute("""
+            CREATE TABLE
+            users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email BLOB NOT NULL, bio TEXT ) ;
+            """
+        )
+        try database.execute("""
+            INSERT INTO
+            users values ( 1, 'Yu Tawata', x'\(Data("yuta24@example.com".utf8).toHex())', NULL ) ;
+            """
+        )
+
+        let expects: [(Row.Value?, Row.Value?, Row.Value?, Row.Value?)] = [
+            (.int64(1), .string("Yu Tawata"), .data(Data("yuta24@example.com".utf8)), nil),
+        ]
+
+        do {
+            let statement = try database.prepare("SELECT * FROM users ;")
+
+            var flag = false
+            for (row, expect) in zip(statement, expects) {
+                flag = true
+                XCTAssertEqual(row[0], expect.0)
+                XCTAssertEqual(row[1], expect.1)
+                XCTAssertEqual(row[2], expect.2)
+                XCTAssertEqual(row[3], expect.3)
+            }
+
+            XCTAssertTrue(flag)
+        } catch {
+            XCTFail("\(error)")
+        }
     }
 }

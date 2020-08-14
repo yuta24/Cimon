@@ -29,6 +29,7 @@ public class Row {
         case int64(Int64)
         case double(Double)
         case string(String)
+        case data(Data)
     }
 
     private let names: [String]
@@ -52,6 +53,13 @@ public class Row {
                 values.append(.double(sqlite3_column_double(statement, i)))
             case SQLITE_TEXT:
                 values.append(.string(String(cString: UnsafePointer(sqlite3_column_text(statement, i)))))
+            case SQLITE_BLOB:
+                if let bytes = sqlite3_column_blob(statement, i) {
+                    let count = Int(sqlite3_column_bytes(statement, i))
+                    values.append(.data(Data(bytes: bytes, count: count)))
+                } else {
+                    values.append(.data(Data()))
+                }
             default:
                 fatalError("Unsupport column type: \(code).")
             }
@@ -181,15 +189,28 @@ public class Database {
         }
     }
 
-    public func execute(_ sql: String, completion: (Result<Statement, DatabaseError>) -> Void) {
-        queue.sync {
+    public func execute(_ sql: String) throws {
+        try queue.sync { () -> Void in
+            let code = sqlite3_exec(connection, sql, .none, .none, .none)
+
+            if code == SQLITE_OK {
+                return ()
+            } else {
+                throw DatabaseError.exec(code: code)
+            }
+        }
+    }
+
+    @discardableResult
+    public func prepare(_ sql: String) throws -> Statement {
+        return try queue.sync { () -> Statement in
             var statement: RawStatement?
             let code = sqlite3_prepare_v2(connection, sql, -1, &statement, .none)
 
             if code == SQLITE_OK, let statement = statement {
-                completion(.success(.init(statement: statement, on: connection)))
+                return .init(statement: statement, on: connection)
             } else {
-                completion(.failure(.exec(code: code)))
+                throw DatabaseError.exec(code: code)
             }
         }
     }

@@ -11,6 +11,7 @@ public enum ValueType {
     case integer
     case real
     case text
+    case blob
 
     var typeName: String {
         switch self {
@@ -20,6 +21,8 @@ public enum ValueType {
             return "REAL"
         case .text:
             return "TEXT"
+        case .blob:
+            return "BLOB"
         }
     }
 }
@@ -43,5 +46,11 @@ extension Double: Value {
 extension String: Value {
     public static  var valueType: ValueType {
         .text
+    }
+}
+
+extension Data: Value {
+    public static var valueType: ValueType {
+        .blob
     }
 }

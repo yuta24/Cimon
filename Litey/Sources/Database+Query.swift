@@ -14,7 +14,7 @@ extension ColumnsBuilder {
 }
 
 extension Database {
-    public func execute(_ query: Query, completion: @escaping (Result<Statement, DatabaseError>) -> Void) {
-        execute(query.rawString, completion: completion)
+    public func prepare(_ query: Query) throws -> Statement {
+        try prepare(query.rawString)
     }
 }
