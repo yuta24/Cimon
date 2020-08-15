@@ -21,9 +21,9 @@ class QueryTests: XCTestCase {
     func testCreate() throws {
         XCTContext.runActivity(named: "default") { _ in
             let query = Query.create(tableName: "users", columns: { b in
-                b.column(name: "id", type: Int64.self, constraints: [.primaryKey, .notNull])
-                b.column(name: "name", type: String.self, constraints: [.notNull])
-                b.column(name: "email", type: String.self, constraints: [.notNull])
+                b.column(name: "id", type: Int64.self, primaryKey: .default)
+                b.column(name: "name", type: String.self, notNull: true)
+                b.column(name: "email", type: String.self, notNull: true)
             })
 
             let rawString = "CREATE TABLE users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL ) ;"
@@ -33,9 +33,9 @@ class QueryTests: XCTestCase {
 
         XCTContext.runActivity(named: "if not exists") { _ in
             let query = Query.create(ifNotExists: true, tableName: "users", columns: { b in
-                b.column(name: "id", type: Int64.self, constraints: [.primaryKey, .notNull])
-                b.column(name: "name", type: String.self, constraints: [.notNull])
-                b.column(name: "email", type: String.self, constraints: [.notNull])
+                b.column(name: "id", type: Int64.self, primaryKey: .default)
+                b.column(name: "name", type: String.self, notNull: true)
+                b.column(name: "email", type: String.self, notNull: true)
             })
 
             let rawString = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL ) ;"
@@ -45,9 +45,9 @@ class QueryTests: XCTestCase {
 
         XCTContext.runActivity(named: "without rowid") { _ in
             let query = Query.create(tableName: "users", columns: { b in
-                b.column(name: "id", type: Int64.self, constraints: [.primaryKey, .notNull])
-                b.column(name: "name", type: String.self, constraints: [.notNull])
-                b.column(name: "email", type: String.self, constraints: [.notNull])
+                b.column(name: "id", type: Int64.self, primaryKey: .default)
+                b.column(name: "name", type: String.self, notNull: true)
+                b.column(name: "email", type: String.self, notNull: true)
             }, withoutRowid: true)
 
             let rawString = "CREATE TABLE users ( id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL ) WITHOUT ROWID ;"

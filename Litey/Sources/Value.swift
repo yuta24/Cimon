@@ -7,50 +7,50 @@
 
 import Foundation
 
-public enum ValueType {
-    case integer
-    case real
-    case text
-    case blob
+public protocol StorageType {
+    static var typeName: String { get }
+}
 
-    var typeName: String {
-        switch self {
-        case .integer:
-            return "INTEGER"
-        case .real:
-            return "REAL"
-        case .text:
-            return "TEXT"
-        case .blob:
-            return "BLOB"
-        }
+public enum Integer: StorageType {
+    public static var typeName: String {
+        return "INTEGER"
+    }
+}
+
+public enum Real: StorageType {
+    public static var typeName: String {
+        return "REAL"
+    }
+}
+
+public enum Text: StorageType {
+    public static var typeName: String {
+        return "TEXT"
+    }
+}
+
+public enum Blob: StorageType {
+    public static var typeName: String {
+        return "BLOB"
     }
 }
 
 public protocol Value {
-    static var valueType: ValueType { get }
+    associatedtype Storage: StorageType
 }
 
 extension Int64: Value {
-    public static  var valueType: ValueType {
-        .integer
-    }
+    public typealias Storage = Integer
 }
 
 extension Double: Value {
-    public static  var valueType: ValueType {
-        .real
-    }
+    public typealias Storage = Real
 }
 
 extension String: Value {
-    public static  var valueType: ValueType {
-        .text
-    }
+    public typealias Storage = Text
 }
 
 extension Data: Value {
-    public static var valueType: ValueType {
-        .blob
-    }
+    public typealias Storage = Blob
 }

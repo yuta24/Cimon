@@ -8,41 +8,6 @@
 import Foundation
 import SQLite3
 
-public class ColumnsBuilder {
-    public enum Constraint<V> where V: Value {
-        case primaryKey
-        case notNull
-        case unique
-        case `default`(value: V)
-
-        var expression: String {
-            switch self {
-            case .primaryKey:
-                return "PRIMARY KEY"
-            case .notNull:
-                return "NOT NULL"
-            case .unique:
-                return "UNIQUE"
-            case .default(let value):
-                return "DEFAULT \(value))"
-            }
-        }
-    }
-
-    private(set) var columns = [String]()
-
-    public func column<V>(name: String, type: V.Type, constraints: [Constraint<V>] = []) where V: Value {
-        var expressions = [String]()
-        expressions.append(name)
-        expressions.append(type.valueType.typeName)
-        for constraint in constraints {
-            expressions.append(constraint.expression)
-        }
-
-        columns.append(expressions.joined(separator: " "))
-    }
-}
-
 public enum PragmaFunction {
     case tableInfo(tableName: String)
 
@@ -61,47 +26,76 @@ public class Query {
         self.rawString = rawString
     }
 
-    public static func create(ifNotExists: Bool = false, tableName: String, columns: (ColumnsBuilder) -> Void, withoutRowid: Bool = false) -> Query {
+    public static func alter(tableName: String, renameTo newTableName: String) -> Query {
+        var literals = [String]()
+        literals.append("ALTER")
+        literals.append("TABLE")
+        literals.append(tableName)
+        literals.append("RENAME TO")
+        literals.append(newTableName)
+        literals.append(";")
+
+        return .init(rawString: literals.joined(separator: " "))
+    }
+
+    public static func alter(tableName: String, renameColumn columnName: String, to newColumnName: String) -> Query {
+        var literals = [String]()
+        literals.append("ALTER")
+        literals.append("TABLE")
+        literals.append(tableName)
+        literals.append("RENAME COLUMN")
+        literals.append(columnName)
+        literals.append("TO")
+        literals.append(newColumnName)
+        literals.append(";")
+
+        return .init(rawString: literals.joined(separator: " "))
+    }
+
+    public static func create(isTemporary: Bool = false, ifNotExists: Bool = false, tableName: String, columns: (ColumnsBuilder) -> Void, withoutRowid: Bool = false) -> Query {
         let columnsBuilder = ColumnsBuilder()
         columns(columnsBuilder)
 
-        var statements = [String]()
-        statements.append("CREATE")
-        statements.append("TABLE")
+        var literals = [String]()
+        literals.append("CREATE")
+        if isTemporary {
+            literals.append("TEMPORARY")
+        }
+        literals.append("TABLE")
         if ifNotExists {
-            statements.append("IF NOT EXISTS")
+            literals.append("IF NOT EXISTS")
         }
-        statements.append(tableName)
-        statements.append("(")
-        statements.append(columnsBuilder.columns.joined(separator: ", "))
-        statements.append(")")
+        literals.append(tableName)
+        literals.append("(")
+        literals.append(columnsBuilder.columns.joined(separator: ", "))
+        literals.append(")")
         if withoutRowid {
-            statements.append("WITHOUT ROWID")
+            literals.append("WITHOUT ROWID")
         }
-        statements.append(";")
+        literals.append(";")
 
-        return .init(rawString: statements.joined(separator: " "))
+        return .init(rawString: literals.joined(separator: " "))
     }
 
     public static func drop(ifExists: Bool = true, tableName: String) -> Query {
-        var statements = [String]()
-        statements.append("DROP")
-        statements.append("TABLE")
+        var literals = [String]()
+        literals.append("DROP")
+        literals.append("TABLE")
         if ifExists {
-            statements.append("IF EXISTS")
+            literals.append("IF EXISTS")
         }
-        statements.append(tableName)
-        statements.append(";")
+        literals.append(tableName)
+        literals.append(";")
 
-        return .init(rawString: statements.joined(separator: " "))
+        return .init(rawString: literals.joined(separator: " "))
     }
 
     public static func pragma(_ function: PragmaFunction) -> Query {
-        var statements = [String]()
-        statements.append("PRAGMA")
-        statements.append(function.statement)
-        statements.append(";")
+        var literals = [String]()
+        literals.append("PRAGMA")
+        literals.append(function.statement)
+        literals.append(";")
 
-        return .init(rawString: statements.joined(separator: " "))
+        return .init(rawString: literals.joined(separator: " "))
     }
 }

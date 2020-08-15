@@ -7,13 +7,11 @@
 
 import Foundation
 
-extension ColumnsBuilder {
-    public func column<D>(_ column: Column<D>, constraints: [Constraint<D>] = []) {
-        self.column(name: column.name, type: D.self, constraints: constraints)
-    }
-}
-
 extension Database {
+    public func execute(_ query: Query) throws {
+        try execute(query.rawString)
+    }
+
     public func prepare(_ query: Query) throws -> Statement {
         try prepare(query.rawString)
     }
