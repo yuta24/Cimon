@@ -8,24 +8,15 @@
 import Foundation
 import SQLite3
 
-public enum PragmaFunction {
-    case tableInfo(tableName: String)
-
-    var statement: String {
-        switch self {
-        case .tableInfo(let tableName):
-            return "table_info(\(tableName))"
-        }
-    }
-}
-
 public class Query {
     let rawString: String
 
     init(rawString: String) {
         self.rawString = rawString
     }
+}
 
+extension Query {
     public static func alter(tableName: String, renameTo newTableName: String) -> Query {
         var literals = [String]()
         literals.append("ALTER")
@@ -51,7 +42,9 @@ public class Query {
 
         return .init(rawString: literals.joined(separator: " "))
     }
+}
 
+extension Query {
     public static func create(isTemporary: Bool = false, ifNotExists: Bool = false, tableName: String, columns: (ColumnsBuilder) -> Void, withoutRowid: Bool = false) -> Query {
         let columnsBuilder = ColumnsBuilder()
         columns(columnsBuilder)
@@ -76,7 +69,9 @@ public class Query {
 
         return .init(rawString: literals.joined(separator: " "))
     }
+}
 
+extension Query {
     public static func drop(ifExists: Bool = true, tableName: String) -> Query {
         var literals = [String]()
         literals.append("DROP")
@@ -89,11 +84,61 @@ public class Query {
 
         return .init(rawString: literals.joined(separator: " "))
     }
+}
 
+extension Query {
+    public static func insert() -> Query {
+        return .init(rawString: "")
+    }
+}
+
+public enum PragmaFunction {
+    case tableInfo(tableName: String)
+
+    var statement: String {
+        switch self {
+        case .tableInfo(let tableName):
+            return "table_info(\(tableName))"
+        }
+    }
+}
+
+extension Query {
     public static func pragma(_ function: PragmaFunction) -> Query {
         var literals = [String]()
         literals.append("PRAGMA")
         literals.append(function.statement)
+        literals.append(";")
+
+        return .init(rawString: literals.joined(separator: " "))
+    }
+}
+
+public enum SelecFetchtColumns {
+    case all
+    case columns([String])
+}
+
+public class SelectWhereBuilder {
+    init() {
+    }
+}
+
+extension Query {
+    public static func select(distinct: Bool = false, columns: SelecFetchtColumns, from tableName: String, where whereBuilder: SelectWhereBuilder? = .none) -> Query {
+        var literals = [String]()
+        literals.append("SELECT")
+        if distinct {
+            literals.append("DISTINCT")
+        }
+        switch columns {
+        case .all:
+            literals.append("*")
+        case .columns(let columnNames):
+            literals.append(columnNames.joined(separator: ", "))
+        }
+        literals.append("FROM")
+        literals.append(tableName)
         literals.append(";")
 
         return .init(rawString: literals.joined(separator: " "))
