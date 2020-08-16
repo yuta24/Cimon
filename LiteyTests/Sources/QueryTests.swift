@@ -86,7 +86,6 @@ class QueryTests: XCTestCase {
 
     func testSelect() throws {
         XCTContext.runActivity(named: "fetch all") { _ in
-            Query.select(columns: .all, from: "users", where: .init())
             let query = Query.select(columns: .all, from: "users")
 
             let rawString = "SELECT * FROM users ;"

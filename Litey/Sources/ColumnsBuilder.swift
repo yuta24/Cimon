@@ -15,19 +15,19 @@ public class ColumnsBuilder {
 
     fileprivate(set) var columns = [String]()
 
-    public func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey? = .none) where V: Value, V.Storage == Integer {
+    public func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey? = .none) where V: Value, V: Binding, V.Storage == Integer {
         column(name: name, type: type, primaryKey: primaryKey, notnull: true, unique: false, default: nil)
     }
 
-    public func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey? = .none) where V: Value, V.Storage == Text {
+    public func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey? = .none) where V: Value, V: Binding, V.Storage == Text {
         column(name: name, type: type, primaryKey: primaryKey, notnull: false, unique: false, default: nil)
     }
 
-    public func column<V>(name: String, type: V.Type, notNull: Bool = false, unique: Bool = false, default: V? = .none) where V: Value {
+    public func column<V>(name: String, type: V.Type, notNull: Bool = false, unique: Bool = false, default: V? = .none) where V: Value, V: Binding {
         column(name: name, type: type, primaryKey: .none, notnull: notNull, unique: unique, default: nil)
     }
 
-    func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey?, notnull isNotNull: Bool, unique isUnique: Bool, default: V?) where V: Value {
+    func column<V>(name: String, type: V.Type, primaryKey: PrimaryKey?, notnull isNotNull: Bool, unique isUnique: Bool, default: V?) where V: Value, V: Binding {
         var literals = [String]()
         literals.append(name)
         literals.append(V.Storage.typeName)
@@ -50,19 +50,5 @@ public class ColumnsBuilder {
         }
 
         columns.append(literals.joined(separator: " "))
-    }
-}
-
-extension ColumnsBuilder {
-    public func column<V>(_ column: Column<V>, primaryKey: PrimaryKey? = .none) where V: Value, V.Storage == Integer {
-        self.column(name: column.name, type: V.self, primaryKey: primaryKey)
-    }
-
-    public func column<V>(_ column: Column<V>, primaryKey: PrimaryKey? = .none) where V: Value, V.Storage == Text {
-        self.column(name: column.name, type: V.self, primaryKey: primaryKey)
-    }
-
-    public func column<V>(_ column: Column<V>, notNull: Bool = false, unique: Bool = false, default: V? = .none) where V: Value {
-        self.column(name: column.name, type: V.self, notNull: notNull, unique: unique, default: `default`)
     }
 }

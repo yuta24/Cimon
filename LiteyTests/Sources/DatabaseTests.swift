@@ -45,10 +45,10 @@ class DatabaseTests: XCTestCase {
             """
         )
 
-        let expects: [(Row.Value?, Row.Value?, Row.Value?, Row.Value?, Row.Value?, Row.Value?)] = [
-            (.int64(0), .string("id"), .string("INTEGER"), .int64(1), nil, .int64(1)),
-            (.int64(1), .string("name"), .string("TEXT"), .int64(1), nil, .int64(0)),
-            (.int64(2), .string("email"), .string("TEXT"), .int64(1), nil, .int64(0)),
+        let expects: [(Int64, String, String, Int64, String?, Int64)] = [
+            (0, "id", "INTEGER", 1, nil, 1),
+            (1, "name", "TEXT", 1, nil, 0),
+            (2, "email", "TEXT", 1, nil, 0),
         ]
 
         do {
@@ -83,8 +83,8 @@ class DatabaseTests: XCTestCase {
             """
         )
 
-        let expects: [(Row.Value?, Row.Value?, Row.Value?, Row.Value?)] = [
-            (.int64(1), .string("Yu Tawata"), .data(Data("yuta24@example.com".utf8)), nil),
+        let expects: [(Int64, String, Data, String?)] = [
+            (1, "Yu Tawata", Data("yuta24@example.com".utf8), nil),
         ]
 
         do {

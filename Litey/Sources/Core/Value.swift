@@ -36,21 +36,27 @@ public enum Blob: StorageType {
 }
 
 public protocol Value {
+}
+
+public protocol Binding {
     associatedtype Storage: StorageType
 }
 
-extension Int64: Value {
+extension Int64: Value, Binding {
     public typealias Storage = Integer
 }
 
-extension Double: Value {
+extension Double: Value, Binding {
     public typealias Storage = Real
 }
 
-extension String: Value {
+extension String: Value, Binding {
     public typealias Storage = Text
 }
 
-extension Data: Value {
+extension Data: Value, Binding {
     public typealias Storage = Blob
 }
+
+//extension Optional: Value where Wrapped: Value {
+//}

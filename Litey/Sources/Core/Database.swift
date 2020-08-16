@@ -11,29 +11,9 @@ import SQLite3
 public typealias RawConnection = OpaquePointer
 public typealias RawStatement = OpaquePointer
 
-public struct Column<V> where V: Value {
-    let name: String
-
-    public init(_ name: String) {
-        self.name = name
-    }
-}
-
-public enum RowError: Error {
-    case notFoundColumn
-    case differentDataType
-}
-
-public class Row {
-    public enum Value: Equatable {
-        case int64(Int64)
-        case double(Double)
-        case string(String)
-        case data(Data)
-    }
-
-    private let names: [String]
-    private let values: [Value?]
+public class Item {
+    let names: [String]
+    let values: [Value?]
 
     init(statement: RawStatement) {
         var names = [String]()
@@ -48,17 +28,17 @@ public class Row {
             case SQLITE_NULL:
                 values.append(.none)
             case SQLITE_INTEGER:
-                values.append(.int64(sqlite3_column_int64(statement, i)))
+                values.append(sqlite3_column_int64(statement, i))
             case SQLITE_FLOAT:
-                values.append(.double(sqlite3_column_double(statement, i)))
+                values.append(sqlite3_column_double(statement, i))
             case SQLITE_TEXT:
-                values.append(.string(String(cString: UnsafePointer(sqlite3_column_text(statement, i)))))
+                values.append(String(cString: UnsafePointer(sqlite3_column_text(statement, i))))
             case SQLITE_BLOB:
                 if let bytes = sqlite3_column_blob(statement, i) {
                     let count = Int(sqlite3_column_bytes(statement, i))
-                    values.append(.data(Data(bytes: bytes, count: count)))
+                    values.append(Data(bytes: bytes, count: count))
                 } else {
-                    values.append(.data(Data()))
+                    values.append(Data())
                 }
             default:
                 fatalError("Unsupport column type: \(code).")
@@ -69,26 +49,39 @@ public class Row {
         self.values = values
     }
 
-    public subscript(idx: Int) -> Value? {
-        values[idx]
+    public subscript(idx: Int) -> Int64? {
+        values[idx] as? Int64
+    }
+
+    public subscript(idx: Int) -> Double? {
+        values[idx] as? Double
+    }
+
+    public subscript(idx: Int) -> String? {
+        values[idx] as? String
+    }
+
+    public subscript(idx: Int) -> Data? {
+        values[idx] as? Data
     }
 }
 
-extension Row {
-    public func get<V>(_ column: Column<V>) throws -> V {
-        guard let i = names.firstIndex(of: column.name) else {
-            throw RowError.notFoundColumn
-        }
+public enum ItemError: Error {
+    case notFoundColumn
+    case differentDataType
+}
 
-        if let value = values[i] as? V {
+extension Item {
+    public func get<V>(_ idx: Int) throws -> V {
+        if let value = values[idx] as? V {
             return value
         } else {
-            throw RowError.differentDataType
+            throw ItemError.differentDataType
         }
     }
 }
 
-extension Row: Sequence {
+extension Item: Sequence {
     public func makeIterator() -> AnyIterator<Value?> {
         var i = 0
         return AnyIterator {
@@ -124,9 +117,9 @@ public struct StatementIterator: IteratorProtocol {
         self.statement = statement
     }
 
-    public mutating func next() -> Row? {
+    public mutating func next() -> Item? {
         if sqlite3_step(statement) == SQLITE_ROW {
-            return Row(statement: statement)
+            return Item(statement: statement)
         } else {
             return .none
         }
