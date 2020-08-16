@@ -183,7 +183,7 @@ public class Database {
     }
 
     public func execute(_ sql: String) throws {
-        try queue.sync { () -> Void in
+        try queue.sync(flags: .barrier) { () -> Void in
             let code = sqlite3_exec(connection, sql, .none, .none, .none)
 
             if code == SQLITE_OK {
@@ -196,7 +196,7 @@ public class Database {
 
     @discardableResult
     public func prepare(_ sql: String) throws -> Statement {
-        return try queue.sync { () -> Statement in
+        return try queue.sync(flags: .barrier) { () -> Statement in
             var statement: RawStatement?
             let code = sqlite3_prepare_v2(connection, sql, -1, &statement, .none)
 
