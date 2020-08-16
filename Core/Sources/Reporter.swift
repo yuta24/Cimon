@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol ReporterProtocol {
-    func report(_ error: Error, with additionalUserInfo: [String: Any]?)
+    func report(_ error: Error)
 }

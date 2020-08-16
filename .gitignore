@@ -4,6 +4,7 @@
 
 *.xcodeproj
 *.xcworkspace
+/default.profraw
 
 /GoogleService-Info.plist
 /credentials.json

@@ -7,10 +7,10 @@
 
 import Foundation
 import Core
-import Crashlytics
+import FirebaseCrashlytics
 
 class CrashlyticsReporter: ReporterProtocol {
-    func report(_ error: Error, with additionalUserInfo: [String: Any]?) {
-        Crashlytics.sharedInstance().recordError(error, withAdditionalUserInfo: additionalUserInfo)
+    func report(_ error: Error) {
+        Crashlytics.crashlytics().record(error: error)
     }
 }

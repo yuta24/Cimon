@@ -191,7 +191,7 @@ targets:
         script: "swiftlint"
     postBuildScripts:
       - name: "[Crashlytics] Run Script"
-        script: "${PODS_ROOT}/Fabric/run"
+        script: "${PODS_ROOT}/_Prebuild/FirebaseCrashlytics/run"
         inputFiles:
           - "$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)"
     scheme:
