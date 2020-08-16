@@ -1,5 +1,5 @@
 //
-//  LocalStore.swift
+//  LocalStorage.swift
 //  Cimon
 //
 //  Created by Yu Tawata on 2019/05/14.

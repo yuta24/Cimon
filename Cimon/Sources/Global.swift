@@ -8,16 +8,7 @@
 import UIKit
 import Common
 import Core
-
-func configure() {
-    analytics.configure([FirebaseAnalyticsServiceProvider()])
-
-    UIButton.appearance().isExclusiveTouch = true
-
-    UINavigationBar.appearance().tintColor = .white
-    UINavigationBar.appearance().barTintColor = Asset.primary.color
-    UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
-}
+import FirebaseCrashlytics
 
 let storage = LocalStorage(userDefaults: .standard)
-let reporter = CrashlyticsReporter()
+let reporter = CrashlyticsReporter(crashlytics: Crashlytics.crashlytics())

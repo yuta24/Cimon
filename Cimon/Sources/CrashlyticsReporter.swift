@@ -6,11 +6,17 @@
 //
 
 import Foundation
-import Core
+import Common
 import FirebaseCrashlytics
 
 class CrashlyticsReporter: ReporterProtocol {
+    private let crashlytics: Crashlytics
+
+    init(crashlytics: Crashlytics) {
+        self.crashlytics = crashlytics
+    }
+
     func report(_ error: Error) {
-        Crashlytics.crashlytics().record(error: error)
+        crashlytics.record(error: error)
     }
 }
