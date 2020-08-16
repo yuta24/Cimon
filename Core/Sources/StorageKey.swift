@@ -1,13 +1,13 @@
 import Domain
 
-public extension StoreKey {
-  static var travisCIToken: StoreKey<TravisCIToken> {
-    return StoreKey<TravisCIToken>(rawValue: "travis_ci:token")
+public extension StorageKey {
+  static var travisCIToken: StorageKey<TravisCIToken> {
+    return .init(rawValue: "travis_ci:token")
   }
-  static var circleCIToken: StoreKey<CircleCIToken> {
-    return StoreKey<CircleCIToken>(rawValue: "circle_ci:token")
+  static var circleCIToken: StorageKey<CircleCIToken> {
+    return .init(rawValue: "circle_ci:token")
   }
-  static var bitriseToken: StoreKey<BitriseToken> {
-    return StoreKey<BitriseToken>(rawValue: "bitrise:token")
+  static var bitriseToken: StorageKey<BitriseToken> {
+    return .init(rawValue: "bitrise:token")
   }
 }

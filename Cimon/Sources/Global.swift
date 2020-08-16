@@ -19,5 +19,5 @@ func configure() {
     UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
 }
 
-let store = LocalStore(userDefaults: .standard)
+let storage = LocalStorage(userDefaults: .standard)
 let reporter = CrashlyticsReporter()
