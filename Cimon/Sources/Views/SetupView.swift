@@ -16,7 +16,6 @@ import Core
 struct SetupState: Equatable {
     var token = ""
     var ci: ContinuousIntegration = .bitrise
-    var loadAppsState: LoadAppsState?
 
     var alert: AlertState<SetupAction>?
     var isNavigationActive = false
@@ -27,16 +26,11 @@ enum TokenError: Error, Equatable {
 }
 
 enum SetupAction: Equatable {
-    case loadApps(LoadAppsAction)
-
     case save
     case saveResponse(Result<String, TokenError>)
     case picked(ContinuousIntegration)
 
     case tokenChanged(String)
-
-    case setNavigation(isActive: Bool)
-    case setNavigationIsActiveDelayCompleted
 
     case alertDismissed
 }
@@ -52,20 +46,9 @@ class SetupEnvironment {
 }
 
 let setupReducer: Reducer<SetupState, SetupAction, SetupEnvironment> = Reducer.combine(
-    loadAppsReducer.optional.pullback(
-        state: \.loadAppsState,
-        action: /SetupAction.loadApps,
-        environment: {
-            LoadAppsEnvironment(client: $0.bitriseClient)
-        }
-    ),
     Reducer { state, action, _ in
 
         switch action {
-
-        case .loadApps:
-
-            return .none
 
         case .save:
             if !state.token.isEmpty {
@@ -95,24 +78,6 @@ let setupReducer: Reducer<SetupState, SetupAction, SetupEnvironment> = Reducer.c
 
             return .none
 
-        case .setNavigation(true):
-            state.isNavigationActive = true
-
-            return Effect(value: .setNavigationIsActiveDelayCompleted)
-                .delay(for: 1, scheduler: DispatchQueue.main)
-                .eraseToEffect()
-
-        case .setNavigation(false):
-            state.isNavigationActive = false
-            state.loadAppsState = .none
-
-            return .none
-
-        case .setNavigationIsActiveDelayCompleted:
-            state.loadAppsState = .init(token: state.token, models: [], paging: .none, alert: .none)
-
-            return .none
-
         case .alertDismissed:
             state.alert = .none
 
@@ -130,36 +95,11 @@ struct SetupView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             NavigationView {
-                VStack {
-                    NavigationLink(
-                        destination: IfLetStore(
-                            store.scope(state: \.loadAppsState, action: SetupAction.loadApps),
-                            then: LoadAppsView.init(store:)
-                        ),
-                        isActive: viewStore.binding(
-                            get: { $0.isNavigationActive },
-                            send: SetupAction.setNavigation(isActive:)
-                        ),
-                        label: {
-                            EmptyView()
-                        }
-                    )
-
-                    Text("Setup")
+                VStack(spacing: 16) {
+                    Text("Bitrise")
                         .font(.title)
 
                     VStack {
-                        WithViewStore(self.store.scope(state: { $0.ci }, action: SetupAction.picked)) { viewStore in
-                            Picker("Service", selection: viewStore.binding(send: { $0 })) {
-                                ForEach(ContinuousIntegration.allCases, id: \.self) { service in
-                                    Text(service.description)
-                                }
-                            }
-                            .pickerStyle(SegmentedPickerStyle())
-                        }
-
-                        Divider()
-
                         TextField(
                             "Input access token",
                             text: viewStore.binding(
@@ -168,9 +108,8 @@ struct SetupView: View {
                         )
                     }
                     .padding(8)
-                    .background(Color(.secondarySystemBackground))
+                    .background(Color(.tertiarySystemBackground))
                     .cornerRadius(8)
-                    .padding()
 
                     Button(
                         action: { viewStore.send(.save) },
@@ -182,10 +121,11 @@ struct SetupView: View {
                             }
                             .padding(8)
                         })
-                        .background(Color(.secondarySystemBackground))
+                        .background(Color(.tertiarySystemBackground))
                         .cornerRadius(8)
-                        .padding()
                 }
+                .padding()
+                .background(Color(.secondarySystemBackground))
                 .navigationBarHidden(true)
             }
         }
